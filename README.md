@@ -1,10 +1,10 @@
-# ntnsim v1.5.1: Operator 3GPP IoT-NTN vs IoT-only LoRaWAN NTN over LEO
+# ntnsim v1.6.0: Operator 3GPP IoT-NTN vs IoT-only LoRaWAN NTN over LEO
 
 Code and frozen results for the paper
 
 > A. Elnashar, "Operator-Led 3GPP IoT-NTN Versus IoT-Only LoRaWAN Direct-to-Satellite Networks: A Same-Scenario LEO Simulation Study," submitted to *IEEE Open Journal of the Communications Society*, 2026.
 
-Every number, table and figure in the paper comes from `frozen/results.json`, produced by `scripts/run_batch.py` with the code in this repository (version 1.5.1). All presets are illustrative system classes, not any operator's deployment, and no measured network data is used.
+Every number, table and figure in the paper comes from `frozen/results.json`, produced by `scripts/run_batch.py` with the code in this repository (version 1.6.0). All presets are illustrative system classes, not any operator's deployment, and no measured network data is used.
 
 ## Repository layout
 
@@ -15,28 +15,32 @@ Every number, table and figure in the paper comes from `frozen/results.json`, pr
 | `frozen/` | `results.json`, CSV tables (link budgets, scenario summary) and all figures (PNG and PDF) used in the paper |
 | `scripts/run_batch.py` | Recomputes every result (about 2 h, about 3 GB RAM, checkpointed) |
 | `scripts/build_notebook.py` | Rebuilds the notebook from the package |
-| `CHANGELOG.md` | Model history and the stated limitations of v1.5.1 |
+| `CHANGELOG.md` | Model history and the stated limitations of v1.6.0 |
 | `PORTING.md` | Notes for porting the model to other bands or regions |
 
-## Headline results (frozen v1.5.1, utility-wells scenario)
+## Headline results (frozen v1.6.0, utility-wells scenario)
 
 | Quantity | Value |
 |---|---|
-| Operator NB-IoT on-time delivery | 0.986 |
-| Operator NB-IoT service capacity | 13.58 [13.43, 13.72] devices/km² |
-| Operator LTE-M service capacity | 58.3 [53.1, 63.4] devices/km² |
-| Control NB-IoT / LR-FHSS capacity ratio, transmit at first visibility | 1.187 [1.165, 1.209] |
-| Control NB-IoT / LR-FHSS capacity ratio, both wait for 30° | 1.238 [1.214, 1.262] |
-| IoT-only LR-FHSS (ISM 868 MHz) on-time delivery | 0.297 (45.9 % expired) |
-| Urban disaster fallback, operator NB-IoT on time (CE0 / CE1 / CE2) | 0.616 overall (0.99 / 0.874 / 0.012) |
+| Operator NB-IoT on-time delivery, uplink / confirmed | 0.982 / 0.979 |
+| Operator NB-IoT service capacity (uplink) | 13.66 [13.42, 13.90] devices/km² |
+| Operator LTE-M service capacity (downlink-limited) | 44.9 [43.2, 46.6] devices/km² |
+| Control NB-IoT / LR-FHSS uplink capacity ratio, first visibility / 30° | 1.182 [1.160, 1.205] / 1.224 [1.197, 1.252] |
+| Control NB-IoT / LR-FHSS confirmed capacity ratio, first visibility / 30° | 4.9 / 4.6 (3 replications) |
+| IoT-only LR-FHSS (ISM 868 MHz) on-time delivery, uplink / confirmed | 0.297 / 0.007 |
+| Urban disaster, operator NB-IoT on time (CE0 / CE1 / CE2) | 0.481 overall (0.992 / 0.428 / 0.008); 0.616 with the downlink off |
 
 Intervals are Student-t 95 % intervals over 10 independent replications; ratios are seed-paired log-ratio intervals.
+
+## Downlink (v1.6)
+
+The downlink is modelled for every stack (`ntnsim/downlink.py`): satellite EIRP density from 3GPP TR 36.763 (small satellites, Set 4) or from the array aperture with an 8.5 dBW/MHz RF density (arrays); the uplink realisation of each device re-evaluated at the downlink frequency; co-channel beams at reuse 3; NB-IoT/LTE-M control and shared channels with a gap anchored at the published NPDSCH 164 dB point (TBS 680, 8 subframes, 128 repetitions, -14.7 dB); cell acquisition limit -14.7 dB; coverage level from the weaker direction; one RAR per NPRACH occasion per level; grants per HARQ attempt and a final message, with re-sends at doubled repetitions; downlink load and admission. LoRaWAN confirmed mode: RX1/RX2 acknowledgements from one satellite transmitter without queueing (Erlang loss), ISM duty cycle 10 % at 869.525 MHz and half-duplex blanking of the gateway. `g_over=dict(downlink=False)` reproduces v1.5.1 exactly.
 
 ## Quick start
 
 ```
 pip install -r requirements.txt
-python3 -c "from ntnsim import validate; validate.run()"     # 55 checks
+python3 -c "from ntnsim import validate; validate.run()"     # 60 checks
 python3 scripts/run_batch.py                                 # full recomputation
 ```
 
@@ -71,9 +75,9 @@ Scenarios (UAE defaults, all values illustrative): remote utility wells, agricul
 | Energy | `energy` | Per-message state timeline; battery life |
 | Sensitivity | `report.run_extras` | One assumption changed at a time |
 
-## Validation (55 checks, all pass)
+## Validation (60 checks, all pass)
 
-LoRa time on air matches the TTN airtime calculator to within 0.05 ms for SF7 to SF12; LoRa SF12 sensitivity matches the SX1276 datasheet (−137 dBm); Monte Carlo LoRa matches pure ALOHA; Monte Carlo LR-FHSS matches the Ullah et al. (IEEE WCL 2022) closed form; NPRACH collision model matches a direct preamble-selection simulation; propagated geometry matches the TR 38.811 slant-range formula; array gains match published estimates for 64 m² and 223 m² apertures at 850 MHz; NB-IoT and LTE-M MCL reproduce 164 dB (23 dBm, NF 3 dB) and 155.7 dB (20 dBm, NF 5 dB) at their stated assumptions (by construction, consistency only); LR-FHSS airtime follows the RP002-1.0.5 hop structure; satellite patterns conserve energy (v1 did not); RACH configurations are valid; Walker and censored-gap handling; v1.4 adds regression tests for the message chronology (no transmission after deadline or contact end, profile conservation, beam hopping), LR-FHSS branch continuity in six regimes, tiered admission accounting, per-TB HARQ, coherence-correlated HARQ, the S.1528 back lobe, capacity-interval coverage on a known crossing, and engine vs reference scheduler. Several checks are internal-consistency tests; independent link-level and measurement benchmarks are Phase 3.
+LoRa time on air matches the TTN airtime calculator to within 0.05 ms for SF7 to SF12; LoRa SF12 sensitivity matches the SX1276 datasheet (−137 dBm); Monte Carlo LoRa matches pure ALOHA; Monte Carlo LR-FHSS matches the Ullah et al. (IEEE WCL 2022) closed form; NPRACH collision model matches a direct preamble-selection simulation; propagated geometry matches the TR 38.811 slant-range formula; array gains match published estimates for 64 m² and 223 m² apertures at 850 MHz; NB-IoT and LTE-M MCL reproduce 164 dB (23 dBm, NF 3 dB) and 155.7 dB (20 dBm, NF 5 dB) at their stated assumptions (by construction, consistency only); LR-FHSS airtime follows the RP002-1.0.5 hop structure; satellite patterns conserve energy (v1 did not); RACH configurations are valid; Walker and censored-gap handling; v1.4 adds regression tests for the message chronology (no transmission after deadline or contact end, profile conservation, beam hopping), LR-FHSS branch continuity in six regimes, tiered admission accounting, per-TB HARQ, coherence-correlated HARQ, the S.1528 back lobe, capacity-interval coverage on a known crossing, and engine vs reference scheduler; v1.6 adds the downlink anchor in both calibrations, acknowledgement-service limits, co-channel geometry symmetry, half-duplex blanking and exact reproduction of v1.5.1 with the downlink off. Several checks are internal-consistency tests; independent link-level and measurement benchmarks are Phase 3.
 
 ## What is assumed, and what is not modelled
 

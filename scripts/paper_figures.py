@@ -15,7 +15,7 @@ import matplotlib.pyplot as plt
 sys.path.insert(0, os.getcwd())
 from ntnsim.figures import COL, MAIN, CONTROL, _ls  # noqa: E402
 
-R = json.load(open("frozen/results.json"))
+R = json.load(open(os.environ.get("NTN_RESULTS", "frozen/results.json")))
 OUT = "frozen/paper_figs"
 os.makedirs(OUT, exist_ok=True)
 INK, INK2, GRID = "#0b0b0b", "#52514e", "#e4e3df"
@@ -245,4 +245,24 @@ for ax, st, tag in zip(axs, ("IO-ISM-LRFHSS", "OP-MSS-NBIOT"), ("(a)", "(b)")):
 axs[1].set_xlabel("Delivered within deadline")
 fig.tight_layout(h_pad=0.8)
 save(fig, "p_sens")
+# downlink: uplink vs confirmed delivery, stacked panels --------------------------------------------
+if "pdr_confirmed_deadline" in R["scenario_matrix"]["utility_wells"]["OP-LB-NBIOT"]:
+    fig, axs = plt.subplots(2, 1, figsize=(W1, 5.4))
+    for ax, sc, tag in zip(axs, ("utility_wells", "disaster_urban"), ("(a) Utility wells", "(b) Urban disaster")):
+        M = R["scenario_matrix"][sc]
+        ul = [M[s]["pdr_deadline"] for s in STACKS]
+        cf = [M[s]["pdr_confirmed_deadline"] for s in STACKS]
+        ax.barh([v - 0.2 for v in y], ul, height=0.38, color="#b9b8b2", label="Uplink delivery")
+        ax.barh([v + 0.2 for v in y], cf, height=0.38, color=[COL[s] for s in STACKS],
+                label="Confirmed delivery (acknowledgment received)")
+        for v, a, b in zip(y, ul, cf):
+            ax.text(max(a, b) + 0.015, v, f"{100 * a:.0f} / {100 * b:.0f}%", va="center", fontsize=5.2)
+        ax.set_yticks(y); ax.set_yticklabels(STACKS, fontsize=5.8); ax.invert_yaxis()
+        ax.tick_params(axis="y", which="both", right=False); ax.grid(axis="y", visible=False)
+        ax.set_xlim(0, 1.25); ax.set_title(tag, loc="left")
+    axs[1].set_xlabel("Messages delivered within the deadline")
+    fig.tight_layout(h_pad=0.8, rect=(0, 0, 1, 0.95))
+    h_, l_ = axs[0].get_legend_handles_labels()
+    fig.legend(h_, l_, loc="upper center", bbox_to_anchor=(0.55, 1.0), ncol=1, fontsize=5.8)
+    save(fig, "p_dl")
 print("done")

@@ -260,7 +260,8 @@ def run_extras(n_mc=3000, cache_dir="out/cache", log=print):
     try:
         base = Case("OP-LB-NBIOT", REF_SCEN, cache_dir=cache_dir).devices_in_cell(45.0)[0]
         cap_cell = AN.capacity("OP-LB-NBIOT", REF_SCEN, n_mc=n_mc, seeds=PR.GLOBAL["seeds"][:1], iters=12,
-                               metrics=("service",), ci=False, check_load=False, **kw)["service"]["devices_per_cell"]
+                               metrics=("service",), ci=False, check_load=False, g_over=dict(downlink=False),
+                               **kw)["service"]["devices_per_cell"]
         ls = cap_cell / base
     except Exception:
         ls = 250.0
@@ -268,12 +269,60 @@ def run_extras(n_mc=3000, cache_dir="out/cache", log=print):
                           ("disaster_urban", 1.0, dict(nbiot_calibration="link_level")),
                           ("disaster_urban", 1.0, dict(admission="cheapest_first")),
                           ("disaster_urban", 1.0, dict(admission="cheapest_first", nbiot_calibration="link_level"))):
-        refs.append(RS.reference_scheduler("OP-LB-NBIOT", sc, scale, dict(g_over, **go), cache_dir=cache_dir, hours=6))
+        refs.append(RS.reference_scheduler("OP-LB-NBIOT", sc, scale, dict(g_over, downlink=False, **go),
+                                           cache_dir=cache_dir, hours=6))     # uplink queue test
     log("extra: orbital phase (three overlapping arrival windows; a sensitivity, not an independent ensemble)")
     phases = {}
     for start in (21600.0, 43200.0, 64800.0):
         phases[str(int(start / 3600)) + "h"] = {s: run_case(s, REF_SCEN, g_over=dict(g_over, arrival_start_s=start),
                                                             **kw)["pdr_deadline"] for s in ALL}
+    log("extra: downlink (v1.6) - confirmed-delivery capacity and downlink sensitivity")
+    capc = {}
+    for stck in ALL:
+        capc[stck] = _ck("capc_%s" % stck, lambda stck=stck: AN.capacity(
+            stck, REF_SCEN, n_mc=n_mc, seeds=PR.GLOBAL["seeds"], iters=12, metrics=("service",), ci=False,
+            check_load=False, key="pdr_confirmed_deadline", **kw)["service"])
+    dl_cases = {
+        "OP-LB-NBIOT@disaster_urban": [
+            ("baseline", {}, {}), ("downlink not modelled (v1.5.1)", {}, dict(downlink=False)),
+            ("satellite downlink EIRP +6 dB", {}, dict(dl_eirp_offset_db=6.0)),
+            ("satellite downlink EIRP -6 dB", {}, dict(dl_eirp_offset_db=-6.0)),
+            ("acquisition limit -20 dB", {}, dict(dl_floor_db=-20.0)),
+            ("device noise figure 9 dB", {}, dict(dl_nf_cell_db=9.0)),
+            ("frequency reuse 1", {}, dict(dl_reuse=1)),
+            ("link-level repetition efficiency", {}, dict(nbiot_calibration="link_level"))],
+        "OP-LB-NBIOT@utility_wells": [
+            ("baseline", {}, {}), ("downlink not modelled (v1.5.1)", {}, dict(downlink=False)),
+            ("satellite downlink EIRP -6 dB", {}, dict(dl_eirp_offset_db=-6.0)),
+            ("frequency reuse 1", {}, dict(dl_reuse=1))],
+        "OP-MSS-NBIOT@utility_wells": [
+            ("baseline", {}, {}), ("downlink not modelled (v1.5.1)", {}, dict(downlink=False)),
+            ("satellite downlink EIRP +6 dB", {}, dict(dl_eirp_offset_db=6.0)),
+            ("acquisition limit -20 dB", {}, dict(dl_floor_db=-20.0)),
+            ("deployable 12 dBi antenna", dict(sat="smallsat_deployable"), {})],
+        "IO-ISM-LRFHSS@utility_wells": [
+            ("baseline", {}, {}), ("acknowledgement at SF12 (RP002 default RX2)", dict(dl_sf=12), {}),
+            ("acknowledgement at SF9", dict(dl_sf=9), {}),
+            ("no half-duplex blanking", dict(gw_half_duplex=False, ack_windows=1), {}),
+            ("dense constellation (64 sats)", dict(const="iot_dense"), {}),
+            ("ISM interference off", dict(ism="off"), {})],
+        "IO-SBAND-LRFHSS-HP@utility_wells": [
+            ("baseline", {}, {}), ("RX2 only (one window)", dict(ack_windows=1), {}),
+            ("acknowledgement at SF12", dict(dl_sf=12), {}),
+            ("satellite downlink EIRP +6 dB", {}, dict(dl_eirp_offset_db=6.0))],
+    }
+    dlsens = {}
+    for key_, lst in dl_cases.items():
+        stck, scn = key_.split("@")
+        dlsens[key_] = []
+        for name, so, go in lst:
+            r = run_case(stck, scn, stack_over=so or None, g_over=dict(g_over, **go), **kw)
+            dlsens[key_].append(dict(case=name, pdr_deadline=r["pdr_deadline"],
+                                     pdr_confirmed_deadline=r.get("pdr_confirmed_deadline"),
+                                     pdr_deadline_confirmed_mode=r.get("pdr_deadline_confirmed_mode"),
+                                     dl_failures=r["causes"].get("dl"), rho_dl_max=r.get("rho_dl_max"),
+                                     ack_service_min=r.get("ack_service_min"), dl=r.get("dl"),
+                                     on_time_by_ce=r.get("on_time_by_ce"), energy_per_msg_j=r["energy_per_msg_j"]))
     log("extra 3/3 Monte Carlo convergence of service capacity")
     conv = {}
     for stck in ("CTRL-NBIOT", "CTRL-LRFHSS"):
@@ -283,6 +332,7 @@ def run_extras(n_mc=3000, cache_dir="out/cache", log=print):
                             metrics=("service",), **kw)["service"]
             conv[stck].append(dict(n_mc=nmc, devices_per_km2=c["devices_per_km2"]))
     return dict(ism_by_satellite=ism_sat, sensitivity=sens, convergence=conv, policy_matrix=pmat,
+                capacity_confirmed=capc, dl_sensitivity=dlsens,
                 policy_ratios=ratios, reference_scheduler=refs, orbital_phase=phases, lrfhss_branch_boundary=lrb,
                 orbital_phase_note="windows start at 6, 12 and 18 h and each spans 24 h, so they overlap")
 
@@ -297,7 +347,8 @@ def _csv(R, out_dir):
                     "contention_capacity_devices_per_km2", "uplink_reception", "on_time", "on_time_ci_low",
                     "on_time_ci_high", "latency_p50_s", "latency_p95_s", "energy_per_msg_J",
                     "energy_per_on_time_msg_J", "battery_years", "battery_limited_by", "noise_rise_dB",
-                    "alloc_kHz", "on_time_msgs_per_s_per_MHz", "on_time_msgs_per_s_per_MHz_at_service_capacity"])
+                    "alloc_kHz", "on_time_msgs_per_s_per_MHz", "on_time_msgs_per_s_per_MHz_at_service_capacity",
+                    "on_time_confirmed", "dl_snr_median_dB", "dl_failures"])
         for sc, rows in R["scenario_matrix"].items():
             for s, r in rows.items():
                 cr = R["cell_radius"][sc][s]
@@ -323,7 +374,9 @@ def _csv(R, out_dir):
                             _r((sv.get("devices_per_cell") or 0) * sv["on_time_at_capacity"]
                                / PR.SCENARIOS[sc]["interval_s"] / (r["alloc_hz"] / 1e6), 4)
                             if r.get("alloc_hz") and sv.get("on_time_at_capacity") is not None
-                            else (0.0 if r.get("alloc_hz") and not sv.get("devices_per_cell") else None)])
+                            else (0.0 if r.get("alloc_hz") and not sv.get("devices_per_cell") else None),
+                            _r(r.get("pdr_confirmed_deadline"), 4), _r((r.get("dl") or {}).get("snr_median_db"), 2),
+                            _r(r["causes"].get("dl"), 4)])
     with open(os.path.join(out_dir, "link_budgets.csv"), "w", newline="") as f:
         w = csv.writer(f)
         stacks = list(R["link_budget"].keys())

@@ -5,7 +5,7 @@ Run from the repository root: python3 scripts/build_notebook.py
 import json
 import os
 
-MODULES = ["rng", "geometry", "antenna", "channel", "phy", "nbiot", "interference", "access", "energy",
+MODULES = ["rng", "geometry", "antenna", "channel", "phy", "nbiot", "interference", "access", "energy", "downlink",
            "economics", "presets", "engine", "analysis", "refsched", "report", "validate", "figures"]
 
 
@@ -20,7 +20,7 @@ def code(s, hidden=False):
 
 
 cells = [md("""
-# Operator 3GPP IoT-NTN vs IoT-only LoRaWAN NTN: LEO simulator (v1.5.1, frozen version used in the paper)
+# Operator 3GPP IoT-NTN vs IoT-only LoRaWAN NTN: LEO simulator (v1.6.0, frozen version used in the paper)
 
 **What it compares.** The same IoT scenarios served by hypothetical architectures representing two business models (infrastructure scale, spectrum and technology are confounded in the main stacks; the control stacks and sensitivity analysis separate them):
 
@@ -30,7 +30,7 @@ cells = [md("""
 
 **Comparison dimensions.** Path loss, itemised link budget, link margin, coverage probability, cell and service radius, time coverage at the site, interference (ISM noise rise, co-channel terrestrial UEs), per-device throughput, goodput versus load, capacity per cell and per km², delivery within deadline, latency, energy per message and battery life, plus a sensitivity analysis.
 
-**Delivery means uplink reception** at the satellite (transparent payload: at the gateway). Downlink, acknowledgements and ground-segment availability are not modelled yet (Phase 2-3).
+**Two delivery metrics.** `pdr_deadline` is uplink reception at the satellite (transparent payload: at the gateway); for 3GPP stacks the random-access response, every uplink grant and the final message are downlink messages that gate it. `pdr_confirmed_deadline` also requires the acknowledgement before the deadline (LoRaWAN: confirmed mode with RX1/RX2 windows, duty cycle and half-duplex gateway). Ground-segment availability is not modelled.
 
 **Read before using results.** Satellite and constellation presets are *illustrative classes*, not a specific operator's design. ISM activity levels, Doppler tolerances, LR-FHSS SNR thresholds and device current profiles are *assumptions* exposed as parameters. NB-IoT/LTE-M Eb/N0 and floor rates are *back-solved* to the 3GPP MCL targets. TR 38.811 clutter tables are S-band values applied at sub-GHz (extrapolation). Economic prices are left empty on purpose. Nothing here is a measurement.
 

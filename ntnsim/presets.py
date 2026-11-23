@@ -9,15 +9,15 @@ import json
 SITE_UAE = dict(name="Abu Dhabi, UAE", lat=24.45, lon=54.38)
 
 SATELLITES = {
-    "smallsat_patch": dict(pattern="broad", gain_dbi=5.0, nf_db=2.0, t_ant_k=290.0,
+    "smallsat_patch": dict(pattern="broad", gain_dbi=5.0, nf_db=2.0, t_ant_k=290.0, dl_eirp_dbw_mhz=21.45,
                            note="illustrative cubesat patch, nadir beam"),
-    "smallsat_deployable": dict(pattern="broad", gain_dbi=12.0, nf_db=2.0, t_ant_k=290.0,
+    "smallsat_deployable": dict(pattern="broad", gain_dbi=12.0, nf_db=2.0, t_ant_k=290.0, dl_eirp_dbw_mhz=21.45,
                                 note="illustrative deployable antenna on a small LEO IoT satellite"),
     "d2d_array_64m2": dict(pattern="multibeam", beams_per_sat=None, aperture_m2=64.0, eff=0.65, nf_db=2.0,
-                           t_ant_k=290.0, scan_loss_exp=1.2, sidelobe_db=-25.0,
+                           t_ant_k=290.0, scan_loss_exp=1.2, sidelobe_db=-25.0, dl_rf_psd_dbw_mhz=8.5,
                            note="64 m2 phased array (AST Block 1 class)"),
     "d2d_array_223m2": dict(pattern="multibeam", beams_per_sat=None, aperture_m2=223.0, eff=0.65, nf_db=2.0,
-                            t_ant_k=290.0, scan_loss_exp=1.2, sidelobe_db=-25.0,
+                            t_ant_k=290.0, scan_loss_exp=1.2, sidelobe_db=-25.0, dl_rf_psd_dbw_mhz=8.5,
                             note="223 m2 phased array (AST Block 2 class)"),
 }
 
@@ -33,6 +33,17 @@ CONSTELLATIONS = {
     "d2d_120": dict(n=120, planes=12, inc=53.0, h=520.0, phasing=1,
                     note="illustrative direct-to-device constellation, 120 large arrays"),
 }
+
+# Downlink EIRP density: small satellites use 3GPP TR 36.763 Set-4 LEO-600
+# (21.45 dBW/MHz, small IoT satellite). No TR set describes a large phased
+# array: the arrays use an RF power density of 8.5 dBW/MHz behind their own
+# aperture gain at the downlink frequency (as the uplink G/T is derived from
+# the same aperture). 8.5 dBW/MHz is the downlink power density (-51.5 dBW/Hz,
+# peak EIRP density -16.5 dBW/Hz at 889 MHz) in a public FCC experimental-
+# licence exhibit for a 64 m2 array of this class. Downlink carrier per stack:
+# B20 791-821 MHz (806 MHz), MSS L-band 1525-1559 MHz (1542 MHz), MSS S-band
+# 2170-2200 MHz (2185 MHz), ISM RX2 869.525 MHz (500 mW e.r.p. = 29.15 dBm
+# EIRP, 10 % duty, half-duplex gateway).
 
 # ISM short-range-device activity seen from orbit (active transmitters per km^2,
 # footprint average). Assumed levels for sensitivity analysis, not measurements.
@@ -57,61 +68,61 @@ RACH = {
 STACKS = {
     # ---- operator-led 3GPP IoT-NTN -----------------------------------------
     "OP-LB-NBIOT": dict(model="operator", label="Operator NB-IoT NTN, 800 MHz (B20) reuse",
-                        tech="NBIOT", f_hz=847e6, sat="d2d_array_223m2", const="d2d_120", alloc_hz=200e3,
+                        tech="NBIOT", f_hz=847e6, f_dl_hz=806e6, sat="d2d_array_223m2", const="d2d_120", alloc_hz=200e3,
                         ptx_dbm=23.0, g_dev_dbi=0.0, device="nbiot_ntn",
                         spectrum="licensed_terrestrial", coexistence="dedicated",
                         carriers_per_beam=1, payload="transparent",
                         rach_max=5, edt=True, rai=True, ctrl_overhead=0.3, tx_policy="first_visible"),
     "OP-LB-LTEM": dict(model="operator", label="Operator LTE-M NTN, 800 MHz (B20) reuse",
-                       tech="LTEM", f_hz=847e6, sat="d2d_array_223m2", const="d2d_120", alloc_hz=1.4e6,
+                       tech="LTEM", f_hz=847e6, f_dl_hz=806e6, sat="d2d_array_223m2", const="d2d_120", alloc_hz=1.4e6,
                        ptx_dbm=23.0, g_dev_dbi=0.0, device="nbiot_ntn",
                        spectrum="licensed_terrestrial", coexistence="dedicated",
                        carriers_per_beam=1, payload="transparent",
                        rach_max=5, edt=True, rai=True, ctrl_overhead=0.3, tx_policy="first_visible"),
     "OP-MSS-NBIOT": dict(model="operator", label="NB-IoT NTN via MSS partner, L-band",
-                         tech="NBIOT", f_hz=1643.5e6, sat="smallsat_patch", const="mss_mid", alloc_hz=200e3,
+                         tech="NBIOT", f_hz=1643.5e6, f_dl_hz=1542e6, sat="smallsat_patch", const="mss_mid", alloc_hz=200e3,
                          ptx_dbm=23.0, g_dev_dbi=0.0, device="nbiot_ntn",
                          spectrum="licensed_mss", coexistence="dedicated",
                          carriers_per_beam=1, payload="regenerative",
                          rach_max=5, edt=True, rai=True, ctrl_overhead=0.3, tx_policy="first_visible"),
     # ---- IoT-only / non-operator LoRaWAN NTN --------------------------------
     "IO-ISM-LRFHSS": dict(model="iot_only", label="IoT-only LR-FHSS DR8, ISM 868 MHz",
-                          tech="LRFHSS", dr="DR8", f_hz=868.1e6, sat="smallsat_patch", alloc_hz=137e3,
+                          tech="LRFHSS", dr="DR8", f_hz=868.1e6, f_dl_hz=869.525e6, dl_eirp_cap_dbm=29.15, dl_duty=0.10, gw_half_duplex=True, sat="smallsat_patch", alloc_hz=137e3,
                           const="iot_sparse", ptx_dbm=14.0, g_dev_dbi=2.15, device="lora_lr11xx",
                           spectrum="ism", ism="low", other_networks_load=1.0, copies=1,
                           duty_cycle_limit=0.01, payload="regenerative", class_a_rx=True),
     "IO-ISM-LORA-SF10": dict(model="iot_only", label="IoT-only LoRa SF10, ISM 868 MHz",
-                             tech="LORA", sf=10, channels=8, f_hz=868.1e6, sat="smallsat_patch", alloc_hz=1e6,
+                             tech="LORA", sf=10, channels=8, f_hz=868.1e6, f_dl_hz=869.525e6, dl_eirp_cap_dbm=29.15, dl_duty=0.10, gw_half_duplex=True, sat="smallsat_patch", alloc_hz=1e6,
                              const="iot_sparse", ptx_dbm=14.0, g_dev_dbi=2.15, device="lora_lr11xx",
                              spectrum="ism", ism="low", other_networks_load=1.0, copies=1,
                              duty_cycle_limit=0.01, payload="regenerative", class_a_rx=True),
     "IO-ISM-LORA-SF12": dict(model="iot_only", label="IoT-only LoRa SF12, ISM 868 MHz",
-                             tech="LORA", sf=12, channels=8, f_hz=868.1e6, sat="smallsat_patch", alloc_hz=1e6,
+                             tech="LORA", sf=12, channels=8, f_hz=868.1e6, f_dl_hz=869.525e6, dl_eirp_cap_dbm=29.15, dl_duty=0.10, gw_half_duplex=True, sat="smallsat_patch", alloc_hz=1e6,
                              const="iot_sparse", ptx_dbm=14.0, g_dev_dbi=2.15, device="lora_lr11xx",
                              spectrum="ism", ism="low", other_networks_load=1.0, copies=1,
                              duty_cycle_limit=0.01, payload="regenerative", class_a_rx=True),
     "IO-SBAND-LRFHSS": dict(model="iot_only", label="IoT-only LR-FHSS, licensed S-band, LR1120 (+11.5 dBm)",
-                            tech="LRFHSS", dr="DR8", f_hz=1995e6, sat="smallsat_patch", alloc_hz=137e3,
+                            tech="LRFHSS", dr="DR8", f_hz=1995e6, f_dl_hz=2185e6, sat="smallsat_patch", alloc_hz=137e3,
                             const="iot_dense", ptx_dbm=11.5, g_dev_dbi=2.15, device="lora_lr1120_sband",
                             spectrum="licensed_mss", ism="off", other_networks_load=0.0, copies=1,
                             duty_cycle_limit=None, payload="regenerative", class_a_rx=False),
     "IO-SBAND-LRFHSS-HP": dict(model="iot_only", label="IoT-only LR-FHSS, licensed S-band, high-power module (+27 dBm)",
-                               tech="LRFHSS", dr="DR8", f_hz=1995e6, sat="smallsat_patch", alloc_hz=137e3,
+                               tech="LRFHSS", dr="DR8", f_hz=1995e6, f_dl_hz=2185e6, sat="smallsat_patch", alloc_hz=137e3,
                                const="iot_dense", ptx_dbm=27.0, g_dev_dbi=2.15, device="sband_hp_module",
                                spectrum="licensed_mss", ism="off", other_networks_load=0.0, copies=1,
                                duty_cycle_limit=None, payload="regenerative", class_a_rx=False),
     # ---- same-band control (air interface only) -----------------------------
     "CTRL-NBIOT": dict(model="control", label="Control: NB-IoT NTN, 847 MHz, equal satellite and power",
-                       tech="NBIOT", f_hz=847e6, sat="d2d_array_223m2", const="d2d_120", alloc_hz=200e3,
+                       tech="NBIOT", f_hz=847e6, f_dl_hz=806e6, sat="d2d_array_223m2", const="d2d_120", alloc_hz=200e3,
                        ptx_dbm=22.0, g_dev_dbi=0.0, device="nbiot_ntn", spectrum="licensed_terrestrial",
                        coexistence="dedicated", carriers_per_beam=1, payload="transparent",
                        rach_max=5, edt=True, rai=True, ctrl_overhead=0.3, tx_policy="first_visible"),
     "CTRL-LRFHSS": dict(model="control", label="Control: LR-FHSS DR8, 847 MHz, equal satellite and power",
-                        tech="LRFHSS", dr="DR8", f_hz=847e6, sat="d2d_array_223m2", const="d2d_120", alloc_hz=200e3,
+                        tech="LRFHSS", dr="DR8", f_hz=847e6, f_dl_hz=806e6, sat="d2d_array_223m2", const="d2d_120", alloc_hz=200e3,
                         ptx_dbm=22.0, g_dev_dbi=0.0, device="lora_lr11xx", spectrum="licensed_terrestrial",
                         ism="off", other_networks_load=0.0, copies=1, duty_cycle_limit=None, payload="transparent"),
     "CTRL-LORA-SF12": dict(model="control", label="Control: LoRa SF12, 847 MHz, equal satellite and power",
-                           tech="LORA", sf=12, channels=1, f_hz=847e6, sat="d2d_array_223m2", alloc_hz=200e3,
+                           tech="LORA", sf=12, channels=1, f_hz=847e6, f_dl_hz=806e6, sat="d2d_array_223m2", alloc_hz=200e3,
                            const="d2d_120", ptx_dbm=22.0, g_dev_dbi=0.0, device="lora_lr11xx",
                            spectrum="licensed_terrestrial", ism="off", other_networks_load=0.0,
                            copies=1, duty_cycle_limit=None, payload="transparent", class_a_rx=True),
@@ -125,7 +136,7 @@ for _t, _extra in (("NBIOT", dict(device="nbiot_ntn", coexistence="dedicated", c
     _name = {"NBIOT": "NB-IoT", "LRFHSS": "LR-FHSS DR8", "LORA": "LoRa SF12"}[_t]
     STACKS["CTRL-SS-" + {"NBIOT": "NBIOT", "LRFHSS": "LRFHSS", "LORA": "LORA-SF12"}[_t]] = dict(
         model="control_smallsat", label=f"Control (smallsat): {_name}, 847 MHz, 5 dBi, 64 sats, 22 dBm",
-        tech=_t, f_hz=847e6, sat="smallsat_patch", const="iot_dense", alloc_hz=200e3, ptx_dbm=22.0,
+        tech=_t, f_hz=847e6, f_dl_hz=806e6, sat="smallsat_patch", const="iot_dense", alloc_hz=200e3, ptx_dbm=22.0,
         g_dev_dbi=0.0, spectrum="licensed_terrestrial", payload="regenerative", **_extra)
 
 SCENARIOS = {
@@ -186,6 +197,14 @@ GLOBAL = dict(
     n_mc=3000, pool_size=4000, seed=20261122,
     battery_mah=5200.0, battery_v=3.6,
     gnss_validity_s=86400.0,
+    downlink=True,              # v1.6: downlink link budget, control/data channels, acknowledgements
+    dl_nf_cell_db=7.0,          # cellular module noise figure (TR 36.763 PC3 assumption; 9 dB = RAN1 common PC5 value)
+    dl_nf_lora_db=6.0,          # LoRa transceiver noise figure (SX1262: -137 dBm at SF12/125 kHz)
+    dl_reuse=3,                 # multibeam downlink frequency reuse (TR 38.821 FRF 3)
+    dl_retx_max=4,              # network re-sends of a missed grant or final message, each with doubled repetitions
+    dl_floor_db=-14.7,          # cell acquisition limit: NPDSCH 164 dB MCL reference point (Matz et al. 2020)
+    dl_eirp_offset_db=0.0,      # sensitivity: offset on every satellite downlink EIRP density
+    dl_sf_margin_db=3.0,        # LoRaWAN downlink SF: lowest SF with this margin at the elevation mask, median LOS
 )
 
 

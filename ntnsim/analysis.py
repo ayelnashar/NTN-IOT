@@ -91,7 +91,38 @@ def link_budget(stack, scen, el_deg=30.0, los=True, **kw):
     rows.append(("Message airtime", message_airtime_s(case, cn0), "s"))
     # MAPL: device EIRP to satellite antenna output, path + clutter + allowances.
     # MCL: device antenna port to satellite antenna port (excludes both antenna gains).
+    dl_rows, dl_margin = None, None
+    if case.dl_on:
+        from . import downlink as DLm
+        from .antenna import airy_rel_db
+        fspl_dl = CH.fspl_db(d, case.f_dl)
+        snr = case.dl_snr_median(el_deg, los)
+        ci = (DLm.c_over_i_db(0.0, 0.0, airy_rel_db, case.ant.bw, g["dl_reuse"])
+              if case.ant.kind == "multibeam" else None)
+        if case.tech in DLm.TECH:
+            req_dl, req_lbl = case.dl_floor, "cell acquisition limit (164 dB MCL point)"
+        else:
+            req_dl, req_lbl = P.LORA_SNR_DB[case.sf_dl], "LoRa SF%d acknowledgement" % case.sf_dl
+        dl_margin = snr - req_dl
+        dl_rows = [
+            ("Downlink frequency", case.f_dl / 1e6, "MHz"),
+            ("Satellite EIRP density at beam centre", case.dl_eirp_dbw_mhz, "dBW/MHz"),
+            ("Satellite EIRP in the downlink bandwidth", case.dl_eirp_dbm, "dBm"),
+            ("Downlink bandwidth", case.dl_bw / 1e3, "kHz"),
+            ("Satellite pattern relative to beam centre", gs - case.ant.g0, "dB"),
+            ("Free-space path loss", -fspl_dl, "dB"),
+            ("Allowances (polarisation, scintillation, gas)", -case.allow, "dB"),
+            ("Clutter loss (median)", -cl, "dB"),
+            ("Device-side loss", -sc["device_loss_db"], "dB"),
+            ("Device antenna gain", st["g_dev_dbi"], "dBi"),
+            ("Device noise power in the bandwidth", case.dl_n_dbm, "dBm"),
+            ("Carrier-to-interference, co-channel beams (beam centre)", ci, "dB"),
+            ("Downlink SINR", snr, "dB"),
+            ("Required: " + req_lbl, req_dl, "dB"),
+            ("Downlink margin", dl_margin, "dB"),
+        ]
     return dict(stack=stack, scenario=scen, elev_deg=el_deg, rows=rows, margin_db=cn0 - req,
+                dl_rows=dl_rows, dl_margin_db=dl_margin,
                 mapl_db=case.eirp_dev + gs - n0e - req,
                 mcl_db=st["ptx_dbm"] - (n0e + req),
                 mapl_definition="device EIRP + satellite gain - (N0+I0) - required C/N0",
@@ -275,7 +306,7 @@ def t_interval(vals):
 
 def capacity(stack, scen, target=0.9, max_contention_loss=0.1, n_mc=3000, seeds=None,
              dev_lo=1.0, dev_hi=1e7, iters=12, metrics=("service", "contention"), ci=True,
-             check_load=True, **kw):
+             check_load=True, key="pdr_deadline", **kw):
     """Two capacity metrics, each bisected on log(devices per cell):
 
     service capacity    - largest devices per cell with delivery within deadline
@@ -305,13 +336,13 @@ def capacity(stack, scen, target=0.9, max_contention_loss=0.1, n_mc=3000, seeds=
     seeds (same estimand and load); a monotonicity check evaluates the
     on-time fraction at 0.5x, 1x and 2x the capacity."""
     seeds = seeds or [20261122, 20261123, 20261124]
-    svc_ok = lambda r: r["pdr_deadline"] >= target
+    svc_ok = lambda r: r[key] >= target
 
     def cont_ok(r):
         c = r["causes"]
         den = r["pdr"] + c["collision"] + c["blocked"]
         return den > 0 and (c["collision"] + c["blocked"]) / den <= max_contention_loss
-    out = dict(stack=stack, scenario=scen, target=target, seeds=seeds, n_mc=n_mc, replications=len(seeds))
+    out = dict(stack=stack, scenario=scen, target=target, seeds=seeds, n_mc=n_mc, replications=len(seeds), metric=key)
     base = Case(stack, scen, stack_over=kw.get("stack_over"), scen_over=kw.get("scen_over"),
                 g_over=kw.get("g_over"), cache_dir=kw.get("cache_dir")).devices_in_cell(45.0)[0]
     for name, fn in (("service", svc_ok), ("contention", cont_ok)):
@@ -342,11 +373,11 @@ def capacity(stack, scen, target=0.9, max_contention_loss=0.1, n_mc=3000, seeds=
                                 else "none: capacity at a search boundary or zero")
         if name == "service" and mean > 0 and check_load and not boundary:
             sc_load = mean / base
-            ot = [_run_scaled(stack, scen, sc_load, n_mc, sd + 1000, kw)["pdr_deadline"] for sd in seeds]
+            ot = [_run_scaled(stack, scen, sc_load, n_mc, sd + 1000, kw)[key] for sd in seeds]
             m_ot, ci_ot, _ = t_interval(ot)
             res["on_time_at_capacity"] = m_ot
             res["on_time_at_capacity_ci95"] = ci_ot if len(seeds) >= 5 else None
-            mono = [_run_scaled(stack, scen, sc_load * f, n_mc, seeds[0] + 2000, kw)["pdr_deadline"]
+            mono = [_run_scaled(stack, scen, sc_load * f, n_mc, seeds[0] + 2000, kw)[key]
                     for f in (0.5, 1.0, 2.0)]
             res["monotonicity_check"] = dict(load_factors=[0.5, 1.0, 2.0], on_time=mono,
                                              monotone=bool(mono[0] >= mono[1] - 0.01 and mono[1] >= mono[2] - 0.01))

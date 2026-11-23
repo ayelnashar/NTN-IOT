@@ -1,5 +1,14 @@
 # Changelog
 
+## v1.6.0 (paper version): downlink
+
+- New module `downlink.py` and engine support for the downlink of every stack; two delivery metrics, `pdr_deadline` (uplink) and `pdr_confirmed_deadline` (acknowledgement received before the deadline).
+- 3GPP: downlink SINR from each device's uplink realisation at the downlink frequency (806 / 1542 MHz), co-channel beams at reuse 3, EIRP density 21.45 dBW/MHz (TR 36.763 Set 4) for small satellites and aperture gain + 8.5 dBW/MHz for arrays (49.7 dBW/MHz for 223 m2); control and shared channels with a gap anchored at the NPDSCH 164 dB point (-14.7 dB, TBS 680, 8 SF, 128 rep) for the active beta; cell acquisition limit -14.7 dB; coverage level = max(uplink level, downlink level); one RAR per non-empty NPRACH occasion per level; a grant per HARQ attempt and a final message, each re-sent up to 4 times with doubled repetitions; downlink load with RAR dropping above rho 0.9, extra admission factor and Pollaczek-Khinchine waiting; downlink reception charged to energy.
+- LoRaWAN confirmed mode: 12-byte acknowledgement at the lowest SF closing with 3 dB at the 10 deg mask; one transmitter, Erlang loss with RX1/RX2 (licensed) or RX2 only (ISM); ISM 869.525 MHz at 29.15 dBm EIRP and 10 % duty; half-duplex blanking of uplink packets (LR-FHSS on headers and fragments).
+- New sensitivities: downlink EIRP, acquisition limit, noise figure, reuse, acknowledgement SF, receive windows; confirmed-delivery capacity for every stack and under matched transmit policies for the controls.
+- 60 validation checks (5 new). With `downlink=False` the engine reproduces v1.5.1 exactly.
+- Main changes in the frozen results: utility wells NB-IoT 0.986 -> 0.982 (0.979 confirmed); LTE-M capacity 58.3 -> 44.9 devices/km2 (downlink-limited); disaster NB-IoT 0.616 -> 0.481, LTE-M 0.176 -> 0.435; IoT-only ISM LR-FHSS confirmed delivery 0.007; confirmed capacity ratio NB-IoT / LR-FHSS on the array 4.6-4.9.
+
 ## v1.5.1 (paper version)
 
 Energy accounting of the 3GPP stacks follows one causal clock per message.

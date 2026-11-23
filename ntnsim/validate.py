@@ -271,7 +271,7 @@ def run(log=print):
                      simulated=rs.get("energy_basis"), reference="generated", tolerance="exact",
                      passed=rs.get("energy_basis") == "generated", source="N08 regression test"))
     # M01: cheapest-first admission books exactly rho_admit on the admitted population
-    rc = _rc2("OP-LB-NBIOT", "disaster_urban", g_over=dict(admission="cheapest_first", nbiot_calibration="link_level"))
+    rc = _rc2("OP-LB-NBIOT", "disaster_urban", g_over=dict(admission="cheapest_first", nbiot_calibration="link_level", downlink=False))
     rows.append(_row("Cheapest-first: admitted utilisation in the most loaded group (rho_admit 0.9)",
                      rc["rho_admitted_max"], 0.9, 1e-6, "M01: tiered fractional admission, consistent moments"))
     # M02: coverage of the capacity interval procedure on a problem with a known crossing
@@ -332,6 +332,35 @@ def run(log=print):
                      simulated=(round(g1, 6), round(g2, 6)), reference=(round((0.5 * 1 + 1 * 3) / 1.5, 6), 3.0),
                      tolerance="1e-9", passed=abs(g1 - 3.5 / 1.5) < 1e-9 and abs(g2 - 3.0) < 1e-9,
                      source="P03 regression test"))
+    # ---- v1.6 downlink checks
+    from . import downlink as DLv
+    from .antenna import airy_rel_db as _airy
+    an = (DLv.anchor_check(0.5), DLv.anchor_check(1.0))
+    rows.append(dict(check="Downlink anchor: NPDSCH TBS 680, 8 subframes, 128 repetitions reproduced (beta 0.5 and 1)",
+                     simulated=tuple(round(x, 6) for x in an), reference=(-14.7, -14.7), tolerance="1e-9",
+                     passed=all(abs(x + 14.7) < 1e-9 for x in an), source="Matz et al., Sensors 2020, Table 2"))
+    s0 = DLv.ack_service(0.0, 1.0, 0.1)[0]
+    s1, c1 = DLv.ack_service(3.0, 0.5, None, 1)
+    s2, c2 = DLv.ack_service(3.0, 0.5, None, 2)
+    s3, c3 = DLv.ack_service(30.0, 0.5, 0.1, 1)
+    okk = s0 == 1.0 and s2 >= s1 and abs(s1 - 1 / (1 + 1.5)) < 1e-9 and c3 <= 0.1 + 1e-12
+    rows.append(dict(check="Acknowledgement service: no load -> 1; one window = Erlang loss 1/(1+A); two windows >= one; duty cap",
+                     simulated=(s0, round(s1, 6), round(s2, 6), round(c3, 6)), reference=(1.0, 0.4, ">= 0.4", "<= 0.1"),
+                     tolerance="1e-9", passed=okk, source="analytic"))
+    cia = DLv.c_over_i_db(0.6, 0.3, _airy, 1.0, 3)
+    cib = DLv.c_over_i_db(0.6, 0.3 + math.pi / 3, _airy, 1.0, 3)
+    ci0 = DLv.c_over_i_db(0.0, 0.0, _airy, 1.0, 3)
+    rows.append(dict(check="Downlink C/I, reuse 3: 60-degree rotational symmetry and positive at beam centre",
+                     simulated=(round(cia, 6), round(cib, 6), round(ci0, 2)), reference="equal pair, > 0 dB",
+                     tolerance="1e-9", passed=abs(cia - cib) < 1e-9 and ci0 > 0, source="hexagonal geometry"))
+    bl = DLv.blank_ok_lrfhss(Rng(3), {"toa_s": 2.0, "nh": 3, "nf": 10, "need": 4}, 0.0, 1.0, 0.233, 0.102)
+    rows.append(dict(check="Half-duplex blanking with no gateway transmissions leaves the LR-FHSS packet intact",
+                     simulated=bl, reference=True, tolerance="exact", passed=bl is True, source="regression test"))
+    off = _rc2("OP-LB-NBIOT", "utility_wells", g_over=dict(downlink=False), cache_dir="out/cache")["pdr_deadline"]
+    lr = _rc2("IO-ISM-LRFHSS", "utility_wells", cache_dir="out/cache")["pdr_deadline"]
+    rows.append(dict(check="Downlink switched off reproduces v1.5.1 (OP-LB-NBIOT); unconfirmed LR-FHSS unchanged by the downlink",
+                     simulated=(off, lr), reference=(0.9856666666666667, 0.29733333333333334), tolerance="exact",
+                     passed=off == 0.9856666666666667 and lr == 0.29733333333333334, source="v1.5.1 frozen results"))
     for r in rows:
         log(("PASS " if r["passed"] else "FAIL ") + r["check"] + f"  sim={r['simulated']} ref={r['reference']}")
     return rows
