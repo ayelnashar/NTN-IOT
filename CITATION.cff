@@ -1,0 +1,20 @@
+cff-version: 1.2.0
+message: "If you use this simulator, please cite the paper and the software."
+title: "ntnsim: Operator-led 3GPP IoT-NTN versus IoT-only LoRaWAN NTN LEO simulator"
+version: 1.5.0
+date-released: 2026-11-23
+license: MIT
+repository-code: "https://github.com/ayelnashar/NTN-IOT"
+authors:
+  - family-names: Elnashar
+    given-names: Ayman
+    email: ayman.elnashar@ku.ac.ae
+preferred-citation:
+  type: article
+  title: "Operator-Led 3GPP IoT-NTN Versus IoT-Only LoRaWAN Direct-to-Satellite Networks: A Same-Scenario LEO Simulation Study"
+  authors:
+    - family-names: Elnashar
+      given-names: Ayman
+  journal: "IEEE Open Journal of the Communications Society"
+  status: submitted
+  year: 2026

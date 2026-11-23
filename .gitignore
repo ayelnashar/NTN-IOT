@@ -1,0 +1,5 @@
+__pycache__/
+*.pyc
+out/
+.ipynb_checkpoints/
+NTN_IoT_Operator_vs_LoRaWAN_Simulator_unexecuted.ipynb

@@ -1,0 +1,8 @@
+# The simulation core (ntnsim) uses the Python standard library only.
+# Figures and notebook tables:
+matplotlib>=3.7
+pandas>=2.0
+# Optional, to execute the notebook from the command line:
+nbclient>=0.8
+nbformat>=5.9
+ipykernel>=6.0
