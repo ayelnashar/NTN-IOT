@@ -1,5 +1,16 @@
 # Changelog
 
+## v1.5.1 (paper version)
+
+Energy accounting of the 3GPP stacks follows one causal clock per message.
+
+- Random-access preambles stop at contact end or message expiry; for devices below the coupling-loss floor, the number of preambles is bounded by the remaining contact and deadline.
+- RRC setup, queue waiting, data and release are charged only when access completes inside the contact and before expiry.
+- A transport-block attempt cut by contact end or expiry is charged for the part transmitted.
+- Release is charged only after data has been sent.
+
+The random-number stream is unchanged, so delivery, latency, capacity, policy ratios and all other non-energy results are identical to v1.5.0 (checked field by field). Only energy per message and battery life change, by at most 3% (largest change: OP-LB-NBIOT in the disaster scenario, 1.483 J to 1.439 J per message, 0.68 to 0.70 years). The 55 validation checks pass.
+
 ## v1.5.0 (final; review round 4)
 
 Frozen as the paper version. P01-P04 change results and are fixed; P05-P08 are corrected in labelling and stated as limitations.

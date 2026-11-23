@@ -47,7 +47,7 @@ from .antenna import SatAntenna
 from .rng import Rng
 from . import presets as PR
 
-MODEL_VERSION = "1.5.0"
+MODEL_VERSION = "1.5.1"
 _TL_CACHE = {}
 _PROF_CACHE = {}
 
@@ -636,17 +636,25 @@ def run_case(stack, scen, stack_over=None, scen_over=None, g_over=None, cache_di
             pre = lv["reps"] * rach["preamble_s"]
             rtt = case.rtt_s(s["el"])
             q_e = dev["rx_ma"] * dev["sync_s"] + dev["gnss_ma"] * gnss       # executed-state energy (N08)
+            # v1.5.1 causal energy clock: access, queue, data and release are charged only while the
+            # contact lasts and the message is not expired (time measured from transaction start)
+            lim = min(s["left"], (dl - s["wait"]) if discard else float("inf")) - dev["sync_s"] - gnss
             if not lk["ok"]:                                                  # below floor or frequency limit
-                q_e += st["rach_max"] * (i_tx * pre + dev["rx_ma"] * rach["rar_window_s"])
+                d_att = 0.5 * lv["period_s"] + pre + rtt + rach["rar_window_s"] + 0.5 * rach["backoff_s"]
+                n_exec = min(st["rach_max"], math.ceil(lim / d_att)) if lim > 0 else 0
+                q_e += n_exec * (i_tx * pre + dev["rx_ma"] * rach["rar_window_s"])
                 energies.append(v * q_e); causes[lk["why"]] += 1; lat.append(None); continue
-            t_acc, att, ok = 0.0, 0, False
-            while att < st["rach_max"]:
+            t_acc, att, ok, n_exec = 0.0, 0, False, 0
+            while att < st["rach_max"]:                # random draws unchanged from v1.5.0
                 att += 1
+                if t_acc < lim:
+                    n_exec += 1
                 t_acc += rng.random() * lv["period_s"] + pre + rtt + rach["rar_window_s"]
                 if rng.random() >= stt["p_coll"][lk["ce"]]:
                     ok = True; break
                 t_acc += rng.random() * rach["backoff_s"]
-            q_e += att * (i_tx * pre + dev["rx_ma"] * rach["rar_window_s"])
+            q_e += n_exec * (i_tx * pre + dev["rx_ma"] * rach["rar_window_s"])
+            access_late = t_acc > lim
             if not ok:
                 energies.append(v * q_e); causes["collision"] += 1; lat.append(None); continue
             c0 = round(lk["res0"] / cap_hz, 12)
@@ -669,11 +677,17 @@ def run_case(stack, scen, stack_over=None, scen_over=None, g_over=None, cache_di
             avail_d = (dl - s["wait"] - t_pre) if discard else float("inf")
             avail = min(avail_c, avail_d)
             n_a = sum(1 for te in lk["att_end"] if te <= avail)
-            q_e += dev["idle_ma"] * min(qw, max(s["left"] - dev["sync_s"] - gnss - t_acc, 0.0))
-            q_e += n_a * (i_tx * lk["t_air"] + dev["rx_ma"] * (rtt + harq_proc))
-            q_e += dev["rx_ma"] * dev["release_rai_s"] if st["rai"] else dev["idle_ma"] * dev["inactivity_s"]
-            if not st["edt"]:
-                q_e += dev["rx_ma"] * dev["setup_extra_rx_s"] + i_tx * dev["setup_extra_tx_s"]
+            if not access_late:
+                if not st["edt"]:
+                    q_e += dev["rx_ma"] * dev["setup_extra_rx_s"] + i_tx * dev["setup_extra_tx_s"]
+                q_e += dev["idle_ma"] * min(qw, max(lim - t_acc, 0.0))
+                q_e += n_a * (i_tx * lk["t_air"] + dev["rx_ma"] * (rtt + harq_proc))
+                if n_a < len(lk["att_end"]):                         # attempt cut by contact end or expiry
+                    t0 = lk["att_end"][n_a] - lk["t_air"]
+                    if avail > t0:
+                        q_e += i_tx * (min(avail, lk["att_end"][n_a]) - t0)
+                if n_a > 0:                                          # release only after data was sent
+                    q_e += dev["rx_ma"] * dev["release_rai_s"] if st["rai"] else dev["idle_ma"] * dev["inactivity_s"]
             energies.append(v * q_e)
             t_data = (lk["att_end"][-1] + rtt) if lk["att_end"] else 0.0
             transaction = t_pre + t_data

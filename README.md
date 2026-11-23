@@ -1,10 +1,10 @@
-# ntnsim v1.5: Operator 3GPP IoT-NTN vs IoT-only LoRaWAN NTN over LEO
+# ntnsim v1.5.1: Operator 3GPP IoT-NTN vs IoT-only LoRaWAN NTN over LEO
 
 Code and frozen results for the paper
 
 > A. Elnashar, "Operator-Led 3GPP IoT-NTN Versus IoT-Only LoRaWAN Direct-to-Satellite Networks: A Same-Scenario LEO Simulation Study," submitted to *IEEE Open Journal of the Communications Society*, 2026.
 
-Every number, table and figure in the paper comes from `frozen/results.json`, produced by `scripts/run_batch.py` with the code in this repository (version 1.5). All presets are illustrative system classes, not any operator's deployment, and no measured network data is used.
+Every number, table and figure in the paper comes from `frozen/results.json`, produced by `scripts/run_batch.py` with the code in this repository (version 1.5.1). All presets are illustrative system classes, not any operator's deployment, and no measured network data is used.
 
 ## Repository layout
 
@@ -15,10 +15,10 @@ Every number, table and figure in the paper comes from `frozen/results.json`, pr
 | `frozen/` | `results.json`, CSV tables (link budgets, scenario summary) and all figures (PNG and PDF) used in the paper |
 | `scripts/run_batch.py` | Recomputes every result (about 2 h, about 3 GB RAM, checkpointed) |
 | `scripts/build_notebook.py` | Rebuilds the notebook from the package |
-| `CHANGELOG.md` | Model history and the stated limitations of v1.5 |
+| `CHANGELOG.md` | Model history and the stated limitations of v1.5.1 |
 | `PORTING.md` | Notes for porting the model to other bands or regions |
 
-## Headline results (frozen v1.5, utility-wells scenario)
+## Headline results (frozen v1.5.1, utility-wells scenario)
 
 | Quantity | Value |
 |---|---|
