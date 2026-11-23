@@ -159,7 +159,8 @@ def faded_gain(rng, fades, t0, t1, coh_s, k_db):
 
 
 def lrfhss_attempt_packet(rng, snr_db, frame, p_t_mw, lam_pkts, pool_mw, capture_db=6.0,
-                          fade_k_db=10.0, n_grids=8, coh_s=1.0, max_packets=200, fades=None, t_start=None):
+                          fade_k_db=10.0, n_grids=8, coh_s=1.0, max_packets=200, fades=None, t_start=None,
+                          return_flags=False):
     """Packet-level LR-FHSS reception (F14, N04, M03).
 
     * Interfering packets arrive as a Poisson process over the two-packet
@@ -184,7 +185,9 @@ def lrfhss_attempt_packet(rng, snr_db, frame, p_t_mw, lam_pkts, pool_mw, capture
       (mean fragment length). Its deviation from enumeration near the switch
       is quantified in validate.py and reported as a limitation (P06). The
       third return value flags the branch.
-    Returns (ok, cause, used_element_branch)."""
+    Returns (ok, cause, used_element_branch), plus the per-element decode
+    flags (headers first) when return_flags is set (v1.7 joint blanking mask;
+    no extra random draws)."""
     el = lrfhss_elements(frame)
     T = el[-1][1]
     cg = frame["grid"]
@@ -255,8 +258,9 @@ def lrfhss_attempt_packet(rng, snr_db, frame, p_t_mw, lam_pkts, pool_mw, capture
     hdr = sum(ok_flags[:frame["nh"]])
     frag = sum(ok_flags[frame["nh"]:])
     if hdr >= 1 and frag >= frame["need"]:
-        return True, "ok", big
-    return False, ("snr" if n_snr >= n_col else "collision"), big
+        return (True, "ok", big, ok_flags) if return_flags else (True, "ok", big)
+    res = (False, ("snr" if n_snr >= n_col else "collision"), big)
+    return res + (ok_flags,) if return_flags else res
 
 
 def lrfhss_analytic(lam_pkts, frame, zeta=1.0):

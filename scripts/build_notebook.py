@@ -5,7 +5,7 @@ Run from the repository root: python3 scripts/build_notebook.py
 import json
 import os
 
-MODULES = ["rng", "geometry", "antenna", "channel", "phy", "nbiot", "interference", "access", "energy", "downlink",
+MODULES = ["rng", "geometry", "antenna", "channel", "phy", "nbiot", "interference", "access", "energy", "downlink", "txn",
            "economics", "presets", "engine", "analysis", "refsched", "report", "validate", "figures"]
 
 
@@ -20,7 +20,7 @@ def code(s, hidden=False):
 
 
 cells = [md("""
-# Operator 3GPP IoT-NTN vs IoT-only LoRaWAN NTN: LEO simulator (v1.6.0, frozen version used in the paper)
+# Operator 3GPP IoT-NTN vs IoT-only LoRaWAN NTN: LEO simulator (v1.7.0, frozen version used in the paper)
 
 **What it compares.** The same IoT scenarios served by hypothetical architectures representing two business models (infrastructure scale, spectrum and technology are confounded in the main stacks; the control stacks and sensitivity analysis separate them):
 
@@ -30,7 +30,7 @@ cells = [md("""
 
 **Comparison dimensions.** Path loss, itemised link budget, link margin, coverage probability, cell and service radius, time coverage at the site, interference (ISM noise rise, co-channel terrestrial UEs), per-device throughput, goodput versus load, capacity per cell and per km², delivery within deadline, latency, energy per message and battery life, plus a sensitivity analysis.
 
-**Two delivery metrics.** `pdr_deadline` is uplink reception at the satellite (transparent payload: at the gateway); for 3GPP stacks the random-access response, every uplink grant and the final message are downlink messages that gate it. `pdr_confirmed_deadline` also requires the acknowledgement before the deadline (LoRaWAN: confirmed mode with RX1/RX2 windows, duty cycle and half-duplex gateway). Ground-segment availability is not modelled.
+**Two delivery metrics.** `pdr_deadline` is uplink reception at the satellite (transparent payload: at the gateway); for 3GPP stacks the random-access response (which carries the first grant), every later uplink grant and the final message are downlink messages that gate it, on one executed timeline per device. `pdr_confirmed_deadline` also requires the acknowledgement before the deadline (LoRaWAN: confirmed mode with RX1/RX2 windows, one transmitter calendar with duty budgets, and a half-duplex gateway in the ISM band). Ground-segment availability is not modelled.
 
 **Read before using results.** Satellite and constellation presets are *illustrative classes*, not a specific operator's design. ISM activity levels, Doppler tolerances, LR-FHSS SNR thresholds and device current profiles are *assumptions* exposed as parameters. NB-IoT/LTE-M Eb/N0 and floor rates are *back-solved* to the 3GPP MCL targets. TR 38.811 clutter tables are S-band values applied at sub-GHz (extrapolation). Economic prices are left empty on purpose. Nothing here is a measurement.
 
@@ -127,7 +127,7 @@ for s in report.ALL:
                      energy_J=r["energy_per_msg_j"], battery_y=r["battery_years"], noise_rise_dB=r["noise_rise_db_at_45"]))
 pd.DataFrame(rows).round(3)
 """),
-    md("## 4. Full batch run\nRuns every comparison dimension for every stack and scenario (n_mc = 3000). Service capacity in the reference scenario uses 10 independent replications of the whole estimation (mean and Student-t 95 % interval, on-time re-estimated at that load, monotonicity check); other scenarios use 3 replications (min-max only). The technology x policy matrix uses 10 replications with seed-paired ratios, and the chronological reference scheduler is compared with the engine queue. A full recomputation takes about 2 hours and about 3 GB of memory, with checkpoints in out/ckpt so an interrupted run resumes. By default (`use_frozen = True`) the notebook loads the frozen paper results produced by this exact code; set it to False to recompute. Set `quick=True` for a 1-minute smoke run."),
+    md("## 4. Full batch run\nRuns every comparison dimension for every stack and scenario (n_mc = 3000). Service capacity in the reference scenario uses 10 independent replications of the whole estimation (mean and Student-t 95 % interval, on-time re-estimated at that load, monotonicity check); other scenarios use 3 replications (min-max only). The technology x policy matrix uses 10 replications with seed-paired ratios, and the chronological reference scheduler is compared with the engine queue. A full recomputation takes about 3.5 hours of processor time and about 3 GB of memory, with checkpoints in out/ckpt so an interrupted run resumes. By default (`use_frozen = True`) the notebook loads the frozen paper results produced by this exact code; set it to False to recompute. Set `quick=True` for a 1-minute smoke run."),
     code("""
 quick = False #@param {type:"boolean"}
 use_frozen = True #@param {type:"boolean"}

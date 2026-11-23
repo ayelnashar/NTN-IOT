@@ -53,12 +53,13 @@ from . import energy as E
 from . import interference as I
 from . import nbiot as NB
 from . import downlink as DL
+from . import txn as TX
 from .antenna import airy_rel_db
 from .antenna import SatAntenna
 from .rng import Rng
 from . import presets as PR
 
-MODEL_VERSION = "1.6.0"
+MODEL_VERSION = "1.7.0"
 _TL_CACHE = {}
 _PROF_CACHE = {}
 
@@ -199,14 +200,41 @@ class Case:
         self.dl_duty = self.st.get("dl_duty")
         self.half_duplex = bool(self.st.get("gw_half_duplex", False))   # ISM: RX2 only (RX1 at 25 mW, 1 %)
         self.dl_beta = NB.CALIBRATION[self.g["nbiot_calibration"]]
+        # downlink multibeam pattern: same aperture and beam layout, beamwidth at f_dl (v1.7, D11)
+        self.dl_bw_deg = self.ant.bw * self.f / self.f_dl if self.ant.kind == "multibeam" else None
         if self.tech in DL.TECH:
             self.dl_floor = self.g.get("dl_floor_db", DL.SNR_FLOOR_DB)
             self.rar_cfg = DL.rar_level_configs(self.tech, self.dl_beta, self.g["la_margin_db"], self.dl_floor)
+            self.rar_tab = DL.rar_pdu_table(self.tech, self.dl_beta, self.g["la_margin_db"], self.dl_floor)
+            # satellite-wide downlink RF power: one carrier in every beam of the footprint (D11)
+            if "dl_rf_psd_dbw_mhz" in sat and self.ant.kind == "multibeam":
+                n_beams = G.footprint_area_km2(self.h, self.g["elev_mask_deg"]) / self.cell_area(45.0)
+                p_beam_w = 10 ** ((sat["dl_rf_psd_dbw_mhz"] + 10 * math.log10(self.dl_bw / 1e6)) / 10)
+                self.dl_rf_budget = dict(beams=n_beams, w_per_beam=p_beam_w, w_total=n_beams * p_beam_w)
         if self.tech in ("LORA", "LRFHSS"):
             snr_edge = self.dl_snr_median(max(self.mask, 10.0))
             self.sf_dl = self.st.get("dl_sf") or next((sf for sf in range(7, 13)
                                                        if snr_edge >= P.LORA_SNR_DB[sf] + self.g["dl_sf_margin_db"]), 12)
             self.t_ack = P.lora_toa_s(self.sf_dl, DL.ACK_PHY_B, crc=False)
+            # receive windows (v1.7, D06): RX1 uses the regional-parameter data-rate mapping
+            # (RX1DROffset 0) on the uplink channel in the ISM band; RX2 the configured rate
+            ism = self.st.get("spectrum") == "ism"
+            # RX1 rate: EU868 regional mapping in the ISM band (DR8 -> DR1); licensed bands have no
+            # regional-parameter set, so RX1 uses the configured downlink rate unless 'eu868' is forced
+            eu = ism or self.g.get("rx1_mapping", "configured") == "eu868"
+            sf1 = (self.st.get("sf", 12) if self.tech == "LORA" else DL.RX1_SF_LRFHSS) if eu else self.sf_dl
+            f1 = self.f if ism else self.f_dl
+            e1 = min(self.dl_eirp_dbm, DL.ISM_RX1_EIRP_DBM) if ism else self.dl_eirp_dbm
+            snr1 = self.dl_snr_median(max(self.mask, 10.0), eirp_dbm=e1, f_dl=f1)
+            t1 = P.lora_toa_s(sf1, DL.ACK_PHY_B, crc=False)
+            use1 = ((self.st.get("ack_windows") or 2) > 1 and snr1 >= P.LORA_SNR_DB[sf1] + self.g["dl_sf_margin_db"])
+            if use1 and self.g.get("ack_policy", "fastest") == "fastest" and self.t_ack < t1:
+                use1 = False        # airtime-aware network server: RX2 is faster, so RX1 is not used
+            self.ack_win = [dict(used=use1, sf=sf1, f=f1, eirp=e1, delay=DL.RX1_DELAY_S,
+                                 duty=DL.ISM_RX1_DUTY if ism else None,
+                                 t=t1, snr_edge=snr1),
+                            dict(used=True, sf=self.sf_dl, f=self.f_dl, eirp=self.dl_eirp_dbm, delay=DL.RX2_DELAY_S,
+                                 duty=self.dl_duty, t=self.t_ack, snr_edge=snr_edge)]
 
     # ------------------------------------------------------------ interference
     def i0(self, el):
@@ -424,32 +452,42 @@ class Case:
         return p, los, offset
 
     # ------------------------------------------------------------ downlink (v1.6)
-    def _dl_from_rel(self, el, rel_db):
+    def _dl_from_rel(self, el, rel_db, eirp_dbm=None, f_dl=None):
         """Downlink SNR (no fast fading, no inter-beam interference) for a device
-        whose uplink satellite-gain-minus-excess-loss is rel_db relative to peak."""
+        whose satellite-gain-minus-excess-loss is rel_db relative to peak."""
         d = G.slant_range_km(self.h, el)
-        rx = (self.dl_eirp_dbm + rel_db - CH.fspl_db(d, self.f_dl) - self.allow
+        eirp = self.dl_eirp_dbm if eirp_dbm is None else eirp_dbm
+        f = self.f_dl if f_dl is None else f_dl
+        rx = (eirp + rel_db - CH.fspl_db(d, f) - self.allow
               - self.sc["device_loss_db"] + self.st["g_dev_dbi"])
         return rx - self.dl_n_dbm
 
-    def dl_snr_lt(self, s, phi):
+    def _dl_pattern_shift(self, off):
+        """Downlink minus uplink in-beam relative gain at the same physical
+        direction (multibeam: parabolic main lobe, beamwidth scaled by f/f_dl)."""
+        if self.ant.kind != "multibeam":
+            return 0.0
+        r = self.ant.bw / self.dl_bw_deg
+        return -3.0 * (off * r) ** 2 + 3.0 * off ** 2
+
+    def dl_snr_lt(self, s, phi, eirp_dbm=None, f_dl=None):
         """Long-term downlink SINR of a Monte Carlo device: the uplink realisation
-        (pattern position, clutter, shadowing) re-evaluated at the downlink
-        frequency and EIRP, plus co-channel beams for multibeam satellites."""
+        (direction, clutter, shadowing) re-evaluated at the downlink frequency,
+        EIRP and beamwidth, plus co-channel beams for multibeam satellites."""
         d = G.slant_range_km(self.h, s["el"])
-        rel = s["p"] - self.eirp + CH.fspl_db(d, self.f) - self.ant.g0
-        snr = self._dl_from_rel(s["el"], rel)
+        rel = s["p"] - self.eirp + CH.fspl_db(d, self.f) - self.ant.g0 + self._dl_pattern_shift(s.get("off", 0.0))
+        snr = self._dl_from_rel(s["el"], rel, eirp_dbm, f_dl)
         if self.ant.kind == "multibeam":
-            ci = DL.c_over_i_db(s.get("off", 0.0), phi, airy_rel_db, self.ant.bw, self.g["dl_reuse"])
+            ci = DL.c_over_i_db(s.get("off", 0.0), phi, airy_rel_db, self.ant.bw, self.g["dl_reuse"], self.dl_bw_deg)
             snr = -10 * math.log10(10 ** (-snr / 10) + 10 ** (-ci / 10))
         return snr
 
-    def dl_snr_median(self, el, los=True):
+    def dl_snr_median(self, el, los=True, eirp_dbm=None, f_dl=None):
         extra = CH.median_loss_db(self.sc["env"], max(el, 10.0), los, self.amode)
         rel = self.ant.gain_toward(G.off_nadir_deg(self.h, el), 0.0) - self.ant.g0 - extra
-        snr = self._dl_from_rel(el, rel)
+        snr = self._dl_from_rel(el, rel, eirp_dbm, f_dl)
         if self.ant.kind == "multibeam":
-            ci = DL.c_over_i_db(0.0, 0.0, airy_rel_db, self.ant.bw, self.g["dl_reuse"])
+            ci = DL.c_over_i_db(0.0, 0.0, airy_rel_db, self.ant.bw, self.g["dl_reuse"], self.dl_bw_deg)
             snr = -10 * math.log10(10 ** (-snr / 10) + 10 ** (-ci / 10))
         return snr
 
@@ -570,7 +608,12 @@ def run_case(stack, scen, stack_over=None, scen_over=None, g_over=None, cache_di
     dl = sc["deadline_s"]
     discard = g["discard_expired"]
     fallback = 0
-    if tech in ("NBIOT", "LTEM"):                            # pass 2: 3GPP access
+    if tech in ("NBIOT", "LTEM") and case.dl_on:             # pass 2: 3GPP transaction with downlink (v1.7)
+        R_ = TX.run_cellular_dl(case, samples, rng, rng_dl, keep_samples, (_prach_reps, _gnss_s))
+        energies, causes, lat, lat_conf = R_["energies"], R_["causes"], R_["lat"], R_["lat_conf"]
+        cn0s.extend(R_["cn0s"]); rates.extend(R_["rates"]); dl_snrs.extend(R_["dl_snrs"])
+        marks, extra, cap_hz = R_["marks"], R_["extra"], R_["cap_hz"]
+    elif tech in ("NBIOT", "LTEM"):                          # pass 2: 3GPP access, uplink only
         c = P.CELLULAR[tech]
         rach = case.rach
         gnss = _gnss_s(case, "nbiot_ntn")
@@ -629,21 +672,8 @@ def run_case(stack, scen, stack_over=None, scen_over=None, g_over=None, cache_di
                     ok_h = False; break               # message fails; later TBs are not sent
             need = _prach_reps(cn0_lt - req_floor)
             ce = next(i for i, lv in enumerate(rach["ce"]) if lv["reps"] >= need or i == len(rach["ce"]) - 1)
-            dlc = None
-            if case.dl_on:                   # downlink messages of the transaction (v1.6)
-                snr_dl = case.dl_snr_lt(s, rng_dl.random() * 2 * math.pi)
-                dl_snrs.append(snr_dl)
-                bm, mg = case.dl_beta, g["la_margin_db"]
-                lvl = DL.dl_level(snr_dl, bm, case.dl_floor)
-                if lvl is None:
-                    link.append(dict(ok=False, why="dl", ce=ce)); continue
-                ce = min(max(ce, lvl), len(rach["ce"]) - 1)     # coverage level from uplink and downlink
-                dlc = dict(snr=snr_dl, rar=case.rar_cfg[ce], dci=DL.message_config(tech, 0, snr_dl, bm, mg, case.dl_floor),
-                           fin=DL.message_config(tech, DL.FINAL_BITS, snr_dl, bm, mg, case.dl_floor))
-                if dlc["rar"] is None or dlc["dci"] is None or dlc["fin"] is None:
-                    link.append(dict(ok=False, why="dl", ce=ce)); continue
             link.append(dict(ok=True, data_ok=ok_h, attempts=att_h, t_air=t_tb, n_tb=n_tb, res=b_hz * t_tb * att_h,
-                             res0=b_hz * t_tb * n_tb, ce=ce, cn0=cn0_lt, att_end=att_end, b_hz=b_hz, dl=dlc))
+                             res0=b_hz * t_tb * n_tb, ce=ce, cn0=cn0_lt, att_end=att_end, b_hz=b_hz))
             cn0s.append(cn0_lt)
             if ok_h:
                 rates.append(case.bits / t_air)
@@ -710,45 +740,7 @@ def run_case(stack, scen, stack_over=None, scen_over=None, g_over=None, cache_di
             # downlink load (v1.6): random-access responses for every access attempt (sent before
             # admission), uplink grants for every HARQ attempt and the final message of admitted
             # transactions; downlink is a second server with its own admission room
-            p_rar_drop, f_dl, w_dl, rho_dl, rho_dl_c = 0.0, 1.0, 0.0, 0.0, 0.0
-            if case.dl_on:
-                av = DL.TECH[tech]["avail"]
-                M = st["rach_max"]
-                e_att = [(1 - p ** M) / (1 - p) if p < 1 else float(M) for p in pc]
-                okl = [x for x in lks if x["ok"]]
-                # one response per non-empty NPRACH occasion per level (RA-RNTI multiplexing)
-                lam_r, s_r = [], []
-                for i in range(nce):
-                    la_i = scale * sum(e_att[i] for x in okl if x["ce"] == i)
-                    per = rach["ce"][i]["period_s"]
-                    if la_i > 0 and case.rar_cfg[i] is not None:
-                        lam_r.append((1 - math.exp(-la_i * per)) / per)
-                        s_r.append(case.rar_cfg[i]["sf"] * 1e-3 / av)
-                lam_g = [scale * pacc[x["ce"]] * admit * x["attempts"] for x in okl]
-                s_g = [x["dl"]["dci"]["sf"] * 1e-3 / av for x in okl]
-                lam_f = [scale * pacc[x["ce"]] * admit for x in okl]
-                s_f = [x["dl"]["fin"]["sf"] * 1e-3 / av for x in okl]
-                rho_r = sum(a * b for a, b in zip(lam_r, s_r))
-                rho_d = sum(a * b for a, b in zip(lam_g, s_g)) + sum(a * b for a, b in zip(lam_f, s_f))
-                rho_dl = rho_r + rho_d
-                if rho_r > g["rho_admit"]:
-                    p_rar_drop = 1 - g["rho_admit"] / rho_r
-                room = g["rho_admit"] - min(rho_r, g["rho_admit"])
-                if rho_d > room:
-                    f_dl = room / rho_d if rho_d > 0 else 1.0
-                rho_dl_c = min(rho_r, g["rho_admit"]) + f_dl * rho_d
-                kr = 1 - p_rar_drop
-                lam_all = [a * kr for a in lam_r] + [a * f_dl for a in lam_g] + [a * f_dl for a in lam_f]
-                s_all = s_r + s_g + s_f
-                lt = sum(lam_all)
-                es2_dl = sum(a * b * b for a, b in zip(lam_all, s_all)) / lt if lt > 0 else 0.0
-                w_dl = lt * es2_dl / (2 * (1 - rho_dl_c)) if rho_dl_c < 1 else float("inf")
-                if f_dl < 1.0:               # fewer admitted transactions: uplink queue re-evaluated
-                    lam_u = (lam_a if rho > g["rho_admit"] and w_tot > 0 else lam_d) * f_dl
-                    e2u = (es2_a if (rho > g["rho_admit"] and g.get("admission", "uniform") == "cheapest_first")
-                           else es2)
-                    rho_q *= f_dl
-                    qwait = lam_u * e2u / (2 * (1 - rho_q)) if rho_q < 1 else float("inf")
+            p_rar_drop, f_dl, w_dl, rho_dl, rho_dl_c = 0.0, 1.0, 0.0, 0.0, 0.0     # no downlink in this path
             state[key] = dict(rho=rho, rho_admitted=rho_q, admit=admit * f_dl, qwait=qwait, p_coll=pc,
                               f_all=f_all, f_cut=f_cut, c_cut=c_cut, f_dl=f_dl, p_rar_drop=p_rar_drop,
                               w_dl=w_dl, rho_dl=rho_dl, rho_dl_carried=rho_dl_c)
@@ -767,51 +759,27 @@ def run_case(stack, scen, stack_over=None, scen_over=None, g_over=None, cache_di
             # v1.5.1 causal energy clock: access, queue, data and release are charged only while the
             # contact lasts and the message is not expired (time measured from transaction start)
             lim = min(s["left"], (dl - s["wait"]) if discard else float("inf")) - dev["sync_s"] - gnss
-            if not lk["ok"] and lk["why"] == "dl":                            # cannot acquire the cell (v1.6)
-                energies.append(v * q_e); causes["dl"] += 1; lat.append(None); lat_conf.append(None); continue
             if not lk["ok"]:                                                  # below floor or frequency limit
                 d_att = 0.5 * lv["period_s"] + pre + rtt + rach["rar_window_s"] + 0.5 * rach["backoff_s"]
                 n_exec = min(st["rach_max"], math.ceil(lim / d_att)) if lim > 0 else 0
                 q_e += n_exec * (i_tx * pre + dev["rx_ma"] * rach["rar_window_s"])
                 energies.append(v * q_e); causes[lk["why"]] += 1; lat.append(None); lat_conf.append(None); continue
-            dlc = lk.get("dl")
-            k_f = g["fade_k_los_db"] if s["los"] else g["fade_k_nlos_db"]
-            fades_dl, coh_dl = {}, max(g["coh_s"], 1e-3)
-            ph_dl = rng_dl.random() * coh_dl
-
-            def dl_ok(t0, dur, req):
-                fad = A.faded_gain(rng_dl, fades_dl, ph_dl + t0, ph_dl + t0 + dur, coh_dl, k_f)
-                return dlc["snr"] + 10 * math.log10(max(fad, 1e-12)) >= req
-            n_miss = 0
-            def rar_cfg(km):                 # after a missed response the device moves up a coverage level
-                lv_k = min(lk["ce"] + km, len(rach["ce"]) - 1)
-                c_k = case.rar_cfg[lv_k] if case.rar_cfg[lv_k] is not None else dlc["rar"]
-                return DL.msg_time_s(tech, c_k["sf"]) + stt["w_dl"], c_k["req"]
-            t_rar, rq_rar = rar_cfg(0) if dlc else (0.0, 0.0)
-            t_acc, att, ok, n_exec, dl_miss = 0.0, 0, False, 0, False
+            t_acc, att, ok, n_exec = 0.0, 0, False, 0
             while att < st["rach_max"]:                # uplink random draws unchanged from v1.5
                 att += 1
                 if t_acc < lim:
                     n_exec += 1
-                t_acc += rng.random() * lv["period_s"] + pre + rtt + rach["rar_window_s"] + t_rar
+                t_acc += rng.random() * lv["period_s"] + pre + rtt + rach["rar_window_s"]
                 if rng.random() >= stt["p_coll"][lk["ce"]]:
-                    if dlc is None:
-                        ok = True; break
-                    if rng_dl.random() >= stt["p_rar_drop"] and dl_ok(t_acc - t_rar, t_rar, rq_rar):
-                        ok = True; break
-                    dl_miss = True
-                    n_miss += 1                       # next attempt: higher coverage level (doubled repetitions)
-                    q_e += dev["rx_ma"] * t_rar if t_acc - t_rar < lim else 0.0
-                    t_rar, rq_rar = rar_cfg(n_miss)
+                    ok = True; break
                 t_acc += rng.random() * rach["backoff_s"]
-            q_e += n_exec * (i_tx * pre + dev["rx_ma"] * rach["rar_window_s"]) + (dev["rx_ma"] * t_rar if n_exec else 0.0)
+            q_e += n_exec * (i_tx * pre + dev["rx_ma"] * rach["rar_window_s"])
             access_late = t_acc > lim
             if not ok:
-                causes["dl" if (dl_miss and dlc) else "collision"] += 1
+                causes["collision"] += 1
                 energies.append(v * q_e); lat.append(None); lat_conf.append(None); continue
             c0 = round(lk["res0"] / cap_hz, 12)
             f_adm = stt["f_all"] if c0 < stt["c_cut"] else (stt["f_cut"] if c0 == stt["c_cut"] else 0.0)
-            f_adm *= stt["f_dl"]
             pre_t = dev["sync_s"] + gnss + t_acc
             air_t = lk["attempts"] * lk["t_air"] + (lk["attempts"] - 1) * (rtt + harq_proc) + rtt
             mk = dict(el=s["el"], j=s["j"], wait=s["wait"], pre=pre_t, air=air_t, svc=lk["res"] / cap_hz,
@@ -824,26 +792,7 @@ def run_case(stack, scen, stack_over=None, scen_over=None, g_over=None, cache_di
                 energies.append(v * q_e); causes["blocked"] += 1; cec["blocked"] += 1; lat.append(None)
                 lat_conf.append(None); continue
             qw = stt["qwait"] if stt["qwait"] != float("inf") else s["left"]
-            # downlink grants (v1.6): every HARQ attempt needs its uplink grant; the network re-sends a
-            # missed grant up to dl_retx_max times; att_end is shifted by the cumulative downlink time
-            att_end, dci_fail, t_dci_rx = list(lk["att_end"]), False, 0.0
-            if dlc:
-                w_dl = stt["w_dl"] if stt["w_dl"] != float("inf") else s["left"]
-                cum = 0.0
-                for kk in range(len(att_end)):
-                    for tries in range(g["dl_retx_max"] + 1):
-                        sfk, rqk = DL.escalate(tech, dlc["dci"], tries, case.dl_beta)
-                        t_g1 = DL.msg_time_s(tech, sfk)
-                        cum += t_g1 + w_dl; t_dci_rx += t_g1
-                        if dl_ok(lk["att_end"][kk] + cum - t_g1, t_g1, rqk):
-                            break
-                    else:
-                        dci_fail = True
-                    if dci_fail:
-                        att_end = att_end[:kk]
-                        break
-                    att_end[kk] = lk["att_end"][kk] + cum
-            n_att = len(att_end)
+            att_end = list(lk["att_end"])
             # executed-state clock (P04): data attempts run only while the contact lasts and the
             # message is not expired; only executed attempts are charged (energy) and counted
             t_pre = dev["sync_s"] + gnss + t_acc + qw
@@ -851,30 +800,19 @@ def run_case(stack, scen, stack_over=None, scen_over=None, g_over=None, cache_di
             avail_d = (dl - s["wait"] - t_pre) if discard else float("inf")
             avail = min(avail_c, avail_d)
             n_a = sum(1 for te in att_end if te <= avail)
-            t_fin_rx, conf = 0.0, False
             t_data = (att_end[-1] + rtt) if att_end else 0.0
-            complete = (not dci_fail) and n_a == lk["attempts"] and t_data <= avail
-            if dlc and complete and lk["data_ok"]:          # final acknowledgement / release message
-                w_dl = stt["w_dl"] if stt["w_dl"] != float("inf") else s["left"]
-                for tries in range(g["dl_retx_max"] + 1):
-                    sfk, rqk = DL.escalate(tech, dlc["fin"], tries, case.dl_beta)
-                    t_f1 = DL.msg_time_s(tech, sfk)
-                    t_fin_rx += t_f1 + w_dl
-                    if dl_ok(t_data + t_fin_rx - t_f1, t_f1, rqk):
-                        conf = True; break
+            complete = n_a == lk["attempts"] and t_data <= avail
             if not access_late:
                 if not st["edt"]:
                     q_e += dev["rx_ma"] * dev["setup_extra_rx_s"] + i_tx * dev["setup_extra_tx_s"]
                 q_e += dev["idle_ma"] * min(qw, max(lim - t_acc, 0.0))
                 q_e += n_a * (i_tx * lk["t_air"] + dev["rx_ma"] * (rtt + harq_proc))
-                q_e += dev["rx_ma"] * min(t_dci_rx, max(lim - t_acc, 0.0))     # grant monitoring (v1.6)
                 if n_a < len(att_end):                               # attempt cut by contact end or expiry
                     t0 = att_end[n_a] - lk["t_air"]
                     if avail > t0:
                         q_e += i_tx * (min(avail, att_end[n_a]) - t0)
                 if n_a > 0:                                          # release only after data was sent
                     q_e += dev["rx_ma"] * dev["release_rai_s"] if st["rai"] else dev["idle_ma"] * dev["inactivity_s"]
-                    q_e += dev["rx_ma"] * t_fin_rx
             energies.append(v * q_e)
             transaction = t_pre + t_data
             if mk is not None:
@@ -883,16 +821,13 @@ def run_case(stack, scen, stack_over=None, scen_over=None, g_over=None, cache_di
                                         ("late_deadline" if s["wait"] + transaction > dl else "served")))
                 marks.append(mk)
             if not complete:
-                why = "dl" if dci_fail else ("no_coverage" if avail_c <= avail_d else "expired")
+                why = "no_coverage" if avail_c <= avail_d else "expired"
                 causes[why] += 1; lat.append(None); lat_conf.append(None); continue
             if not lk["data_ok"]:
                 causes["snr"] += 1; lat.append(None); lat_conf.append(None); continue
             d = s["wait"] + transaction + (0.0 if st.get("payload") == "transparent" else g["ground_delay_s"])
             causes["ok"] += 1; lat.append(d)
-            if dlc is None:
-                lat_conf.append(d)
-            else:
-                lat_conf.append((d + t_fin_rx) if (conf and transaction + t_fin_rx <= s["left"]) else None)
+            lat_conf.append(d)
             if d <= dl:
                 cec["ok"] += 1
         allst = list(state.values())
@@ -943,7 +878,7 @@ def run_case(stack, scen, stack_over=None, scen_over=None, g_over=None, cache_di
                 dop_ok = P.lrfhss_doppler_ok(s["fdr"]) and (g["lrfhss_acq_hz"] is None or offset <= g["lrfhss_acq_hz"])
             if not dop_ok:
                 causes["doppler"] += 1; lat.append(None); info.append(None); continue
-            ok, cause, k_ok = False, "snr", 0
+            ok, cause, k_ok, flags = False, "snr", 0, None
             k = g["fade_k_los_db"] if s["los"] else g["fade_k_nlos_db"]
             for kcp in range(n_cp):
                 t_k = ph0 + kcp * (case.toa + gap)              # one channel clock for all copies (P03)
@@ -955,9 +890,12 @@ def run_case(stack, scen, stack_over=None, scen_over=None, g_over=None, cache_di
                 else:
                     snr = s["p"] - n0e - 10 * math.log10(P.LRFHSS_OBW_HZ)
                     if g["lrfhss_model"] == "packet":
-                        ok, cause, fb = A.lrfhss_attempt_packet(rng, snr, case.frame, p_mw, lam, pool, cap, k,
-                                                                n_grids=case.frame["C"] // case.frame["grid"],
-                                                                coh_s=g["coh_s"], fades=fades, t_start=t_k)
+                        res_ = A.lrfhss_attempt_packet(rng, snr, case.frame, p_mw, lam, pool, cap, k,
+                                                       n_grids=case.frame["C"] // case.frame["grid"],
+                                                       coh_s=g["coh_s"], fades=fades, t_start=t_k,
+                                                       return_flags=case.dl_on)
+                        ok, cause, fb = res_[:3]
+                        flags = res_[3] if case.dl_on else None
                         fallback += fb
                     else:
                         a_h, a_f = A.lrfhss_overlap_means(lam, case.frame)
@@ -975,50 +913,14 @@ def run_case(stack, scen, stack_over=None, scen_over=None, g_over=None, cache_di
                 lat.append(s["wait"] + t_tx + (g["ground_delay_s"] if st.get("payload") == "regenerative" else case.rtt_s(el) / 2))
             else:
                 causes[cause] += 1; lat.append(None)
-            info.append(dict(s=s, ok=ok, n_cp=n_cp, lam=lam, gkey=(int(el // 5) * 5, round(math.log10(max(lam, 1e-9)) * 10))))
-        # ---- confirmed mode (v1.6): RX2 acknowledgement, no queue, half-duplex blanking
-        lat_conf, e_conf, lat_cmode = [], [], []
-        ack_s_min, carried_max = 1.0, 0.0
+            info.append(dict(s=s, ok=ok, n_cp=n_cp, lam=lam, gkey=(int(el // 5) * 5, round(math.log10(max(lam, 1e-9)) * 10)),
+                             flags=flags if ok else None, t0=k_ok * (case.toa + gap), t_end=t_tx))
+        # ---- confirmed mode (v1.7): one transmitter calendar for RX1/RX2 acknowledgements and blanking
+        lat_conf, e_conf, lat_cmode, ack_x = [], [], [], {}
         if case.dl_on:
-            grp = {}
-            for it in info:
-                if it is not None:
-                    grp.setdefault(it["gkey"], []).append(it["ok"])
-            p_ul = {k_: sum(v_) / len(v_) for k_, v_ in grp.items()}
-            own = 1.0 / (copies * (1.0 + st.get("other_networks_load", 0.0)))
-            dev_l = E.DEVICES[st["device"]]
-            rx_j = dev_l["v"] * dev_l["rx_ma"] / 1000.0
-            req_dl = P.LORA_SNR_DB[case.sf_dl]
-            k_th, k_tf = P.LRFHSS_TH_S, P.LRFHSS_TF_S
-            for it, d0, e0 in zip(info, lat, energies):
-                if it is None:
-                    lat_conf.append(None); lat_cmode.append(None); e_conf.append(e0); continue
-                s = it["s"]
-                lam_ack = it["lam"] * own * p_ul[it["gkey"]]
-                s_ack, carried = DL.ack_service(lam_ack, case.t_ack, case.dl_duty,
-                                                st.get("ack_windows") or (1 if case.half_duplex else 2))
-                ack_s_min, carried_max = min(ack_s_min, s_ack), max(carried_max, carried)
-                ok_c = it["ok"]
-                if ok_c and case.half_duplex:
-                    lam_tx = lam_ack * s_ack
-                    if tech == "LRFHSS":
-                        ok_c = DL.blank_ok_lrfhss(rng_dl, case.frame, lam_tx, case.t_ack, k_th, k_tf)
-                    else:
-                        ok_c = rng_dl.random() >= 1 - math.exp(-lam_tx * (case.t_ack + case.toa))
-                dcm = d0 if ok_c else None
-                lat_cmode.append(dcm)
-                e_extra = (rx_j * 2 * g["rx_window_symbols"] * P.lora_symbol_s(case.sf_dl) * it["n_cp"]
-                           if not st.get("class_a_rx") else 0.0)
-                if dcm is None:
-                    lat_conf.append(None); e_conf.append(e0 + e_extra); continue
-                served = rng_dl.random() < s_ack
-                snr_dl = case.dl_snr_lt(s, rng_dl.random() * 2 * math.pi)
-                dl_snrs.append(snr_dl)
-                k_ = g["fade_k_los_db"] if s["los"] else g["fade_k_nlos_db"]
-                fad = A.faded_gain(rng_dl, {}, 0.0, case.t_ack, max(g["coh_s"], 1e-3), k_)
-                got = served and snr_dl + 10 * math.log10(max(fad, 1e-12)) >= req_dl
-                e_conf.append(e0 + e_extra + (rx_j * case.t_ack if served else 0.0))
-                lat_conf.append((dcm + DL.RX2_DELAY_S + case.t_ack) if got else None)
+            C_ = TX.run_lora_confirmed(case, info, lat, energies, rng_dl)
+            lat_conf, e_conf, lat_cmode, ack_x = C_["lat_conf"], C_["e_conf"], C_["lat_cmode"], C_["extra"]
+            dl_snrs.extend(C_["dl_snrs"])
         extra = dict(toa_s=case.toa, device_duty_cycle=case.toa * copies / sc["interval_s"],
                      duty_cycle_compliant=(case.toa * copies / sc["interval_s"] <= dcl) if dcl else None,
                      duty_cycle_note=("1 % applies within 868.0-868.6 MHz (TDRA SRD table); channels outside "
@@ -1029,8 +931,7 @@ def run_case(stack, scen, stack_over=None, scen_over=None, g_over=None, cache_di
             extra["frame"] = case.frame
         if case.dl_on:
             on_c = sum(1 for x in lat_cmode if x is not None and x <= sc["deadline_s"]) / K
-            extra.update(dl_sf=case.sf_dl, ack_airtime_s=case.t_ack, ack_service_min=ack_s_min,
-                         dl_tx_occupancy_max=carried_max,
+            extra.update(dl_sf=case.sf_dl, ack_airtime_s=case.t_ack, **ack_x,
                          pdr_deadline_confirmed_mode=on_c,
                          energy_per_msg_confirmed_j=sum(e_conf) / K if e_conf else None)
     # ---------------------------------------------------------------- KPIs

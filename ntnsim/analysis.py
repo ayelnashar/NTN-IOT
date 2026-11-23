@@ -100,7 +100,7 @@ def link_budget(stack, scen, el_deg=30.0, los=True, **kw):
         ci = (DLm.c_over_i_db(0.0, 0.0, airy_rel_db, case.ant.bw, g["dl_reuse"])
               if case.ant.kind == "multibeam" else None)
         if case.tech in DLm.TECH:
-            req_dl, req_lbl = case.dl_floor, "cell acquisition limit (164 dB MCL point)"
+            req_dl, req_lbl = case.dl_floor, "assumed acquisition threshold (NPDSCH reference point)"
         else:
             req_dl, req_lbl = P.LORA_SNR_DB[case.sf_dl], "LoRa SF%d acknowledgement" % case.sf_dl
         dl_margin = snr - req_dl

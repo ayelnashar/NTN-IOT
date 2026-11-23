@@ -332,30 +332,81 @@ def run(log=print):
                      simulated=(round(g1, 6), round(g2, 6)), reference=(round((0.5 * 1 + 1 * 3) / 1.5, 6), 3.0),
                      tolerance="1e-9", passed=abs(g1 - 3.5 / 1.5) < 1e-9 and abs(g2 - 3.0) < 1e-9,
                      source="P03 regression test"))
-    # ---- v1.6 downlink checks
+    # ---- downlink checks
     from . import downlink as DLv
     from .antenna import airy_rel_db as _airy
     an = (DLv.anchor_check(0.5), DLv.anchor_check(1.0))
     rows.append(dict(check="Downlink anchor: NPDSCH TBS 680, 8 subframes, 128 repetitions reproduced (beta 0.5 and 1)",
                      simulated=tuple(round(x, 6) for x in an), reference=(-14.7, -14.7), tolerance="1e-9",
                      passed=all(abs(x + 14.7) < 1e-9 for x in an), source="Matz et al., Sensors 2020, Table 2"))
-    s0 = DLv.ack_service(0.0, 1.0, 0.1)[0]
-    s1, c1 = DLv.ack_service(3.0, 0.5, None, 1)
-    s2, c2 = DLv.ack_service(3.0, 0.5, None, 2)
-    s3, c3 = DLv.ack_service(30.0, 0.5, 0.1, 1)
-    okk = s0 == 1.0 and s2 >= s1 and abs(s1 - 1 / (1 + 1.5)) < 1e-9 and c3 <= 0.1 + 1e-12
-    rows.append(dict(check="Acknowledgement service: no load -> 1; one window = Erlang loss 1/(1+A); two windows >= one; duty cap",
-                     simulated=(s0, round(s1, 6), round(s2, 6), round(c3, 6)), reference=(1.0, 0.4, ">= 0.4", "<= 0.1"),
-                     tolerance="1e-9", passed=okk, source="analytic"))
+    # ---- v1.7 downlink checks (review D01-D07)
+    w1 = [dict(used=False, t=0.5, duty=None), dict(used=True, t=0.5, duty=None)]
+    c0 = DLv.ack_calendar_params(0.0, w1)
+    c1 = DLv.ack_calendar_params(3.0, w1)
+    w3 = [dict(used=False, t=0.5, duty=None), dict(used=True, t=0.5, duty=0.1)]
+    c3 = DLv.ack_calendar_params(30.0, w3)
+    okk = (c0["served"] == 1.0 and abs(c1["occ"] - 1.5 / 2.5) < 1e-9 and abs(c1["served"] - 1 / 2.5) < 1e-9
+           and c3["lam"][1] * c3["a"][1] * (1 - c3["occ"]) * 0.5 <= 0.1 + 1e-9)
+    rows.append(dict(check="Acknowledgement transmitter: no load -> served 1; one window = Erlang loss A/(1+A); duty budget holds",
+                     simulated=(c0["served"], round(c1["occ"], 6), round(c1["served"], 6),
+                                round(c3["lam"][1] * c3["a"][1] * (1 - c3["occ"]) * 0.5, 6)),
+                     reference=(1.0, 0.6, 0.4, "<= 0.1"), tolerance="1e-9", passed=okk, source="analytic"))
+    rr = Rng(11)
+    tot = busy = 0.0
+    nonover = True
+    for _ in range(400):
+        iv = DLv.sample_calendar(rr, c1, 0.0, 50.0, w1)
+        nonover &= all(iv[k][1] <= iv[k + 1][0] + 1e-12 for k in range(len(iv) - 1))
+        busy += sum(min(e, 50.0) - max(s_, 0.0) for s_, e in iv if e > 0 and s_ < 50.0); tot += 50.0
+    rows.append(dict(check="Acknowledgement calendar: non-overlapping busy intervals; busy fraction equals occupancy",
+                     simulated=(nonover, round(busy / tot, 4)), reference=(True, 0.6), tolerance="0.01",
+                     passed=nonover and abs(busy / tot - 0.6) < 0.01, source="renewal theory"))
     cia = DLv.c_over_i_db(0.6, 0.3, _airy, 1.0, 3)
     cib = DLv.c_over_i_db(0.6, 0.3 + math.pi / 3, _airy, 1.0, 3)
     ci0 = DLv.c_over_i_db(0.0, 0.0, _airy, 1.0, 3)
-    rows.append(dict(check="Downlink C/I, reuse 3: 60-degree rotational symmetry and positive at beam centre",
-                     simulated=(round(cia, 6), round(cib, 6), round(ci0, 2)), reference="equal pair, > 0 dB",
-                     tolerance="1e-9", passed=abs(cia - cib) < 1e-9 and ci0 > 0, source="hexagonal geometry"))
-    bl = DLv.blank_ok_lrfhss(Rng(3), {"toa_s": 2.0, "nh": 3, "nf": 10, "need": 4}, 0.0, 1.0, 0.233, 0.102)
-    rows.append(dict(check="Half-duplex blanking with no gateway transmissions leaves the LR-FHSS packet intact",
-                     simulated=bl, reference=True, tolerance="exact", passed=bl is True, source="regression test"))
+    cie = DLv.c_over_i_db(0.6, 0.3, _airy, 1.0, 3, 1.0)
+    rows.append(dict(check="Downlink C/I, reuse 3: 60-degree symmetry, positive at beam centre, equal-beamwidth case unchanged",
+                     simulated=(round(cia, 6), round(cib, 6), round(ci0, 2), round(cie, 6)), reference="equal pair, > 0 dB",
+                     tolerance="1e-9", passed=abs(cia - cib) < 1e-9 and ci0 > 0 and abs(cie - cia) < 1e-12,
+                     source="hexagonal geometry"))
+    fr = {"nh": 2, "nf": 2, "need": 1, "t_last_s": 0.1}
+    j_r5 = DLv.joint_lrfhss_ok([True, False, True, True], fr, 0.0, [(0.0, 0.05)], 0.1, 0.1)
+    j_ok = DLv.joint_lrfhss_ok([True, False, True, True], fr, 0.0, [], 0.1, 0.1)
+    rows.append(dict(check="Joint LR-FHSS mask (review probe R5): only decodable header blanked -> lost; no transmissions -> kept",
+                     simulated=(j_r5, j_ok), reference=(False, True), tolerance="exact",
+                     passed=(j_r5 is False and j_ok is True), source="review D05"))
+    cfg = DLv.message_config("LTEM", 160, -23.0, 0.5, 1.0, -30.0, 2)
+    esc = [DLv.escalate("LTEM", cfg, k, 0.5) for k in range(5)]
+    reps = cfg["data"]["r"], max(min(cfg["data"]["r"] * 2 ** k, 2048) for k in range(5))
+    sf4 = esc[4][0]
+    okr = sf4 == cfg["ctrl"]["nsf"] * min(cfg["ctrl"]["r"] * 16, 256) + cfg["data"]["nsf"] * min(cfg["data"]["r"] * 16, 2048)
+    rows.append(dict(check="Re-send escalation (review probe R3): repetitions capped at R_max, N_SF kept",
+                     simulated=(reps, sf4), reference="data repetitions <= 2048", tolerance="exact",
+                     passed=okr and reps[1] <= 2048, source="review D07"))
+    q_ = 1 - math.exp(-48 / 48)
+    p_ne, e1, _ = DLv.rar_occasion_moments("NBIOT", [None] + [dict(sf=d) for d in range(1, 13)], 48, 48.0)
+    ed = sum(k * pk for k, pk in enumerate(DLv.binom_pmf(48, q_)))
+    rows.append(dict(check="RAR batch: distinct preambles at lambda T = 48 over 48 preambles; PDU split of 30 RARs (NB-IoT)",
+                     simulated=(round(ed, 2), DLv.rar_batch_pdus("NBIOT", 30)), reference=(30.34, [12, 12, 6]),
+                     tolerance="0.01", passed=abs(ed - 30.34) < 0.01 and DLv.rar_batch_pdus("NBIOT", 30) == [12, 12, 6],
+                     source="review D01"))
+    from . import txn as TXv
+    ch0 = TXv.access_chain(0, (True, True, True), [0, 0, 0], 0.0, (0, 0, 0), 3, 5)
+    ch1 = TXv.access_chain(0, (False, True, True), [0, 0, 0], 0.0, (0, 0, 0), 3, 5)
+    rows.append(dict(check="Coverage-level chain: clean access in one attempt; undetectable level 0 moves up after 3 attempts",
+                     simulated=(round(ch0[0], 9), ch0[1], round(ch1[0], 9), ch1[1]),
+                     reference=(1.0, [1, 0, 0], 1.0, [3, 1, 0]), tolerance="1e-9",
+                     passed=(abs(ch0[0] - 1) < 1e-9 and ch0[1] == [1.0, 0.0, 0.0] and abs(ch1[0] - 1) < 1e-9
+                             and ch1[1] == [3.0, 1.0, 0.0]), source="TS 36.321 5.1.2-5.1.4 logic"))
+    a_ = _rc2("OP-LB-NBIOT", "disaster_urban", cache_dir="out/cache")
+    b_ = _rc2("IO-ISM-LRFHSS", "utility_wells", cache_dir="out/cache")
+    okc = (a_["pdr_confirmed_deadline"] <= a_["pdr_deadline"] and b_["pdr_confirmed_deadline"] <= b_["pdr_deadline_confirmed_mode"]
+           <= b_["pdr_deadline"] and a_["rho_dl_carried_max"] <= 0.9 + 1e-6)
+    rows.append(dict(check="Ordering: confirmed <= confirmed-mode uplink <= uplink; carried downlink load within admission limit",
+                     simulated=(round(a_["pdr_confirmed_deadline"], 4), round(a_["pdr_deadline"], 4),
+                                round(b_["pdr_confirmed_deadline"], 4), round(b_["pdr_deadline_confirmed_mode"], 4),
+                                round(a_["rho_dl_carried_max"], 4)),
+                     reference="monotone, rho_c <= 0.9", tolerance="exact", passed=okc, source="model invariants"))
     off = _rc2("OP-LB-NBIOT", "utility_wells", g_over=dict(downlink=False), cache_dir="out/cache")["pdr_deadline"]
     lr = _rc2("IO-ISM-LRFHSS", "utility_wells", cache_dir="out/cache")["pdr_deadline"]
     rows.append(dict(check="Downlink switched off reproduces v1.5.1 (OP-LB-NBIOT); unconfirmed LR-FHSS unchanged by the downlink",

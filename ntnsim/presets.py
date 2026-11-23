@@ -197,12 +197,17 @@ GLOBAL = dict(
     n_mc=3000, pool_size=4000, seed=20261122,
     battery_mah=5200.0, battery_v=3.6,
     gnss_validity_s=86400.0,
-    downlink=True,              # v1.6: downlink link budget, control/data channels, acknowledgements
+    downlink=True,              # v1.6/v1.7: downlink link budget, control/data channels, acknowledgements
     dl_nf_cell_db=7.0,          # cellular module noise figure (TR 36.763 PC3 assumption; 9 dB = RAN1 common PC5 value)
     dl_nf_lora_db=6.0,          # LoRa transceiver noise figure (SX1262: -137 dBm at SF12/125 kHz)
     dl_reuse=3,                 # multibeam downlink frequency reuse (TR 38.821 FRF 3)
-    dl_retx_max=4,              # network re-sends of a missed grant or final message, each with doubled repetitions
-    dl_floor_db=-14.7,          # cell acquisition limit: NPDSCH 164 dB MCL reference point (Matz et al. 2020)
+    dl_retx_max=4,              # network re-sends of a missed grant or final message, repetitions doubled up to R_max
+    dl_floor_db=-14.7,          # assumed acquisition limit: NPDSCH reference threshold (Matz et al. 2020, 164 dB MCL)
+    dl_policy="ce_barring",     # v1.7 downlink admission: 'uniform' | 'ce_barring' | 'rar_priority' (v1.6 stress)
+    ce_select="measured",       # v1.7 initial CE level: 'measured' (downlink thresholds) | 'max_ul_dl' (oracle)
+    rx1_mapping="configured",   # v1.7 LoRaWAN RX1 rate in licensed bands: 'configured' (= RX2 rate) | 'eu868' (DR8 -> SF11)
+    ack_policy="fastest",       # v1.7 LoRaWAN: 'fastest' (RX1 only if not slower than RX2) | 'rx1_first' (RX1 then RX2)
+    ce_attempts=3,              # preamble attempts per coverage level before moving up (maxNumPreambleAttemptCE, n3)
     dl_eirp_offset_db=0.0,      # sensitivity: offset on every satellite downlink EIRP density
     dl_sf_margin_db=3.0,        # LoRaWAN downlink SF: lowest SF with this margin at the elevation mask, median LOS
 )

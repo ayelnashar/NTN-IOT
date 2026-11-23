@@ -120,6 +120,17 @@ def run_all(out_dir="out", cache_dir="out/cache", n_mc=3000, quick=False, log=pr
     return R
 
 
+def R_cap_ref_nbiot(cache_dir):
+    """Reference-scenario service capacity of OP-LB-NBIOT (devices/km2), from the checkpoint when present."""
+    if CKPT_DIR:
+        p = os.path.join(CKPT_DIR, "cap_%s_OP-LB-NBIOT.json" % REF_SCEN)
+        if os.path.exists(p):
+            with open(p) as f:
+                return json.load(f)["service"]["devices_per_km2"]
+    return AN.capacity("OP-LB-NBIOT", REF_SCEN, seeds=PR.GLOBAL["seeds_ref"], iters=12, metrics=("service",),
+                       cache_dir=cache_dir)["service"]["devices_per_km2"]
+
+
 def run_extras(n_mc=3000, cache_dir="out/cache", log=print):
     """ISM noise rise by satellite class, and one-at-a-time sensitivity of the
     delivery ratio to the assumptions that drive the comparison."""
@@ -276,38 +287,81 @@ def run_extras(n_mc=3000, cache_dir="out/cache", log=print):
     for start in (21600.0, 43200.0, 64800.0):
         phases[str(int(start / 3600)) + "h"] = {s: run_case(s, REF_SCEN, g_over=dict(g_over, arrival_start_s=start),
                                                             **kw)["pdr_deadline"] for s in ALL}
-    log("extra: downlink (v1.6) - confirmed-delivery capacity and downlink sensitivity")
+    log("extra: downlink (v1.7) - confirmed-delivery capacity and downlink sensitivity")
     capc = {}
     for stck in ALL:
         capc[stck] = _ck("capc_%s" % stck, lambda stck=stck: AN.capacity(
             stck, REF_SCEN, n_mc=n_mc, seeds=PR.GLOBAL["seeds"], iters=12, metrics=("service",), ci=False,
             check_load=False, key="pdr_confirmed_deadline", **kw)["service"])
+    # ten seed-paired replications for the confirmed-capacity ratio (review D12), both transmit policies
+    capc_ref, capc_ratio = {}, []
+    for stck in ("CTRL-NBIOT", "CTRL-LRFHSS"):
+        for pol in ("first_visible", "elev_threshold"):
+            capc_ref["%s@%s" % (stck, pol)] = _ck("capcref_%s_%s" % (stck, pol), lambda stck=stck, pol=pol: AN.capacity(
+                stck, REF_SCEN, n_mc=n_mc, seeds=PR.GLOBAL["seeds_ref"], iters=12, metrics=("service",),
+                check_load=False, key="pdr_confirmed_deadline", stack_over=dict(tx_policy=pol), **kw)["service"])
+    # uplink service capacity of the operator stacks under the downlink stress policies (three replications)
+    cap_pol = {}
+    for stck in ("OP-LB-NBIOT", "OP-LB-LTEM"):
+        for pol in ("uniform", "rar_priority"):
+            cap_pol["%s@%s" % (stck, pol)] = _ck("cappol_%s_%s" % (stck, pol), lambda stck=stck, pol=pol: AN.capacity(
+                stck, REF_SCEN, n_mc=n_mc, seeds=PR.GLOBAL["seeds"], iters=12, metrics=("service",), ci=False,
+                check_load=False, g_over=dict(dl_policy=pol), **kw)["service"])
+        cap_pol["%s@uplink_only_v151" % stck] = _ck("cappol_%s_ulonly" % stck, lambda stck=stck: AN.capacity(
+            stck, REF_SCEN, n_mc=n_mc, seeds=PR.GLOBAL["seeds"], iters=12, metrics=("service",), ci=False,
+            check_load=False, g_over=dict(downlink=False), **kw)["service"])
+    # what binds at the operator NB-IoT service capacity: the same load under each downlink policy
+    cap_diag = []
+    try:
+        c_ = Case("OP-LB-NBIOT", REF_SCEN, cache_dir=cache_dir)
+        n_, a_c = c_.devices_in_cell(45.0)
+        ls_ = R_cap_ref_nbiot(cache_dir) / (n_ / a_c)
+        for lab, go in (("ce_barring", {}), ("uniform", dict(dl_policy="uniform")),
+                        ("rar_priority", dict(dl_policy="rar_priority")), ("uplink_only_v151", dict(downlink=False))):
+            r = run_case("OP-LB-NBIOT", REF_SCEN, scen_over=dict(load_scale=ls_), g_over=dict(g_over, **go), **kw)
+            cap_diag.append(dict(policy=lab, load_scale=ls_, pdr_deadline=r["pdr_deadline"], causes=r["causes"],
+                                 rar_load_max=r.get("rar_load_max"), rho_dl_max=r.get("rho_dl_max"),
+                                 barred_max=r.get("barred_max"), p_collision_max=r.get("p_preamble_collision_max"),
+                                 rho_max=r.get("rho_max")))
+    except Exception as e:                     # pragma: no cover
+        cap_diag.append(dict(error=str(e)))
+    for pol in ("first_visible", "elev_threshold"):
+        a_, b_ = capc_ref["CTRL-NBIOT@%s" % pol], capc_ref["CTRL-LRFHSS@%s" % pol]
+        capc_ratio.append(dict(a="CTRL-NBIOT", b="CTRL-LRFHSS", policy=pol, key="pdr_confirmed_deadline",
+                               **AN.paired_ratio(a_["per_seed_devices_per_km2"], b_["per_seed_devices_per_km2"])))
     dl_cases = {
         "OP-LB-NBIOT@disaster_urban": [
-            ("baseline", {}, {}), ("downlink not modelled (v1.5.1)", {}, dict(downlink=False)),
+            ("baseline (CE-aware access barring)", {}, {}), ("downlink not modelled (v1.5.1)", {}, dict(downlink=False)),
+            ("uniform downlink admission (stress)", {}, dict(dl_policy="uniform")),
+            ("RAR priority admission (v1.6 policy, stress)", {}, dict(dl_policy="rar_priority")),
+            ("oracle coverage level max(UL, DL)", {}, dict(ce_select="max_ul_dl")),
             ("satellite downlink EIRP +6 dB", {}, dict(dl_eirp_offset_db=6.0)),
             ("satellite downlink EIRP -6 dB", {}, dict(dl_eirp_offset_db=-6.0)),
             ("acquisition limit -20 dB", {}, dict(dl_floor_db=-20.0)),
             ("device noise figure 9 dB", {}, dict(dl_nf_cell_db=9.0)),
             ("frequency reuse 1", {}, dict(dl_reuse=1)),
-            ("link-level repetition efficiency", {}, dict(nbiot_calibration="link_level"))],
+            ("link-level repetition efficiency (refitted gap)", {}, dict(nbiot_calibration="link_level"))],
         "OP-LB-NBIOT@utility_wells": [
             ("baseline", {}, {}), ("downlink not modelled (v1.5.1)", {}, dict(downlink=False)),
             ("satellite downlink EIRP -6 dB", {}, dict(dl_eirp_offset_db=-6.0)),
             ("frequency reuse 1", {}, dict(dl_reuse=1))],
         "OP-MSS-NBIOT@utility_wells": [
             ("baseline", {}, {}), ("downlink not modelled (v1.5.1)", {}, dict(downlink=False)),
+            ("oracle coverage level max(UL, DL)", {}, dict(ce_select="max_ul_dl")),
             ("satellite downlink EIRP +6 dB", {}, dict(dl_eirp_offset_db=6.0)),
             ("acquisition limit -20 dB", {}, dict(dl_floor_db=-20.0)),
             ("deployable 12 dBi antenna", dict(sat="smallsat_deployable"), {})],
         "IO-ISM-LRFHSS@utility_wells": [
-            ("baseline", {}, {}), ("acknowledgement at SF12 (RP002 default RX2)", dict(dl_sf=12), {}),
+            ("baseline (RX2 at SF11; RX1 does not close)", {}, {}),
+            ("acknowledgement at SF12 (RP002 default RX2)", dict(dl_sf=12), {}),
             ("acknowledgement at SF9", dict(dl_sf=9), {}),
-            ("no half-duplex blanking", dict(gw_half_duplex=False, ack_windows=1), {}),
+            ("full-duplex gateway (no blanking)", dict(gw_half_duplex=False), {}),
             ("dense constellation (64 sats)", dict(const="iot_dense"), {}),
             ("ISM interference off", dict(ism="off"), {})],
         "IO-SBAND-LRFHSS-HP@utility_wells": [
-            ("baseline", {}, {}), ("RX2 only (one window)", dict(ack_windows=1), {}),
+            ("baseline (RX1 and RX2 at the configured rate)", {}, {}),
+            ("RX2 only (one window)", dict(ack_windows=1), {}),
+            ("EU868 RX1 mapping (SF11), RX1 first", {}, dict(rx1_mapping="eu868", ack_policy="rx1_first")),
             ("acknowledgement at SF12", dict(dl_sf=12), {}),
             ("satellite downlink EIRP +6 dB", {}, dict(dl_eirp_offset_db=6.0))],
     }
@@ -321,6 +375,8 @@ def run_extras(n_mc=3000, cache_dir="out/cache", log=print):
                                      pdr_confirmed_deadline=r.get("pdr_confirmed_deadline"),
                                      pdr_deadline_confirmed_mode=r.get("pdr_deadline_confirmed_mode"),
                                      dl_failures=r["causes"].get("dl"), rho_dl_max=r.get("rho_dl_max"),
+                                     barred_max=r.get("barred_max"), rar_drop_max=r.get("rar_drop_max"),
+                                     dl_admission_min=r.get("dl_admission_min"), rx1_used=r.get("rx1_used"),
                                      ack_service_min=r.get("ack_service_min"), dl=r.get("dl"),
                                      on_time_by_ce=r.get("on_time_by_ce"), energy_per_msg_j=r["energy_per_msg_j"]))
     log("extra 3/3 Monte Carlo convergence of service capacity")
@@ -332,7 +388,9 @@ def run_extras(n_mc=3000, cache_dir="out/cache", log=print):
                             metrics=("service",), **kw)["service"]
             conv[stck].append(dict(n_mc=nmc, devices_per_km2=c["devices_per_km2"]))
     return dict(ism_by_satellite=ism_sat, sensitivity=sens, convergence=conv, policy_matrix=pmat,
-                capacity_confirmed=capc, dl_sensitivity=dlsens,
+                capacity_confirmed=capc, capacity_confirmed_ref=capc_ref, capacity_confirmed_ratios=capc_ratio,
+                capacity_dl_policy=cap_pol, capacity_point_diagnostic=cap_diag,
+                dl_sensitivity=dlsens,
                 policy_ratios=ratios, reference_scheduler=refs, orbital_phase=phases, lrfhss_branch_boundary=lrb,
                 orbital_phase_note="windows start at 6, 12 and 18 h and each spans 24 h, so they overlap")
 

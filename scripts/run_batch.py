@@ -1,4 +1,4 @@
-"""Recompute every result of the paper (about 2 hours, about 3 GB of memory).
+"""Recompute every result of the paper (about 3.5 hours of processor time, about 3 GB of memory).
 
 Run from the repository root:
     python3 scripts/run_batch.py

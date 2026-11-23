@@ -1,5 +1,42 @@
 # Changelog
 
+## v1.7.0 (paper version): downlink review fixes
+
+Review of v1.6.0 (findings D01-D12). Code fixes, not only text qualifications; all results rerun.
+
+| Finding | Change |
+|---|---|
+| D01 | RAR MAC PDU per non-empty occasion and level with one 56-bit subheader+RAR per distinct detected preamble (Binomial(n_p, 1-exp(-m/n_p)) occupancy, collided preambles included), split at the maximum TBS (680 NB-IoT, 1000 LTE-M, limited per level by the CE-mode repetition cap); the RAR carries the first Msg3 grant, so explicit grants are sent only for later HARQ attempts and transport blocks. |
+| D02 | Downlink demand includes every re-send (expected transmissions from a pre-simulation of each device's decoding on its own fading process); final messages only for planned uplink successes; access, collisions, RAR misses, uplink admission and downlink load solved as one fixed point per group. Downlink admission: `dl_policy` = `ce_barring` (default: access barring by initial coverage level, deepest first, transactions preserved), `uniform` or `rar_priority` (v1.6 stress policy). |
+| D03 | Non-acquired devices send no preambles and leave the access demand. Initial level from the downlink measurement (`ce_select='measured'`; `max_ul_dl` kept as an oracle option); preamble detectable only if its repetitions meet the uplink need; after `ce_attempts`=3 failed attempts at a level the device moves up, NPRACH and RAR together; `rach_max`=5 in total. |
+| D04 | One absolute event timeline per device (`txn.py`): occasion wait, preamble, round trip, RAR monitoring, backoff, queue, grant waits and receptions, uplink attempts re-evaluated on the uplink fading process at their executed times, feedback spacing, final message. Downlink fading averaged over transmission time only. LoRa ACK fading with random coherence phase. |
+| D05 | LR-FHSS receiver returns per-element decode flags (no extra random draws); joint mask requires one header and `need` fragments both decoded and unblanked; one non-overlapping transmitter calendar shared by blanking and ACK scheduling; ACK demand recomputed from surviving uplinks (fixed point with common random numbers). |
+| D06 | Single-transmitter loss calendar with window-specific duty budgets; RX1 at the EU868 mapping (DR8 -> SF11) on the uplink channel at 25 mW e.r.p. and 1 % in the ISM band (computed not to close), RX2 at the configured rate; licensed bands use the configured rate for RX1 (`rx1_mapping='eu868'` as option); `ack_policy='fastest'` (RX1 only if not slower than RX2) or `rx1_first`; ACK must end inside the contact. |
+| D07 | Re-sends keep N_SF and repetitions R and use min(R 2^k, R_max) with the requirement recomputed; LTE-M PDSCH cap 32 (CE mode A, levels 0-1) or 2048 (mode B). |
+| D08 | Energy as mutually exclusive TX/RX/idle intervals clipped at contact end or expiry; RAR window is the containing monitoring interval; release carried by the final message (no separate tail). |
+| D09 | Documentation: beta changes are a pivoted sensitivity (gap refitted); acquisition cutoff unchanged. |
+| D10 | Declared NB-IoT and LTE-M downlink configurations (RE counts, TBS limits, MPDCCH AL24 over one narrowband, CE-mode caps). |
+| D11 | Downlink pattern evaluated in the same physical direction with the downlink beamwidth; C/I with the uplink beam layout and downlink gains; fixed-EIRP statement for small satellites; satellite-wide RF power reported (`dl_rf_budget`). |
+| D12 | Confirmed capacity of the control stacks with 10 seed-paired replications and intervals; stale module header corrected. |
+
+Validation: 65 checks (new: calendar limits and occupancy, R5 joint mask probe, R3 escalation probe, RAR distinct-preamble count and PDU split, coverage-level chain, ordering invariants). `downlink=False` still reproduces v1.5.1 exactly.
+
+Main changes in the frozen results (utility wells unless stated, v1.6 -> v1.7):
+
+| Quantity | v1.6.0 | v1.7.0 |
+|---|---|---|
+| OP NB-IoT on time, uplink / confirmed | 0.982 / 0.979 | 0.983 / 0.980 |
+| OP NB-IoT service capacity | 13.66 | 19.36 [19.02, 19.70] (10.2 uniform, 10.6 RAR priority, 13.6 uplink-only) |
+| OP LTE-M service capacity | 44.9 (downlink-limited) | 58.5 [57.5, 59.5] |
+| CTRL NB-IoT / LR-FHSS uplink ratio | 1.18 / 1.22 | 1.70 / 1.87 |
+| CTRL NB-IoT / LR-FHSS confirmed ratio | 4.9 / 4.6 (3 reps, no CI) | 7.48 [7.27, 7.70] / 7.20 [7.00, 7.41] |
+| ISM LR-FHSS confirmed | 0.007 | 0.009 |
+| S-band HP confirmed | 0.683 | 0.668 |
+| Disaster OP NB-IoT | 0.481 | 0.502 (uniform 0.230, RAR priority 0.100) |
+| Disaster, acquisition limit -20 dB | 0.068 | 0.392 |
+| OP NB-IoT energy / battery | 0.35 J / 13.2 y | 0.30 J / 14.8 y |
+
+
 ## v1.6.0 (paper version): downlink
 
 - New module `downlink.py` and engine support for the downlink of every stack; two delivery metrics, `pdr_deadline` (uplink) and `pdr_confirmed_deadline` (acknowledgement received before the deadline).
