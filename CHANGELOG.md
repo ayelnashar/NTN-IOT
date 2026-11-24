@@ -1,5 +1,19 @@
 # Changelog
 
+## v1.9.1 (paper version): access barring tested on the matched NB-IoT control
+
+The two downlink policies without access barring (uniform admission and RAR priority) and the uplink-only model, previously run only for the operator stacks, now also run for CTRL-NBIOT (three replications, seeds 20261122 to 20261124). `control_no_barring_ratios` gives seed-paired ratios to CTRL-LRFHSS on the same seeds, so the claim that the NB-IoT uplink advantage depends on barring rests on the matched pair rather than on the 23 dBm operator stack.
+
+| Quantity (utility wells, first visibility) | Value |
+|---|---|
+| CTRL-NBIOT service capacity, uniform / RAR priority / uplink-only model | 10.35 / 10.46 / 13.69 devices/km² |
+| CTRL-LRFHSS service capacity, same three seeds | 11.48 devices/km² |
+| Ratio CTRL-NBIOT / CTRL-LRFHSS, uniform | 0.90 [0.80, 1.02] |
+| Ratio CTRL-NBIOT / CTRL-LRFHSS, RAR priority | 0.91 [0.78, 1.07] |
+| Ratio CTRL-NBIOT / CTRL-LRFHSS, with access barring (unchanged, ten replications) | 1.70 [1.68, 1.72] |
+
+Engine unchanged. Every other result is reused from the v1.9.0 checkpoints and is identical field by field (the only differences are the three new `capacity_dl_policy` entries and `control_no_barring_ratios`), so per-stack records keep `model_version` 1.9.0. 65/65 validation checks pass; notebook re-executed. README and CITATION carry the paper's current title.
+
 ## v1.9.0 (paper version): fixes from the final external review
 
 Delivery, capacity and every ratio are unchanged (checked field by field against v1.8.0); 65/65 validation checks pass.

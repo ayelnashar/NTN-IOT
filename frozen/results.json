@@ -1163183,6 +1163183,69 @@
    "note": "",
    "devices_per_km2_ci95": null,
    "ci_method": "none: fewer than 5 replications, min-max range only"
+  },
+  "CTRL-NBIOT@uniform": {
+   "devices_per_cell": 5038.250264535079,
+   "devices_per_cell_median": 5070.819187632957,
+   "devices_per_cell_min": 4933.046785520729,
+   "devices_per_cell_max": 5110.884820451549,
+   "devices_per_cell_sd": 93.28527606664706,
+   "cell_area_km2": 486.73034399680625,
+   "devices_per_km2": 10.351214644156514,
+   "devices_per_km2_min": 10.13507139294586,
+   "devices_per_km2_max": 10.500444205888845,
+   "estimator": "mean over 3 independent replications",
+   "estimand": "expected finite-sample crossing (n_mc 3000 per evaluation)",
+   "per_seed_devices_per_km2": [
+    10.418128333634835,
+    10.13507139294586,
+    10.500444205888845
+   ],
+   "note": "",
+   "devices_per_km2_ci95": null,
+   "ci_method": "none: fewer than 5 replications, min-max range only"
+  },
+  "CTRL-NBIOT@rar_priority": {
+   "devices_per_cell": 5092.174113345683,
+   "devices_per_cell_median": 5131.03619368583,
+   "devices_per_cell_min": 4933.046785520729,
+   "devices_per_cell_max": 5212.439360830488,
+   "devices_per_cell_sd": 143.69324532081504,
+   "cell_area_km2": 486.73034399680625,
+   "devices_per_km2": 10.462002577302014,
+   "devices_per_km2_min": 10.13507139294586,
+   "devices_per_km2_max": 10.709090618900658,
+   "estimator": "mean over 3 independent replications",
+   "estimand": "expected finite-sample crossing (n_mc 3000 per evaluation)",
+   "per_seed_devices_per_km2": [
+    10.709090618900658,
+    10.13507139294586,
+    10.54184572005952
+   ],
+   "note": "",
+   "devices_per_km2_ci95": null,
+   "ci_method": "none: fewer than 5 replications, min-max range only"
+  },
+  "CTRL-NBIOT@uplink_only_v151": {
+   "devices_per_cell": 6662.7206089843685,
+   "devices_per_cell_median": 6626.574157662321,
+   "devices_per_cell_min": 6523.086311298827,
+   "devices_per_cell_max": 6838.501357991959,
+   "devices_per_cell_sd": 160.78428834152436,
+   "cell_area_km2": 486.73034399680625,
+   "devices_per_km2": 13.688730713341528,
+   "devices_per_km2_min": 13.401848460349186,
+   "devices_per_km2_max": 14.049876779485995,
+   "estimator": "mean over 3 independent replications",
+   "estimand": "expected finite-sample crossing (n_mc 3000 per evaluation)",
+   "per_seed_devices_per_km2": [
+    13.401848460349186,
+    13.614466900189404,
+    14.049876779485995
+   ],
+   "note": "",
+   "devices_per_km2_ci95": null,
+   "ci_method": "none: fewer than 5 replications, min-max range only"
   }
  },
  "capacity_point_diagnostic": [
@@ -1163265,6 +1163328,68 @@
    "barred_max": null,
    "p_collision_max": 0.9985942489866795,
    "rho_max": 0.16910657923214384
+  }
+ ],
+ "control_no_barring_ratios": [
+  {
+   "a": "CTRL-NBIOT",
+   "b": "CTRL-LRFHSS",
+   "a_dl_policy": "uniform",
+   "tx_policy": "first_visible",
+   "seeds": [
+    20261122,
+    20261123,
+    20261124
+   ],
+   "a_per_km2": 10.351214644156514,
+   "b_per_km2_same_seeds": 11.48493975313413,
+   "ratio": 0.9015643800002221,
+   "ratio_ci95": [
+    0.7965931432709605,
+    1.0203682245463483
+   ],
+   "replications": 3,
+   "method": "seed-paired, Student-t interval on log ratio"
+  },
+  {
+   "a": "CTRL-NBIOT",
+   "b": "CTRL-LRFHSS",
+   "a_dl_policy": "rar_priority",
+   "tx_policy": "first_visible",
+   "seeds": [
+    20261122,
+    20261123,
+    20261124
+   ],
+   "a_per_km2": 10.462002577302014,
+   "b_per_km2_same_seeds": 11.48493975313413,
+   "ratio": 0.9110748043694277,
+   "ratio_ci95": [
+    0.7790739839782654,
+    1.0654409160452056
+   ],
+   "replications": 3,
+   "method": "seed-paired, Student-t interval on log ratio"
+  },
+  {
+   "a": "CTRL-NBIOT",
+   "b": "CTRL-LRFHSS",
+   "a_dl_policy": "uplink_only_v151",
+   "tx_policy": "first_visible",
+   "seeds": [
+    20261122,
+    20261123,
+    20261124
+   ],
+   "a_per_km2": 13.688730713341528,
+   "b_per_km2_same_seeds": 11.48493975313413,
+   "ratio": 1.1921602453063438,
+   "ratio_ci95": [
+    1.0983180606697003,
+    1.2940204676432943
+   ],
+   "replications": 3,
+   "method": "seed-paired, Student-t interval on log ratio"
   }
  ],
  "dl_sensitivity": {

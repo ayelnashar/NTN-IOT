@@ -316,7 +316,7 @@ def run_extras(n_mc=3000, cache_dir="out/cache", log=print):
                 check_load=False, key="pdr_confirmed_deadline", stack_over=dict(tx_policy=pol), **kw)["service"])
     # uplink service capacity of the operator stacks under the downlink stress policies (three replications)
     cap_pol = {}
-    for stck in ("OP-LB-NBIOT", "OP-LB-LTEM"):
+    for stck in ("OP-LB-NBIOT", "OP-LB-LTEM", "CTRL-NBIOT"):     # v1.9.1: the NB-IoT control too
         for pol in ("uniform", "rar_priority"):
             cap_pol["%s@%s" % (stck, pol)] = _ck("cappol_%s_%s" % (stck, pol), lambda stck=stck, pol=pol: AN.capacity(
                 stck, REF_SCEN, n_mc=n_mc, seeds=PR.GLOBAL["seeds"], iters=12, metrics=("service",), ci=False,
@@ -324,6 +324,14 @@ def run_extras(n_mc=3000, cache_dir="out/cache", log=print):
         cap_pol["%s@uplink_only_v151" % stck] = _ck("cappol_%s_ulonly" % stck, lambda stck=stck: AN.capacity(
             stck, REF_SCEN, n_mc=n_mc, seeds=PR.GLOBAL["seeds"], iters=12, metrics=("service",), ci=False,
             check_load=False, g_over=dict(downlink=False), **kw)["service"])
+    # v1.9.1: NB-IoT control without access barring against the LR-FHSS control, on the same seeds
+    nobar = []
+    for pol in ("uniform", "rar_priority", "uplink_only_v151"):
+        a_ = cap_pol["CTRL-NBIOT@%s" % pol]["per_seed_devices_per_km2"]
+        b_ = per[("CTRL-LRFHSS", "first_visible")][:len(a_)]
+        nobar.append(dict(a="CTRL-NBIOT", b="CTRL-LRFHSS", a_dl_policy=pol, tx_policy="first_visible",
+                          seeds=PR.GLOBAL["seeds"], a_per_km2=cap_pol["CTRL-NBIOT@%s" % pol]["devices_per_km2"],
+                          b_per_km2_same_seeds=sum(b_) / len(b_), **AN.paired_ratio(a_, b_)))
     # what binds at the operator NB-IoT service capacity: the same load under each downlink policy
     cap_diag = []
     try:
@@ -407,6 +415,7 @@ def run_extras(n_mc=3000, cache_dir="out/cache", log=print):
     return dict(ism_by_satellite=ism_sat, sensitivity=sens, convergence=conv, policy_matrix=pmat,
                 capacity_confirmed=capc, capacity_confirmed_ref=capc_ref, capacity_confirmed_ratios=capc_ratio,
                 capacity_dl_policy=cap_pol, capacity_point_diagnostic=cap_diag,
+                control_no_barring_ratios=nobar,
                 dl_sensitivity=dlsens,
                 policy_ratios=ratios, reference_scheduler=refs, orbital_phase=phases, lrfhss_branch_boundary=lrb,
                 orbital_phase_note="windows start at 6, 12 and 18 h and each spans 24 h, so they overlap")

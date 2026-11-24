@@ -1,10 +1,10 @@
-# ntnsim v1.9.0: Operator 3GPP IoT-NTN vs IoT-only LoRaWAN NTN over LEO
+# ntnsim v1.9.1: Operator 3GPP IoT-NTN vs IoT-only LoRaWAN NTN over LEO
 
 Code and frozen results for the paper
 
-> A. Elnashar, "Operator-Led 3GPP IoT-NTN Versus IoT-Only LoRaWAN Direct-to-Satellite Networks: A Same-Scenario LEO Simulation Study," submitted to *IEEE Open Journal of the Communications Society*, 2026.
+> A. Elnashar, "Operator-Led 3GPP IoT-NTN Versus IoT-Only LoRaWAN Direct-to-Satellite Networks: A LEO Simulation Study," submitted to *IEEE Open Journal of the Communications Society*, 2026.
 
-Every number, table and figure in the paper comes from `frozen/results.json`, produced by `scripts/run_batch.py` with the code in this repository (version 1.9.0). All presets are illustrative system classes, not any operator's deployment, and no measured network data is used.
+Every number, table and figure in the paper comes from `frozen/results.json`, produced by `scripts/run_batch.py` with the code in this repository (version 1.9.1). All presets are illustrative system classes, not any operator's deployment, and no measured network data is used.
 
 ## Repository layout
 
@@ -15,10 +15,10 @@ Every number, table and figure in the paper comes from `frozen/results.json`, pr
 | `frozen/` | `results.json`, CSV tables (link budgets, scenario summary) and all figures (PNG and PDF) used in the paper |
 | `scripts/run_batch.py` | Recomputes every result (about 3.5 h of processor time, about 3 GB RAM, checkpointed) |
 | `scripts/build_notebook.py` | Rebuilds the notebook from the package |
-| `CHANGELOG.md` | Model history and the stated limitations of v1.9.0 |
+| `CHANGELOG.md` | Model history and the stated limitations of v1.9.1 |
 | `PORTING.md` | Notes for porting the model to other bands or regions |
 
-## Headline results (frozen v1.9.0, utility-wells scenario)
+## Headline results (frozen v1.9.1, utility-wells scenario)
 
 | Quantity | Value |
 |---|---|
@@ -28,10 +28,11 @@ Every number, table and figure in the paper comes from `frozen/results.json`, pr
 | Operator LTE-M service capacity | 58.5 [57.5, 59.5] devices/km² |
 | Control NB-IoT / LR-FHSS uplink capacity ratio, first visibility / 30° | 1.698 [1.677, 1.720] / 1.873 [1.824, 1.923] |
 | Control NB-IoT / LR-FHSS confirmed capacity ratio, first visibility / 30° | 7.48 [7.27, 7.70] / 7.20 [7.00, 7.41] |
+| Control NB-IoT capacity without access barring (uniform / RAR priority), and its ratio to control LR-FHSS on the same 3 seeds | 10.35 / 10.46 devices/km²; 0.90 [0.80, 1.02] / 0.91 [0.78, 1.07] |
 | IoT-only LR-FHSS (ISM 868 MHz) on-time delivery, uplink / confirmed | 0.297 / 0.009 |
 | Urban disaster, operator NB-IoT on time | 0.502 (0.616 with the downlink off; 0.230 uniform admission; 0.100 RAR priority) |
 
-At the NB-IoT service capacity the random-access responses occupy 0.71 of the downlink; access barring by coverage level holds the downlink at 0.9 and bars 7.1 % of devices. NB-IoT capacity, and the uplink ratio to LR-FHSS, therefore depend on the access control.
+At the NB-IoT service capacity the random-access responses occupy 0.71 of the downlink; access barring by coverage level holds the downlink at 0.9 and bars 7.1 % of devices. NB-IoT capacity, and the uplink ratio to LR-FHSS, therefore depend on the access control. Without barring, the NB-IoT control carries 0.90 to 0.91 times the devices of the LR-FHSS control on the same satellite, spectrum, power and transmit policy (v1.9.1).
 
 Intervals are Student-t 95 % intervals over 10 independent replications; ratios are seed-paired log-ratio intervals.
 
