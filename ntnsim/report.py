@@ -126,7 +126,8 @@ def run_all(out_dir="out", cache_dir="out/cache", n_mc=3000, quick=False, log=pr
                                                                              keep_samples=True, **kw)
                                                                     for s in ALL})
                             for sc in PR.SCENARIOS}
-    R.update(run_extras(n_mc=n_mc, cache_dir=cache_dir, log=log))
+    if not quick:                    # the extras (sensitivity, policy matrix, downlink cases) take hours
+        R.update(run_extras(n_mc=n_mc, cache_dir=cache_dir, log=log))
     with open(os.path.join(out_dir, "results.json"), "w") as f:
         json.dump(R, f, indent=1, default=lambda o: None)
     _csv(R, out_dir)

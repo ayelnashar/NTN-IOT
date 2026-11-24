@@ -14,6 +14,8 @@ All six control stacks (CTRL-*, CTRL-SS-*) now transmit at first visibility, so 
 | CTRL-SS-LRFHSS delivery | 0.870 | 0.850 |
 | NB-IoT / LR-FHSS ratios (policy matrix) | 1.70 and 1.87 | unchanged |
 
+Tooling fix after release (results unchanged): `run_all(quick=True)` now skips the extras (sensitivity, policy matrix, downlink cases), so the notebook smoke run takes about 4 minutes instead of hours.
+
 ## v1.7.1 (paper version): reporting changes, simulation model unchanged
 
 The simulation model is unchanged (`MODEL_VERSION` 1.7.0); every simulated quantity of v1.7.0 is reproduced. Changes affect reported quantities only.
