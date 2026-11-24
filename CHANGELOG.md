@@ -1,5 +1,16 @@
 # Changelog
 
+## v1.7.1 (paper version): reporting changes, simulation model unchanged
+
+The simulation model is unchanged (`MODEL_VERSION` 1.7.0); every simulated quantity of v1.7.0 is reproduced. Changes affect reported quantities only.
+
+| Item | Change |
+|---|---|
+| Cell radius | For broad-beam satellites `cell_radius_km` is now the radius of the whole footprint above the 10° elevation mask (1664 km at 550 km, 1563 km at 500 km), the population used for contention and for devices per cell. v1.7.0 reported the 90 % service radius in this field, which did not match the devices-per-cell axis of the goodput results. `service_radius_km` is unchanged. |
+| Goodput | For beam-cell stacks the load sweep continues past 10^4 times the scenario load, half a decade at a time, while the previous point still delivered at least 10 messages of the Monte Carlo sample; goodput samples use 1000 messages (`goodput_n_mc`). The paper figure ends each curve at the last load with at least 10 delivered messages. |
+| Downlink sensitivity | Adds OP-LB-LTEM in the urban disaster scenario (baseline and downlink not modelled) and records `battery_years` and the loss `causes` for every case. |
+| Figures | Legends under the axes in one line (time coverage, downlink, cell radius, transmit policy); goodput legend in three columns with end-of-curve markers. |
+
 ## v1.7.0 (paper version): downlink review fixes
 
 Review of v1.6.0 (findings D01-D12). Code fixes, not only text qualifications; all results rerun.

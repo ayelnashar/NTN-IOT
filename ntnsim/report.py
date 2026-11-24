@@ -90,7 +90,20 @@ def run_all(out_dir="out", cache_dir="out/cache", n_mc=3000, quick=False, log=pr
     R["interference"]["tn_coexistence_pdr"] = coex
     log("7/9 goodput vs load")
     scales = [10 ** (x / 2) for x in range(-6, 9)] if not quick else [0.01, 1, 100]
-    R["goodput"] = {s: AN.goodput_curve(s, REF_SCEN, scales, n_mc=max(600, n_mc // 3), **kw) for s in ALL}
+    # beam-cell stacks hold about 10^4 times fewer devices per cell than a small-satellite footprint at the same
+    # load, so their sweep continues past 10^4 times the scenario load, point by point, while the previous point
+    # still delivered at least 10 messages of the Monte Carlo sample (the resolution limit used in the figure)
+    gp_n = max(600, n_mc // 3)
+    R["goodput"] = {}
+    for s in ALL:
+        rows = AN.goodput_curve(s, REF_SCEN, scales, n_mc=gp_n, **kw)
+        if not quick and Case(s, REF_SCEN, cache_dir=kw.get("cache_dir")).devices_in_cell(45.0)[0] < 1e3:
+            x = 9
+            while rows[-1]["pdr"] * gp_n >= 10 and x <= 14:
+                rows += AN.goodput_curve(s, REF_SCEN, [10 ** (x / 2)], n_mc=gp_n, **kw)
+                x += 1
+        R["goodput"][s] = rows
+    R["goodput_n_mc"] = gp_n
     log("8/9 capacity: service (10 replications + CI in the reference scenario, 3 elsewhere) and contention")
     seeds = PR.GLOBAL["seeds"] if not quick else PR.GLOBAL["seeds"][:1]
     seeds_ref = PR.GLOBAL["seeds_ref"] if not quick else PR.GLOBAL["seeds"][:1]
@@ -341,6 +354,8 @@ def run_extras(n_mc=3000, cache_dir="out/cache", log=print):
             ("device noise figure 9 dB", {}, dict(dl_nf_cell_db=9.0)),
             ("frequency reuse 1", {}, dict(dl_reuse=1)),
             ("link-level repetition efficiency (refitted gap)", {}, dict(nbiot_calibration="link_level"))],
+        "OP-LB-LTEM@disaster_urban": [
+            ("baseline (CE-aware access barring)", {}, {}), ("downlink not modelled (v1.5.1)", {}, dict(downlink=False))],
         "OP-LB-NBIOT@utility_wells": [
             ("baseline", {}, {}), ("downlink not modelled (v1.5.1)", {}, dict(downlink=False)),
             ("satellite downlink EIRP -6 dB", {}, dict(dl_eirp_offset_db=-6.0)),
@@ -378,7 +393,8 @@ def run_extras(n_mc=3000, cache_dir="out/cache", log=print):
                                      barred_max=r.get("barred_max"), rar_drop_max=r.get("rar_drop_max"),
                                      dl_admission_min=r.get("dl_admission_min"), rx1_used=r.get("rx1_used"),
                                      ack_service_min=r.get("ack_service_min"), dl=r.get("dl"),
-                                     on_time_by_ce=r.get("on_time_by_ce"), energy_per_msg_j=r["energy_per_msg_j"]))
+                                     on_time_by_ce=r.get("on_time_by_ce"), energy_per_msg_j=r["energy_per_msg_j"],
+                                     battery_years=r.get("battery_years"), causes=r["causes"]))
     log("extra 3/3 Monte Carlo convergence of service capacity")
     conv = {}
     for stck in ("CTRL-NBIOT", "CTRL-LRFHSS"):

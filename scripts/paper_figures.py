@@ -45,6 +45,13 @@ def legend_below(ax, ncol=2, y=-0.22):
     ax.legend(loc="upper center", bbox_to_anchor=(0.5, y), ncol=ncol)
 
 
+def legend_under(fig, ax, ncol=2, handles=None, labels=None):
+    """One-line legend centered under the whole figure, outside every axes box."""
+    h, l = (handles, labels) if handles is not None else ax.get_legend_handles_labels()
+    fig.legend(h, l, loc="upper center", bbox_to_anchor=(0.5, 0.0), ncol=ncol, borderaxespad=0.2,
+               handlelength=1.6, columnspacing=1.2)
+
+
 def legend_above(ax, ncol=2):
     ax.legend(loc="lower left", bbox_to_anchor=(0, 1.02), ncol=ncol, borderaxespad=0)
 
@@ -66,13 +73,14 @@ fig, ax = plt.subplots(figsize=(W1, 3.0))
 geo = [R["time_coverage"]["utility_wells"][s]["geometric_coverage"] for s in STACKS]
 lnk = [R["time_coverage"]["utility_wells"][s]["link_coverage"] for s in STACKS]
 ax.barh([v - 0.2 for v in y], geo, height=0.38, color="#b9b8b2", label="Satellite in view")
-ax.barh([v + 0.2 for v in y], lnk, height=0.38, color=[COL[s] for s in STACKS], label="Link closes (90 %)")
+ax.barh([v + 0.2 for v in y], lnk, height=0.38, color=[COL[s] for s in STACKS], label="Link closes (90%)")
 for v, r in zip(y, lnk):
     ax.text(r + 0.012, v + 0.2, f"{100 * r:.0f}%", va="center", fontsize=5.5)
 ax.set_yticks(y); ax.set_yticklabels(STACKS, fontsize=5.8); ax.invert_yaxis()
 ax.set_xlim(0, 1.12); ax.set_xlabel("Fraction of the day"); ax.grid(axis="y", visible=False)
 ax.tick_params(axis="y", which="both", right=False)
-legend_above(ax)
+fig.tight_layout()
+legend_under(fig, ax)
 save(fig, "p_tcov")
 
 
@@ -171,28 +179,46 @@ save(fig, "p_cap")
 fig, ax = plt.subplots(figsize=(W1, 3.0))
 vals = [R["cell_radius"]["utility_wells"][s].get("cell_radius_km") or 0 for s in STACKS]
 svc = [R["cell_radius"]["utility_wells"][s].get("service_radius_km") or 0 for s in STACKS]
-ax.barh([v + 0.2 for v in y], vals, height=0.38, color=[COL[s] for s in STACKS], label="Cell radius (beam spot or footprint)")
-ax.barh([v - 0.2 for v in y], svc, height=0.38, color="#b9b8b2", label="Service radius (link closes, 90 %)")
+ax.barh([v + 0.2 for v in y], vals, height=0.38, color=[COL[s] for s in STACKS], label="Cell radius (beam or footprint)")
+ax.barh([v - 0.2 for v in y], svc, height=0.38, color="#b9b8b2", label="Service radius (link closes, 90%)")
 for v, r in zip(y, vals):
     if r:
-        ax.text(r * 1.1, v + 0.2, f"{r:,.0f}" if r >= 10 else f"{r:.1f}", va="center", fontsize=5.3)
+        ax.text(r * 1.1, v + 0.2, f"{r:.0f}" if r >= 10 else f"{r:.1f}", va="center", fontsize=5.3)
 ax.set_xscale("log"); ax.set_xlim(2, 8e3)
 ax.set_yticks(y); ax.set_yticklabels(STACKS, fontsize=5.8); ax.invert_yaxis()
 ax.tick_params(axis="y", which="both", right=False); ax.grid(axis="y", visible=False)
 ax.set_xlabel("Radius (km)")
-legend_above(ax, ncol=1)
+fig.tight_layout()
+h_, l_ = ax.get_legend_handles_labels()
+legend_under(fig, ax, handles=h_[::-1], labels=l_[::-1])
 save(fig, "p_radius")
 
 # goodput ------------------------------------------------------------------------------------------------
 fig, ax = plt.subplots(figsize=(W1, 2.4))
+GP_MIN_DELIVERED = 10        # a point is plotted only if the Monte Carlo sample delivered at least this many messages
+GP_N = R.get("goodput_n_mc", 1000)
+fig, ax = plt.subplots(figsize=(W1, 2.4))
+def gp_rows(s):
+    """Points of one goodput curve up to the last load whose Monte Carlo sample still delivered at least
+    GP_MIN_DELIVERED messages (or, for stacks that never do, at least one)."""
+    rows = sorted((r for r in R["goodput"][s] if r["devices_per_cell"] > 0), key=lambda r: r["devices_per_cell"])
+    cnt = [r["pdr"] * GP_N for r in rows]
+    idx = [i for i, c in enumerate(cnt) if c >= GP_MIN_DELIVERED - 1e-9] or [i for i, c in enumerate(cnt) if c >= 1 - 1e-9]
+    return [r for r in rows[:max(idx) + 1] if r["goodput_bps"] > 0] if idx else []
+
+
 for s in STACKS:
-    rows = [r for r in R["goodput"][s] if r["devices_per_cell"] > 0]
-    ax.plot([r["devices_per_cell"] for r in rows], [max(r["goodput_bps"], 1e-3) for r in rows], color=COL[s],
+    keep = gp_rows(s)
+    ax.plot([r["devices_per_cell"] for r in keep], [r["goodput_bps"] for r in keep], color=COL[s],
             ls=_ls(s), lw=1.0, label=s)
-xs = [r["devices_per_cell"] for st in STACKS for r in R["goodput"][st] if r["goodput_bps"] > 1e-2]
-ax.set_xscale("log"); ax.set_yscale("log"); ax.set_ylim(1e-2, 1e4); ax.set_xlim(min(xs) / 2, max(xs) * 3)
+    if keep and keep[-1]["devices_per_cell"] < max(r["devices_per_cell"] for r in R["goodput"][s]):
+        # delivery falls below the resolution limit at the next load step
+        ax.plot(keep[-1]["devices_per_cell"], keep[-1]["goodput_bps"], marker="v", ms=2.0, color=COL[s], ls="none")
+xs = [r["devices_per_cell"] for st in STACKS for r in gp_rows(st)]
+ax.set_xscale("log"); ax.set_yscale("log"); ax.set_ylim(1e-2, 3e4); ax.set_xlim(0.2, max(xs) * 2)
 ax.set_xlabel("Devices per cell"); ax.set_ylabel("Delivered goodput per cell (bit/s)")
-legend_below(ax, y=-0.22)
+fig.tight_layout()
+legend_under(fig, ax, ncol=3)
 save(fig, "p_goodput")
 
 # policy matrix --------------------------------------------------------------------------------------------
@@ -219,12 +245,13 @@ for off, pol, hatch, lab in ((-0.2, "first_visible", None, "Transmit at first vi
                 hi = ci[1]
             ax.text(hi * 1.3, v + off, f"{val:,.2f}" if val >= 0.1 else f"{val:.2g}", va="center", fontsize=5.3)
         elif pol == "first_visible":
-            ax.text(1.3e-3, v, "0 under both policies (below 90 % on time unloaded)", va="center", fontsize=5.3, color=INK2)
+            ax.text(1.3e-3, v, "0 under both policies (below 90% on time unloaded)", va="center", fontsize=5.3, color=INK2)
 ax.set_xscale("log"); ax.set_xlim(1e-3, 1e2)
 ax.set_yticks(yy); ax.set_yticklabels(stk, fontsize=5.8); ax.set_ylim(len(stk) - 0.5, -0.5)
 ax.tick_params(axis="y", which="both", right=False); ax.grid(axis="y", visible=False)
 ax.set_xlabel("Service capacity (devices per km²)")
-legend_above(ax)
+fig.tight_layout()
+legend_under(fig, ax)
 save(fig, "p_policy")
 
 # sensitivity, stacked ---------------------------------------------------------------------------------------
@@ -261,8 +288,7 @@ if "pdr_confirmed_deadline" in R["scenario_matrix"]["utility_wells"]["OP-LB-NBIO
         ax.tick_params(axis="y", which="both", right=False); ax.grid(axis="y", visible=False)
         ax.set_xlim(0, 1.25); ax.set_title(tag, loc="left")
     axs[1].set_xlabel("Messages delivered within the deadline")
-    fig.tight_layout(h_pad=0.8, rect=(0, 0, 1, 0.95))
-    h_, l_ = axs[0].get_legend_handles_labels()
-    fig.legend(h_, l_, loc="upper center", bbox_to_anchor=(0.55, 1.0), ncol=1, fontsize=5.8)
+    fig.tight_layout(h_pad=0.8)
+    legend_under(fig, axs[0])
     save(fig, "p_dl")
 print("done")

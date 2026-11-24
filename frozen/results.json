@@ -18651,7 +18651,7 @@
     "el_min_link_deg": 19.0,
     "service_radius_km": 1084.325365274267,
     "service_area_km2": 3684855.840688395,
-    "cell_radius_km": 1084.325365274267
+    "cell_radius_km": 1563.0154020003633
    },
    "IO-ISM-LRFHSS": {
     "stack": "IO-ISM-LRFHSS",
@@ -18661,7 +18661,7 @@
     "el_min_link_deg": 27.0,
     "service_radius_km": 877.9066428539483,
     "service_area_km2": 2417459.639970798,
-    "cell_radius_km": 877.9066428539483
+    "cell_radius_km": 1664.3190289917611
    },
    "IO-ISM-LORA-SF10": {
     "stack": "IO-ISM-LORA-SF10",
@@ -18671,7 +18671,7 @@
     "el_min_link_deg": 51.5,
     "service_radius_km": 393.3187309542616,
     "service_area_km2": 485848.8632639635,
-    "cell_radius_km": 393.3187309542616
+    "cell_radius_km": 1664.3190289917611
    },
    "IO-ISM-LORA-SF12": {
     "stack": "IO-ISM-LORA-SF12",
@@ -18681,7 +18681,7 @@
     "el_min_link_deg": 27.0,
     "service_radius_km": 877.9066428539483,
     "service_area_km2": 2417459.639970798,
-    "cell_radius_km": 877.9066428539483
+    "cell_radius_km": 1664.3190289917611
    },
    "IO-SBAND-LRFHSS": {
     "stack": "IO-SBAND-LRFHSS",
@@ -18691,7 +18691,7 @@
     "el_min_link_deg": 68.0,
     "service_radius_km": 203.27975796389225,
     "service_area_km2": 129807.95183314278,
-    "cell_radius_km": 203.27975796389225
+    "cell_radius_km": 1664.3190289917611
    },
    "IO-SBAND-LRFHSS-HP": {
     "stack": "IO-SBAND-LRFHSS-HP",
@@ -18701,7 +18701,7 @@
     "el_min_link_deg": 22.5,
     "service_radius_km": 1027.2430245947958,
     "service_area_km2": 3307921.467558038,
-    "cell_radius_km": 1027.2430245947958
+    "cell_radius_km": 1664.3190289917611
    },
    "CTRL-NBIOT": {
     "stack": "CTRL-NBIOT",
@@ -18747,7 +18747,7 @@
     "el_min_link_deg": 16.0,
     "service_radius_km": 1308.1239554581243,
     "service_area_km2": 5356996.666349087,
-    "cell_radius_km": 1308.1239554581243
+    "cell_radius_km": 1664.3190289917611
    },
    "CTRL-SS-LRFHSS": {
     "stack": "CTRL-SS-LRFHSS",
@@ -18757,7 +18757,7 @@
     "el_min_link_deg": 22.5,
     "service_radius_km": 1027.2430245947958,
     "service_area_km2": 3307921.467558038,
-    "cell_radius_km": 1027.2430245947958
+    "cell_radius_km": 1664.3190289917611
    },
    "CTRL-SS-LORA-SF12": {
     "stack": "CTRL-SS-LORA-SF12",
@@ -18767,7 +18767,7 @@
     "el_min_link_deg": 22.5,
     "service_radius_km": 1027.2430245947958,
     "service_area_km2": 3307921.467558038,
-    "cell_radius_km": 1027.2430245947958
+    "cell_radius_km": 1664.3190289917611
    }
   },
   "agri_water": {
@@ -18803,7 +18803,7 @@
     "el_min_link_deg": 18.5,
     "service_radius_km": 1105.3016355442064,
     "service_area_km2": 3828440.6572882663,
-    "cell_radius_km": 1105.3016355442064
+    "cell_radius_km": 1563.0154020003633
    },
    "IO-ISM-LRFHSS": {
     "stack": "IO-ISM-LRFHSS",
@@ -18813,7 +18813,7 @@
     "el_min_link_deg": 27.0,
     "service_radius_km": 877.9066428539483,
     "service_area_km2": 2417459.639970798,
-    "cell_radius_km": 877.9066428539483
+    "cell_radius_km": 1664.3190289917611
    },
    "IO-ISM-LORA-SF10": {
     "stack": "IO-ISM-LORA-SF10",
@@ -18823,7 +18823,7 @@
     "el_min_link_deg": 51.5,
     "service_radius_km": 393.3187309542616,
     "service_area_km2": 485848.8632639635,
-    "cell_radius_km": 393.3187309542616
+    "cell_radius_km": 1664.3190289917611
    },
    "IO-ISM-LORA-SF12": {
     "stack": "IO-ISM-LORA-SF12",
@@ -18833,7 +18833,7 @@
     "el_min_link_deg": 27.0,
     "service_radius_km": 877.9066428539483,
     "service_area_km2": 2417459.639970798,
-    "cell_radius_km": 877.9066428539483
+    "cell_radius_km": 1664.3190289917611
    },
    "IO-SBAND-LRFHSS": {
     "stack": "IO-SBAND-LRFHSS",
@@ -18843,7 +18843,7 @@
     "el_min_link_deg": 68.0,
     "service_radius_km": 203.27975796389225,
     "service_area_km2": 129807.95183314278,
-    "cell_radius_km": 203.27975796389225
+    "cell_radius_km": 1664.3190289917611
    },
    "IO-SBAND-LRFHSS-HP": {
     "stack": "IO-SBAND-LRFHSS-HP",
@@ -18853,7 +18853,7 @@
     "el_min_link_deg": 22.5,
     "service_radius_km": 1027.2430245947958,
     "service_area_km2": 3307921.467558038,
-    "cell_radius_km": 1027.2430245947958
+    "cell_radius_km": 1664.3190289917611
    },
    "CTRL-NBIOT": {
     "stack": "CTRL-NBIOT",
@@ -18899,7 +18899,7 @@
     "el_min_link_deg": 15.0,
     "service_radius_km": 1360.0748790937791,
     "service_area_km2": 5789293.021171175,
-    "cell_radius_km": 1360.0748790937791
+    "cell_radius_km": 1664.3190289917611
    },
    "CTRL-SS-LRFHSS": {
     "stack": "CTRL-SS-LRFHSS",
@@ -18909,7 +18909,7 @@
     "el_min_link_deg": 22.5,
     "service_radius_km": 1027.2430245947958,
     "service_area_km2": 3307921.467558038,
-    "cell_radius_km": 1027.2430245947958
+    "cell_radius_km": 1664.3190289917611
    },
    "CTRL-SS-LORA-SF12": {
     "stack": "CTRL-SS-LORA-SF12",
@@ -18919,7 +18919,7 @@
     "el_min_link_deg": 22.5,
     "service_radius_km": 1027.2430245947958,
     "service_area_km2": 3307921.467558038,
-    "cell_radius_km": 1027.2430245947958
+    "cell_radius_km": 1664.3190289917611
    }
   },
   "logistics": {
@@ -18955,7 +18955,7 @@
     "el_min_link_deg": 21.0,
     "service_radius_km": 1005.6091786521562,
     "service_area_km2": 3170344.6379116285,
-    "cell_radius_km": 1005.6091786521562
+    "cell_radius_km": 1563.0154020003633
    },
    "IO-ISM-LRFHSS": {
     "stack": "IO-ISM-LRFHSS",
@@ -18965,7 +18965,7 @@
     "el_min_link_deg": 36.0,
     "service_radius_km": 652.096782132713,
     "service_area_km2": 1334734.2444643565,
-    "cell_radius_km": 652.096782132713
+    "cell_radius_km": 1664.3190289917611
    },
    "IO-ISM-LORA-SF10": {
     "stack": "IO-ISM-LORA-SF10",
@@ -18975,7 +18975,7 @@
     "el_min_link_deg": 71.0,
     "service_radius_km": 173.53816528231317,
     "service_area_km2": 94604.76769987978,
-    "cell_radius_km": 173.53816528231317
+    "cell_radius_km": 1664.3190289917611
    },
    "IO-ISM-LORA-SF12": {
     "stack": "IO-ISM-LORA-SF12",
@@ -18985,7 +18985,7 @@
     "el_min_link_deg": 36.0,
     "service_radius_km": 652.096782132713,
     "service_area_km2": 1334734.2444643565,
-    "cell_radius_km": 652.096782132713
+    "cell_radius_km": 1664.3190289917611
    },
    "IO-SBAND-LRFHSS": {
     "stack": "IO-SBAND-LRFHSS",
@@ -18995,7 +18995,7 @@
     "el_min_link_deg": null,
     "service_radius_km": null,
     "service_area_km2": null,
-    "cell_radius_km": null
+    "cell_radius_km": 1664.3190289917611
    },
    "IO-SBAND-LRFHSS-HP": {
     "stack": "IO-SBAND-LRFHSS-HP",
@@ -19005,7 +19005,7 @@
     "el_min_link_deg": 24.0,
     "service_radius_km": 974.0324172306813,
     "service_area_km2": 2974750.865328082,
-    "cell_radius_km": 974.0324172306813
+    "cell_radius_km": 1664.3190289917611
    },
    "CTRL-NBIOT": {
     "stack": "CTRL-NBIOT",
@@ -19051,7 +19051,7 @@
     "el_min_link_deg": 18.0,
     "service_radius_km": 1211.8512231185173,
     "service_area_km2": 4599796.792831899,
-    "cell_radius_km": 1211.8512231185173
+    "cell_radius_km": 1664.3190289917611
    },
    "CTRL-SS-LRFHSS": {
     "stack": "CTRL-SS-LRFHSS",
@@ -19061,7 +19061,7 @@
     "el_min_link_deg": 24.0,
     "service_radius_km": 974.0324172306813,
     "service_area_km2": 2974750.865328082,
-    "cell_radius_km": 974.0324172306813
+    "cell_radius_km": 1664.3190289917611
    },
    "CTRL-SS-LORA-SF12": {
     "stack": "CTRL-SS-LORA-SF12",
@@ -19071,7 +19071,7 @@
     "el_min_link_deg": 24.0,
     "service_radius_km": 974.0324172306813,
     "service_area_km2": 2974750.865328082,
-    "cell_radius_km": 974.0324172306813
+    "cell_radius_km": 1664.3190289917611
    }
   },
   "disaster_urban": {
@@ -19107,7 +19107,7 @@
     "el_min_link_deg": 69.0,
     "service_radius_km": 177.04376479514858,
     "service_area_km2": 98465.29740798475,
-    "cell_radius_km": 177.04376479514858
+    "cell_radius_km": 1563.0154020003633
    },
    "IO-ISM-LRFHSS": {
     "stack": "IO-ISM-LRFHSS",
@@ -19117,7 +19117,7 @@
     "el_min_link_deg": null,
     "service_radius_km": null,
     "service_area_km2": null,
-    "cell_radius_km": null
+    "cell_radius_km": 1664.3190289917611
    },
    "IO-ISM-LORA-SF10": {
     "stack": "IO-ISM-LORA-SF10",
@@ -19127,7 +19127,7 @@
     "el_min_link_deg": null,
     "service_radius_km": null,
     "service_area_km2": null,
-    "cell_radius_km": null
+    "cell_radius_km": 1664.3190289917611
    },
    "IO-ISM-LORA-SF12": {
     "stack": "IO-ISM-LORA-SF12",
@@ -19137,7 +19137,7 @@
     "el_min_link_deg": null,
     "service_radius_km": null,
     "service_area_km2": null,
-    "cell_radius_km": null
+    "cell_radius_km": 1664.3190289917611
    },
    "IO-SBAND-LRFHSS": {
     "stack": "IO-SBAND-LRFHSS",
@@ -19147,7 +19147,7 @@
     "el_min_link_deg": null,
     "service_radius_km": null,
     "service_area_km2": null,
-    "cell_radius_km": null
+    "cell_radius_km": 1664.3190289917611
    },
    "IO-SBAND-LRFHSS-HP": {
     "stack": "IO-SBAND-LRFHSS-HP",
@@ -19157,7 +19157,7 @@
     "el_min_link_deg": 72.5,
     "service_radius_km": 159.02417443360565,
     "service_area_km2": 79442.6318663221,
-    "cell_radius_km": 159.02417443360565
+    "cell_radius_km": 1664.3190289917611
    },
    "CTRL-NBIOT": {
     "stack": "CTRL-NBIOT",
@@ -19203,7 +19203,7 @@
     "el_min_link_deg": 68.5,
     "service_radius_km": 198.25094869778025,
     "service_area_km2": 123465.43091594099,
-    "cell_radius_km": 198.25094869778025
+    "cell_radius_km": 1664.3190289917611
    },
    "CTRL-SS-LRFHSS": {
     "stack": "CTRL-SS-LRFHSS",
@@ -19213,7 +19213,7 @@
     "el_min_link_deg": 71.5,
     "service_radius_km": 168.67571556894828,
     "service_area_km2": 89377.79303230034,
-    "cell_radius_km": 168.67571556894828
+    "cell_radius_km": 1664.3190289917611
    },
    "CTRL-SS-LORA-SF12": {
     "stack": "CTRL-SS-LORA-SF12",
@@ -19223,7 +19223,7 @@
     "el_min_link_deg": 72.0,
     "service_radius_km": 163.83799144142515,
     "service_area_km2": 84324.7706642012,
-    "cell_radius_km": 163.83799144142515
+    "cell_radius_km": 1664.3190289917611
    }
   }
  },
@@ -21426,6 +21426,33 @@
     "goodput_msgs_s": 11.377321790925349,
     "goodput_bps": 1820.3714865480558,
     "contention_loss": 0.835
+   },
+   {
+    "load_scale": 31622.776601683792,
+    "devices_per_cell": 784980.0116070573,
+    "offered_msgs_s": 218.05000322418257,
+    "pdr": 0.059,
+    "goodput_msgs_s": 12.864950190226772,
+    "goodput_bps": 2058.3920304362837,
+    "contention_loss": 0.9400000000000001
+   },
+   {
+    "load_scale": 100000.0,
+    "devices_per_cell": 2482324.7543837125,
+    "offered_msgs_s": 689.5346539954757,
+    "pdr": 0.018,
+    "goodput_msgs_s": 12.411623771918562,
+    "goodput_bps": 1985.85980350697,
+    "contention_loss": 0.981
+   },
+   {
+    "load_scale": 316227.7660168379,
+    "devices_per_cell": 7849800.116070572,
+    "offered_msgs_s": 2180.5000322418255,
+    "pdr": 0.009,
+    "goodput_msgs_s": 19.624500290176428,
+    "goodput_bps": 3139.9200464282285,
+    "contention_loss": 0.991
    }
   ],
   "OP-LB-LTEM": [
@@ -21563,6 +21590,42 @@
     "goodput_msgs_s": 25.85754952483034,
     "goodput_bps": 4137.207923972855,
     "contention_loss": 0.613
+   },
+   {
+    "load_scale": 31622.776601683792,
+    "devices_per_cell": 784980.0116070573,
+    "offered_msgs_s": 218.05000322418257,
+    "pdr": 0.198,
+    "goodput_msgs_s": 43.173900638388155,
+    "goodput_bps": 6907.8241021421045,
+    "contention_loss": 0.799
+   },
+   {
+    "load_scale": 100000.0,
+    "devices_per_cell": 2482324.7543837125,
+    "offered_msgs_s": 689.5346539954757,
+    "pdr": 0.072,
+    "goodput_msgs_s": 49.646495087674246,
+    "goodput_bps": 7943.43921402788,
+    "contention_loss": 0.925
+   },
+   {
+    "load_scale": 316227.7660168379,
+    "devices_per_cell": 7849800.116070572,
+    "offered_msgs_s": 2180.5000322418255,
+    "pdr": 0.02,
+    "goodput_msgs_s": 43.61000064483651,
+    "goodput_bps": 6977.6001031738415,
+    "contention_loss": 0.98
+   },
+   {
+    "load_scale": 1000000.0,
+    "devices_per_cell": 24823247.543837123,
+    "offered_msgs_s": 6895.346539954757,
+    "pdr": 0.007,
+    "goodput_msgs_s": 48.2674257796833,
+    "goodput_bps": 7722.788124749328,
+    "contention_loss": 0.993
    }
   ],
   "OP-MSS-NBIOT": [
@@ -22522,6 +22585,33 @@
     "goodput_msgs_s": 11.584182187123993,
     "goodput_bps": 1853.4691499398389,
     "contention_loss": 0.832
+   },
+   {
+    "load_scale": 31622.776601683792,
+    "devices_per_cell": 784980.0116070573,
+    "offered_msgs_s": 218.05000322418257,
+    "pdr": 0.062,
+    "goodput_msgs_s": 13.51910019989932,
+    "goodput_bps": 2163.0560319838914,
+    "contention_loss": 0.9380000000000001
+   },
+   {
+    "load_scale": 100000.0,
+    "devices_per_cell": 2482324.7543837125,
+    "offered_msgs_s": 689.5346539954757,
+    "pdr": 0.018,
+    "goodput_msgs_s": 12.411623771918562,
+    "goodput_bps": 1985.85980350697,
+    "contention_loss": 0.982
+   },
+   {
+    "load_scale": 316227.7660168379,
+    "devices_per_cell": 7849800.116070572,
+    "offered_msgs_s": 2180.5000322418255,
+    "pdr": 0.008,
+    "goodput_msgs_s": 17.444000257934604,
+    "goodput_bps": 2791.0400412695367,
+    "contention_loss": 0.992
    }
   ],
   "CTRL-LRFHSS": [
@@ -22659,6 +22749,24 @@
     "goodput_msgs_s": 2.8270920813814504,
     "goodput_bps": 452.3347330210321,
     "contention_loss": 0.958
+   },
+   {
+    "load_scale": 31622.776601683792,
+    "devices_per_cell": 784980.0116070573,
+    "offered_msgs_s": 218.05000322418257,
+    "pdr": 0.012,
+    "goodput_msgs_s": 2.616600038690191,
+    "goodput_bps": 418.65600619043056,
+    "contention_loss": 0.988
+   },
+   {
+    "load_scale": 100000.0,
+    "devices_per_cell": 2482324.7543837125,
+    "offered_msgs_s": 689.5346539954757,
+    "pdr": 0.0,
+    "goodput_msgs_s": 0.0,
+    "goodput_bps": 0.0,
+    "contention_loss": 1.0
    }
   ],
   "CTRL-LORA-SF12": [
@@ -1162968,7 +1163076,18 @@
       "blocked": 0.8167701863354038
      }
     },
-    "energy_per_msg_j": 0.32558228599850086
+    "energy_per_msg_j": 0.32558228599850086,
+    "battery_years": 2.9776879932408638,
+    "causes": {
+     "ok": 0.5016666666666667,
+     "snr": 0.004333333333333333,
+     "doppler": 0.0,
+     "collision": 0.0013333333333333333,
+     "no_coverage": 0.005666666666666667,
+     "blocked": 0.08766666666666667,
+     "expired": 0.0,
+     "dl": 0.3993333333333333
+    }
    },
    {
     "case": "downlink not modelled (v1.5.1)",
@@ -1163000,7 +1163119,18 @@
       "blocked": 0.0
      }
     },
-    "energy_per_msg_j": 1.4394563218109284
+    "energy_per_msg_j": 1.4394563218109284,
+    "battery_years": 0.7033638786614821,
+    "causes": {
+     "ok": 0.6163333333333333,
+     "snr": 0.14366666666666666,
+     "doppler": 0.0,
+     "collision": 0.238,
+     "no_coverage": 0.002,
+     "blocked": 0.0,
+     "expired": 0.0,
+     "dl": 0.0
+    }
    },
    {
     "case": "uniform downlink admission (stress)",
@@ -1163041,7 +1163171,18 @@
       "blocked": 0.024844720496894408
      }
     },
-    "energy_per_msg_j": 1.701590443376971
+    "energy_per_msg_j": 1.701590443376971,
+    "battery_years": 0.5961991237360309,
+    "causes": {
+     "ok": 0.22966666666666666,
+     "snr": 0.002,
+     "doppler": 0.0,
+     "collision": 0.07033333333333333,
+     "no_coverage": 0.011,
+     "blocked": 0.167,
+     "expired": 0.0,
+     "dl": 0.52
+    }
    },
    {
     "case": "RAR priority admission (v1.6 policy, stress)",
@@ -1163082,7 +1163223,18 @@
       "blocked": 0.10869565217391304
      }
     },
-    "energy_per_msg_j": 1.616329393563008
+    "energy_per_msg_j": 1.616329393563008,
+    "battery_years": 0.6272850619158712,
+    "causes": {
+     "ok": 0.10033333333333333,
+     "snr": 0.002,
+     "doppler": 0.0,
+     "collision": 0.06766666666666667,
+     "no_coverage": 0.013333333333333334,
+     "blocked": 0.3426666666666667,
+     "expired": 0.0,
+     "dl": 0.474
+    }
    },
    {
     "case": "oracle coverage level max(UL, DL)",
@@ -1163123,7 +1163275,18 @@
       "blocked": 0.8167701863354038
      }
     },
-    "energy_per_msg_j": 0.32558228599850086
+    "energy_per_msg_j": 0.32558228599850086,
+    "battery_years": 2.9776879932408638,
+    "causes": {
+     "ok": 0.5016666666666667,
+     "snr": 0.004333333333333333,
+     "doppler": 0.0,
+     "collision": 0.0013333333333333333,
+     "no_coverage": 0.005666666666666667,
+     "blocked": 0.08766666666666667,
+     "expired": 0.0,
+     "dl": 0.3993333333333333
+    }
    },
    {
     "case": "satellite downlink EIRP +6 dB",
@@ -1163164,7 +1163327,18 @@
       "blocked": 0.9691211401425178
      }
     },
-    "energy_per_msg_j": 0.38774650608908723
+    "energy_per_msg_j": 0.38774650608908723,
+    "battery_years": 2.522484834182817,
+    "causes": {
+     "ok": 0.5976666666666667,
+     "snr": 0.013333333333333334,
+     "doppler": 0.0,
+     "collision": 0.010333333333333333,
+     "no_coverage": 0.0033333333333333335,
+     "blocked": 0.154,
+     "expired": 0.0,
+     "dl": 0.22133333333333333
+    }
    },
    {
     "case": "satellite downlink EIRP -6 dB",
@@ -1163205,7 +1163379,18 @@
       "blocked": 0.5488721804511278
      }
     },
-    "energy_per_msg_j": 0.29352227566335864
+    "energy_per_msg_j": 0.29352227566335864,
+    "battery_years": 3.2832534689565422,
+    "causes": {
+     "ok": 0.44733333333333336,
+     "snr": 0.0016666666666666668,
+     "doppler": 0.0,
+     "collision": 0.0003333333333333333,
+     "no_coverage": 0.0,
+     "blocked": 0.024333333333333332,
+     "expired": 0.0,
+     "dl": 0.5263333333333333
+    }
    },
    {
     "case": "acquisition limit -20 dB",
@@ -1163246,7 +1163431,18 @@
       "blocked": 1.0
      }
     },
-    "energy_per_msg_j": 0.2646876759937415
+    "energy_per_msg_j": 0.2646876759937415,
+    "battery_years": 3.6170906930875786,
+    "causes": {
+     "ok": 0.3923333333333333,
+     "snr": 0.004666666666666667,
+     "doppler": 0.0,
+     "collision": 0.0026666666666666666,
+     "no_coverage": 0.005333333333333333,
+     "blocked": 0.3566666666666667,
+     "expired": 0.0,
+     "dl": 0.23833333333333334
+    }
    },
    {
     "case": "device noise figure 9 dB",
@@ -1163287,7 +1163483,18 @@
       "blocked": 0.7439024390243902
      }
     },
-    "energy_per_msg_j": 0.3166978172967887
+    "energy_per_msg_j": 0.3166978172967887,
+    "battery_years": 3.056518571965355,
+    "causes": {
+     "ok": 0.47733333333333333,
+     "snr": 0.004333333333333333,
+     "doppler": 0.0,
+     "collision": 0.001,
+     "no_coverage": 0.006,
+     "blocked": 0.061,
+     "expired": 0.0,
+     "dl": 0.4503333333333333
+    }
    },
    {
     "case": "frequency reuse 1",
@@ -1163328,7 +1163535,18 @@
       "blocked": 0.8846153846153846
      }
     },
-    "energy_per_msg_j": 0.2985215692160453
+    "energy_per_msg_j": 0.2985215692160453,
+    "battery_years": 3.231542819785979,
+    "causes": {
+     "ok": 0.4826666666666667,
+     "snr": 0.005,
+     "doppler": 0.0,
+     "collision": 0.0003333333333333333,
+     "no_coverage": 0.007333333333333333,
+     "blocked": 0.101,
+     "expired": 0.0,
+     "dl": 0.4036666666666667
+    }
    },
    {
     "case": "link-level repetition efficiency (refitted gap)",
@@ -1163369,7 +1163587,115 @@
       "blocked": 0.9371069182389937
      }
     },
-    "energy_per_msg_j": 0.30798102537586874
+    "energy_per_msg_j": 0.30798102537586874,
+    "battery_years": 3.1380260174981034,
+    "causes": {
+     "ok": 0.43666666666666665,
+     "snr": 0.002,
+     "doppler": 0.0,
+     "collision": 0.0006666666666666666,
+     "no_coverage": 0.005666666666666667,
+     "blocked": 0.15633333333333332,
+     "expired": 0.0,
+     "dl": 0.39866666666666667
+    }
+   }
+  ],
+  "OP-LB-LTEM@disaster_urban": [
+   {
+    "case": "baseline (CE-aware access barring)",
+    "pdr_deadline": 0.5003333333333333,
+    "pdr_confirmed_deadline": 0.499,
+    "pdr_deadline_confirmed_mode": 0.5003333333333333,
+    "dl_failures": 0.4023333333333333,
+    "rho_dl_max": 0.899996985706876,
+    "barred_max": 0.56268310546875,
+    "rar_drop_max": 0.0,
+    "dl_admission_min": 1.0,
+    "rx1_used": null,
+    "ack_service_min": null,
+    "dl": {
+     "f_mhz": 806.0,
+     "eirp_density_dbw_mhz": 49.69456761467439,
+     "eirp_dbm": 80.02880516954389,
+     "bw_hz": 1080000.0,
+     "noise_dbm": -106.6657624451305,
+     "snr_median_db": -10.512043440376784,
+     "snr_p10_db": -24.805763379083373,
+     "snr_median_30deg_los_db": 10.635459641403266
+    },
+    "on_time_by_ce": {
+     "0": {
+      "share": 0.44266666666666665,
+      "on_time": 0.9103915662650602,
+      "blocked": 0.053463855421686746
+     },
+     "1": {
+      "share": 0.051666666666666666,
+      "on_time": 0.7032258064516129,
+      "blocked": 0.07096774193548387
+     },
+     "2": {
+      "share": 0.10733333333333334,
+      "on_time": 0.5683229813664596,
+      "blocked": 0.2950310559006211
+     }
+    },
+    "energy_per_msg_j": 0.2904480815542594,
+    "battery_years": 3.3158815650322415,
+    "causes": {
+     "ok": 0.5003333333333333,
+     "snr": 0.03666666666666667,
+     "doppler": 0.0,
+     "collision": 0.0003333333333333333,
+     "no_coverage": 0.0013333333333333333,
+     "blocked": 0.059,
+     "expired": 0.0,
+     "dl": 0.4023333333333333
+    }
+   },
+   {
+    "case": "downlink not modelled (v1.5.1)",
+    "pdr_deadline": 0.176,
+    "pdr_confirmed_deadline": null,
+    "pdr_deadline_confirmed_mode": null,
+    "dl_failures": 0.0,
+    "rho_dl_max": 0.0,
+    "barred_max": null,
+    "rar_drop_max": 0.0,
+    "dl_admission_min": 1.0,
+    "rx1_used": null,
+    "ack_service_min": null,
+    "dl": null,
+    "on_time_by_ce": {
+     "0": {
+      "share": 0.4086666666666667,
+      "on_time": 0.3034257748776509,
+      "blocked": 0.6892332789559543
+     },
+     "1": {
+      "share": 0.068,
+      "on_time": 0.25980392156862747,
+      "blocked": 0.6225490196078431
+     },
+     "2": {
+      "share": 0.5233333333333333,
+      "on_time": 0.06560509554140127,
+      "blocked": 0.47579617834394905
+     }
+    },
+    "energy_per_msg_j": 0.3492643898370249,
+    "battery_years": 2.7861475007519023,
+    "causes": {
+     "ok": 0.176,
+     "snr": 0.23366666666666666,
+     "doppler": 0.0,
+     "collision": 0.015333333333333332,
+     "no_coverage": 0.002,
+     "blocked": 0.573,
+     "expired": 0.0,
+     "dl": 0.0
+    }
    }
   ],
   "OP-LB-NBIOT@utility_wells": [
@@ -1163412,7 +1163738,18 @@
       "blocked": 0.0
      }
     },
-    "energy_per_msg_j": 0.30252839715861635
+    "energy_per_msg_j": 0.30252839715861635,
+    "battery_years": 14.79759380051083,
+    "causes": {
+     "ok": 0.983,
+     "snr": 0.015666666666666666,
+     "doppler": 0.0,
+     "collision": 0.0,
+     "no_coverage": 0.0,
+     "blocked": 0.0,
+     "expired": 0.0,
+     "dl": 0.0013333333333333333
+    }
    },
    {
     "case": "downlink not modelled (v1.5.1)",
@@ -1163444,7 +1163781,18 @@
       "blocked": 0.0
      }
     },
-    "energy_per_msg_j": 0.34311063729876956
+    "energy_per_msg_j": 0.34311063729876956,
+    "battery_years": 13.48209550056131,
+    "causes": {
+     "ok": 0.9856666666666667,
+     "snr": 0.014333333333333333,
+     "doppler": 0.0,
+     "collision": 0.0,
+     "no_coverage": 0.0,
+     "blocked": 0.0,
+     "expired": 0.0,
+     "dl": 0.0
+    }
    },
    {
     "case": "satellite downlink EIRP -6 dB",
@@ -1163485,7 +1163833,18 @@
       "blocked": 0.0
      }
     },
-    "energy_per_msg_j": 0.30750478167735357
+    "energy_per_msg_j": 0.30750478167735357,
+    "battery_years": 14.622634740066397,
+    "causes": {
+     "ok": 0.979,
+     "snr": 0.01,
+     "doppler": 0.0,
+     "collision": 0.0,
+     "no_coverage": 0.0,
+     "blocked": 0.0,
+     "expired": 0.0,
+     "dl": 0.011
+    }
    },
    {
     "case": "frequency reuse 1",
@@ -1163526,7 +1163885,18 @@
       "blocked": 0.0
      }
     },
-    "energy_per_msg_j": 0.3074376184867153
+    "energy_per_msg_j": 0.3074376184867153,
+    "battery_years": 14.624968507981896,
+    "causes": {
+     "ok": 0.9806666666666667,
+     "snr": 0.018333333333333333,
+     "doppler": 0.0,
+     "collision": 0.0,
+     "no_coverage": 0.0,
+     "blocked": 0.0,
+     "expired": 0.0,
+     "dl": 0.001
+    }
    }
   ],
   "OP-MSS-NBIOT@utility_wells": [
@@ -1163569,7 +1163939,18 @@
       "blocked": 0.0
      }
     },
-    "energy_per_msg_j": 1.0086196676461348
+    "energy_per_msg_j": 1.0086196676461348,
+    "battery_years": 5.485288607348433,
+    "causes": {
+     "ok": 0.7813333333333333,
+     "snr": 0.007666666666666666,
+     "doppler": 0.010333333333333333,
+     "collision": 0.013666666666666667,
+     "no_coverage": 0.0006666666666666666,
+     "blocked": 0.0,
+     "expired": 0.004333333333333333,
+     "dl": 0.182
+    }
    },
    {
     "case": "downlink not modelled (v1.5.1)",
@@ -1163601,7 +1163982,18 @@
       "blocked": 0.0
      }
     },
-    "energy_per_msg_j": 1.9829385752460151
+    "energy_per_msg_j": 1.9829385752460151,
+    "battery_years": 2.935863536221172,
+    "causes": {
+     "ok": 0.8073333333333333,
+     "snr": 0.17233333333333334,
+     "doppler": 0.010333333333333333,
+     "collision": 0.004333333333333333,
+     "no_coverage": 0.0013333333333333333,
+     "blocked": 0.0,
+     "expired": 0.004333333333333333,
+     "dl": 0.0
+    }
    },
    {
     "case": "oracle coverage level max(UL, DL)",
@@ -1163642,7 +1164034,18 @@
       "blocked": 0.0
      }
     },
-    "energy_per_msg_j": 0.997762459041288
+    "energy_per_msg_j": 0.997762459041288,
+    "battery_years": 5.538886274489694,
+    "causes": {
+     "ok": 0.795,
+     "snr": 0.007,
+     "doppler": 0.010333333333333333,
+     "collision": 0.002,
+     "no_coverage": 0.0006666666666666666,
+     "blocked": 0.0,
+     "expired": 0.004333333333333333,
+     "dl": 0.18066666666666667
+    }
    },
    {
     "case": "satellite downlink EIRP +6 dB",
@@ -1163683,7 +1164086,18 @@
       "blocked": 0.0
      }
     },
-    "energy_per_msg_j": 1.361878837945342
+    "energy_per_msg_j": 1.361878837945342,
+    "battery_years": 4.171809497679899,
+    "causes": {
+     "ok": 0.715,
+     "snr": 0.08133333333333333,
+     "doppler": 0.010333333333333333,
+     "collision": 0.04033333333333333,
+     "no_coverage": 0.0026666666666666666,
+     "blocked": 0.0,
+     "expired": 0.004333333333333333,
+     "dl": 0.146
+    }
    },
    {
     "case": "acquisition limit -20 dB",
@@ -1163724,7 +1164138,18 @@
       "blocked": 0.9875
      }
     },
-    "energy_per_msg_j": 1.0560994596086077
+    "energy_per_msg_j": 1.0560994596086077,
+    "battery_years": 5.262591919049903,
+    "causes": {
+     "ok": 0.5666666666666667,
+     "snr": 0.033666666666666664,
+     "doppler": 0.010333333333333333,
+     "collision": 0.023,
+     "no_coverage": 0.0006666666666666666,
+     "blocked": 0.21133333333333335,
+     "expired": 0.004333333333333333,
+     "dl": 0.15
+    }
    },
    {
     "case": "deployable 12 dBi antenna",
@@ -1163765,7 +1164190,18 @@
       "blocked": 0.0
      }
     },
-    "energy_per_msg_j": 0.13477564931906155
+    "energy_per_msg_j": 0.13477564931906155,
+    "battery_years": 15.0,
+    "causes": {
+     "ok": 0.38466666666666666,
+     "snr": 0.006333333333333333,
+     "doppler": 0.01,
+     "collision": 0.0013333333333333333,
+     "no_coverage": 0.002,
+     "blocked": 0.0,
+     "expired": 0.5836666666666667,
+     "dl": 0.012
+    }
    }
   ],
   "IO-ISM-LRFHSS@utility_wells": [
@@ -1163792,7 +1164228,18 @@
      "snr_median_30deg_los_db": -8.215478397158776
     },
     "on_time_by_ce": null,
-    "energy_per_msg_j": 0.207816193728
+    "energy_per_msg_j": 0.207816193728,
+    "battery_years": 15.0,
+    "causes": {
+     "ok": 0.29733333333333334,
+     "snr": 0.234,
+     "doppler": 0.0,
+     "collision": 0.009333333333333334,
+     "no_coverage": 0.0,
+     "blocked": 0.0,
+     "expired": 0.4593333333333333,
+     "dl": 0.0
+    }
    },
    {
     "case": "acknowledgement at SF12 (RP002 default RX2)",
@@ -1163817,7 +1164264,18 @@
      "snr_median_30deg_los_db": -8.215478397158776
     },
     "on_time_by_ce": null,
-    "energy_per_msg_j": 0.207816193728
+    "energy_per_msg_j": 0.207816193728,
+    "battery_years": 15.0,
+    "causes": {
+     "ok": 0.29733333333333334,
+     "snr": 0.234,
+     "doppler": 0.0,
+     "collision": 0.009333333333333334,
+     "no_coverage": 0.0,
+     "blocked": 0.0,
+     "expired": 0.4593333333333333,
+     "dl": 0.0
+    }
    },
    {
     "case": "acknowledgement at SF9",
@@ -1163842,7 +1164300,18 @@
      "snr_median_30deg_los_db": -8.215478397158776
     },
     "on_time_by_ce": null,
-    "energy_per_msg_j": 0.207816193728
+    "energy_per_msg_j": 0.207816193728,
+    "battery_years": 15.0,
+    "causes": {
+     "ok": 0.29733333333333334,
+     "snr": 0.234,
+     "doppler": 0.0,
+     "collision": 0.009333333333333334,
+     "no_coverage": 0.0,
+     "blocked": 0.0,
+     "expired": 0.4593333333333333,
+     "dl": 0.0
+    }
    },
    {
     "case": "full-duplex gateway (no blanking)",
@@ -1163867,7 +1164336,18 @@
      "snr_median_30deg_los_db": -8.215478397158776
     },
     "on_time_by_ce": null,
-    "energy_per_msg_j": 0.207816193728
+    "energy_per_msg_j": 0.207816193728,
+    "battery_years": 15.0,
+    "causes": {
+     "ok": 0.29733333333333334,
+     "snr": 0.234,
+     "doppler": 0.0,
+     "collision": 0.009333333333333334,
+     "no_coverage": 0.0,
+     "blocked": 0.0,
+     "expired": 0.4593333333333333,
+     "dl": 0.0
+    }
    },
    {
     "case": "dense constellation (64 sats)",
@@ -1163892,7 +1164372,18 @@
      "snr_median_30deg_los_db": -8.215478397158776
     },
     "on_time_by_ce": null,
-    "energy_per_msg_j": 0.384370272
+    "energy_per_msg_j": 0.384370272,
+    "battery_years": 13.103772376990793,
+    "causes": {
+     "ok": 0.4806666666666667,
+     "snr": 0.518,
+     "doppler": 0.0,
+     "collision": 0.0013333333333333333,
+     "no_coverage": 0.0,
+     "blocked": 0.0,
+     "expired": 0.0,
+     "dl": 0.0
+    }
    },
    {
     "case": "ISM interference off",
@@ -1163917,7 +1164408,18 @@
      "snr_median_30deg_los_db": -8.215478397158776
     },
     "on_time_by_ce": null,
-    "energy_per_msg_j": 0.207816193728
+    "energy_per_msg_j": 0.207816193728,
+    "battery_years": 15.0,
+    "causes": {
+     "ok": 0.37933333333333336,
+     "snr": 0.14766666666666667,
+     "doppler": 0.0,
+     "collision": 0.013666666666666667,
+     "no_coverage": 0.0,
+     "blocked": 0.0,
+     "expired": 0.4593333333333333,
+     "dl": 0.0
+    }
    }
   ],
   "IO-SBAND-LRFHSS-HP@utility_wells": [
@@ -1163944,7 +1164446,18 @@
      "snr_median_30deg_los_db": -2.9497656319651355
     },
     "on_time_by_ce": null,
-    "energy_per_msg_j": 4.413420928000001
+    "energy_per_msg_j": 4.413420928000001,
+    "battery_years": 1.3556911010365513,
+    "causes": {
+     "ok": 0.8686666666666667,
+     "snr": 0.13033333333333333,
+     "doppler": 0.0,
+     "collision": 0.001,
+     "no_coverage": 0.0,
+     "blocked": 0.0,
+     "expired": 0.0,
+     "dl": 0.0
+    }
    },
    {
     "case": "RX2 only (one window)",
@@ -1163969,7 +1164482,18 @@
      "snr_median_30deg_los_db": -2.9497656319651355
     },
     "on_time_by_ce": null,
-    "energy_per_msg_j": 4.413420928000001
+    "energy_per_msg_j": 4.413420928000001,
+    "battery_years": 1.3556911010365513,
+    "causes": {
+     "ok": 0.8686666666666667,
+     "snr": 0.13033333333333333,
+     "doppler": 0.0,
+     "collision": 0.001,
+     "no_coverage": 0.0,
+     "blocked": 0.0,
+     "expired": 0.0,
+     "dl": 0.0
+    }
    },
    {
     "case": "EU868 RX1 mapping (SF11), RX1 first",
@@ -1163994,7 +1164518,18 @@
      "snr_median_30deg_los_db": -2.9497656319651355
     },
     "on_time_by_ce": null,
-    "energy_per_msg_j": 4.413420928000001
+    "energy_per_msg_j": 4.413420928000001,
+    "battery_years": 1.3556911010365513,
+    "causes": {
+     "ok": 0.8686666666666667,
+     "snr": 0.13033333333333333,
+     "doppler": 0.0,
+     "collision": 0.001,
+     "no_coverage": 0.0,
+     "blocked": 0.0,
+     "expired": 0.0,
+     "dl": 0.0
+    }
    },
    {
     "case": "acknowledgement at SF12",
@@ -1164019,7 +1164554,18 @@
      "snr_median_30deg_los_db": -2.9497656319651355
     },
     "on_time_by_ce": null,
-    "energy_per_msg_j": 4.413420928000001
+    "energy_per_msg_j": 4.413420928000001,
+    "battery_years": 1.3556911010365513,
+    "causes": {
+     "ok": 0.8686666666666667,
+     "snr": 0.13033333333333333,
+     "doppler": 0.0,
+     "collision": 0.001,
+     "no_coverage": 0.0,
+     "blocked": 0.0,
+     "expired": 0.0,
+     "dl": 0.0
+    }
    },
    {
     "case": "satellite downlink EIRP +6 dB",
@@ -1164044,7 +1164590,18 @@
      "snr_median_30deg_los_db": 3.0502343680348645
     },
     "on_time_by_ce": null,
-    "energy_per_msg_j": 4.413420928000001
+    "energy_per_msg_j": 4.413420928000001,
+    "battery_years": 1.3556911010365513,
+    "causes": {
+     "ok": 0.8686666666666667,
+     "snr": 0.13033333333333333,
+     "doppler": 0.0,
+     "collision": 0.001,
+     "no_coverage": 0.0,
+     "blocked": 0.0,
+     "expired": 0.0,
+     "dl": 0.0
+    }
    }
   ]
  },
@@ -1164414,5 +1164971,6 @@
    "p_collision_max": 0.9985942489866795,
    "rho_max": 0.16910657923214384
   }
- ]
+ ],
+ "goodput_n_mc": 1000
 }

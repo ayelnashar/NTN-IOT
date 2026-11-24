@@ -1,10 +1,10 @@
-# ntnsim v1.7.0: Operator 3GPP IoT-NTN vs IoT-only LoRaWAN NTN over LEO
+# ntnsim v1.7.1: Operator 3GPP IoT-NTN vs IoT-only LoRaWAN NTN over LEO
 
 Code and frozen results for the paper
 
 > A. Elnashar, "Operator-Led 3GPP IoT-NTN Versus IoT-Only LoRaWAN Direct-to-Satellite Networks: A Same-Scenario LEO Simulation Study," submitted to *IEEE Open Journal of the Communications Society*, 2026.
 
-Every number, table and figure in the paper comes from `frozen/results.json`, produced by `scripts/run_batch.py` with the code in this repository (version 1.7.0). All presets are illustrative system classes, not any operator's deployment, and no measured network data is used.
+Every number, table and figure in the paper comes from `frozen/results.json`, produced by `scripts/run_batch.py` with the code in this repository (release 1.7.1, simulation model 1.7.0). All presets are illustrative system classes, not any operator's deployment, and no measured network data is used.
 
 ## Repository layout
 
@@ -15,10 +15,10 @@ Every number, table and figure in the paper comes from `frozen/results.json`, pr
 | `frozen/` | `results.json`, CSV tables (link budgets, scenario summary) and all figures (PNG and PDF) used in the paper |
 | `scripts/run_batch.py` | Recomputes every result (about 3.5 h of processor time, about 3 GB RAM, checkpointed) |
 | `scripts/build_notebook.py` | Rebuilds the notebook from the package |
-| `CHANGELOG.md` | Model history and the stated limitations of v1.7.0 |
+| `CHANGELOG.md` | Model history and the stated limitations of v1.7.1 |
 | `PORTING.md` | Notes for porting the model to other bands or regions |
 
-## Headline results (frozen v1.7.0, utility-wells scenario)
+## Headline results (frozen v1.7.1, utility-wells scenario)
 
 | Quantity | Value |
 |---|---|
@@ -75,7 +75,7 @@ Scenarios (UAE defaults, all values illustrative): remote utility wells, agricul
 | Path loss | `analysis.path_loss_curve` | FSPL + TR 38.811 LOS/NLOS clutter and shadowing |
 | Link budget | `analysis.link_budget` | Itemised: EIRP, FSPL, clutter, G, G/T, kT, interference, C/N0, required C/N0, margin, MAPL, MCL |
 | Coverage | `analysis.coverage_curve`, `time_coverage` | P(link closes) per elevation (closed form); fraction of day at the site |
-| Cell radius | `analysis.cell_radius` | Beam-spot radius (arrays) or footprint where link closes with 90 % probability (smallsats) |
+| Cell radius | `analysis.cell_radius` | Cell radius: beam spot (arrays) or whole footprint above the 10° mask, the contention population (broad-beam satellites); service radius: where the link closes with 90 % probability |
 | Interference | `analysis.noise_rise_vs_density`, engine | Aggregate ISM SRD and co-channel terrestrial UE density integrated over the footprint |
 | Throughput | `report` (throughput vs elevation), `analysis.goodput_curve` | Link-adapted rate (3GPP) or fixed PHY rate (LoRa/LR-FHSS); delivered goodput vs load |
 | Capacity | `analysis.capacity` | Service capacity (>= 90 % on time, all failures counted) and contention capacity (conditional); mean over independent replications of the whole estimation, Student-t 95 % interval (10 replications in the reference scenario) |

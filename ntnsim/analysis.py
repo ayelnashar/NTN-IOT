@@ -193,7 +193,9 @@ def cell_radius(stack, scen, target=0.9, **kw):
         out["beam_spot_area_nadir_km2"] = case.ant.beam_spot_area_km2(case.h, 90.0, d)
         out["cell_radius_km"] = out["beam_spot_radius_nadir_km"]
     else:
-        out["cell_radius_km"] = service_r
+        # a broad-beam satellite has one cell: every device above the elevation mask contends for the same
+        # receiver (the population used for contention), whether or not its own link closes
+        out["cell_radius_km"] = G.RE_KM * G.central_angle_rad(case.h, case.mask)
     return out
 
 
