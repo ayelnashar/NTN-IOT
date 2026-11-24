@@ -120,19 +120,23 @@ STACKS = {
     "CTRL-LRFHSS": dict(model="control", label="Control: LR-FHSS DR8, 847 MHz, equal satellite and power",
                         tech="LRFHSS", dr="DR8", f_hz=847e6, f_dl_hz=806e6, sat="d2d_array_223m2", const="d2d_120", alloc_hz=200e3,
                         ptx_dbm=22.0, g_dev_dbi=0.0, device="lora_lr11xx", spectrum="licensed_terrestrial",
-                        ism="off", other_networks_load=0.0, copies=1, duty_cycle_limit=None, payload="transparent"),
+                        ism="off", other_networks_load=0.0, copies=1, duty_cycle_limit=None, payload="transparent",
+                        tx_policy="first_visible"),
     "CTRL-LORA-SF12": dict(model="control", label="Control: LoRa SF12, 847 MHz, equal satellite and power",
                            tech="LORA", sf=12, channels=1, f_hz=847e6, f_dl_hz=806e6, sat="d2d_array_223m2", alloc_hz=200e3,
                            const="d2d_120", ptx_dbm=22.0, g_dev_dbi=0.0, device="lora_lr11xx",
                            spectrum="licensed_terrestrial", ism="off", other_networks_load=0.0,
-                           copies=1, duty_cycle_limit=None, payload="transparent", class_a_rx=True),
+                           copies=1, duty_cycle_limit=None, payload="transparent", class_a_rx=True,
+                           tx_policy="first_visible"),
 }
+# control stacks share one transmit policy (first visibility) so that they differ only in the air interface;
+# the 30-degree policy is evaluated for every control in the transmit-policy matrix
 for _t, _extra in (("NBIOT", dict(device="nbiot_ntn", coexistence="dedicated", carriers_per_beam=1, rach_max=5,
                                    edt=True, rai=True, ctrl_overhead=0.3, tx_policy="first_visible")),
                    ("LRFHSS", dict(dr="DR8", device="lora_lr11xx", ism="off", other_networks_load=0.0, copies=1,
-                                   duty_cycle_limit=None, class_a_rx=False)),
+                                   duty_cycle_limit=None, class_a_rx=False, tx_policy="first_visible")),
                    ("LORA", dict(sf=12, channels=1, device="lora_lr11xx", ism="off", other_networks_load=0.0,
-                                 copies=1, duty_cycle_limit=None, class_a_rx=True))):
+                                 copies=1, duty_cycle_limit=None, class_a_rx=True, tx_policy="first_visible"))):
     _name = {"NBIOT": "NB-IoT", "LRFHSS": "LR-FHSS DR8", "LORA": "LoRa SF12"}[_t]
     STACKS["CTRL-SS-" + {"NBIOT": "NBIOT", "LRFHSS": "LRFHSS", "LORA": "LORA-SF12"}[_t]] = dict(
         model="control_smallsat", label=f"Control (smallsat): {_name}, 847 MHz, 5 dBi, 64 sats, 22 dBm",

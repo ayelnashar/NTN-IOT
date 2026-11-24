@@ -1,5 +1,19 @@
 # Changelog
 
+## v1.8.0 (paper version): one transmit policy for all control stacks
+
+All six control stacks (CTRL-*, CTRL-SS-*) now transmit at first visibility, so within each control group only the air interface differs. In v1.7 the LR-FHSS and LoRa controls kept the IoT-only default (wait for 30 deg elevation) while the NB-IoT controls transmitted at first visibility; equal-policy results existed only in the transmit-policy matrix. The 30 deg policy is still evaluated for every control in that matrix. Engine code unchanged; all non-control results are identical to v1.7.1 (checked field by field); 65/65 validation checks pass.
+
+| Quantity (utility wells unless stated) | v1.7.1 | v1.8.0 |
+|---|---|---|
+| CTRL-LRFHSS service capacity | 8.85 [8.66, 9.04] (30 deg) | 11.45 [11.25, 11.65] |
+| CTRL-LORA-SF12 service capacity | 0.0118 | 0.0148 |
+| CTRL-LRFHSS confirmed / uplink delivery | 0.988 / 0.998 | 0.983 / 0.998 |
+| CTRL-LRFHSS capacity, agriculture / logistics | 7.53 / 2.00 | 18.56 / 2.48 |
+| CTRL-LRFHSS disaster delivery (uplink / confirmed) | 0.343 / 0.201 | 0.490 / 0.267 |
+| CTRL-SS-LRFHSS delivery | 0.870 | 0.850 |
+| NB-IoT / LR-FHSS ratios (policy matrix) | 1.70 and 1.87 | unchanged |
+
 ## v1.7.1 (paper version): reporting changes, simulation model unchanged
 
 The simulation model is unchanged (`MODEL_VERSION` 1.7.0); every simulated quantity of v1.7.0 is reproduced. Changes affect reported quantities only.

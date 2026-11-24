@@ -1,7 +1,7 @@
 cff-version: 1.2.0
 message: "If you use this simulator, please cite the paper and the software."
 title: "ntnsim: Operator-led 3GPP IoT-NTN versus IoT-only LoRaWAN NTN LEO simulator"
-version: 1.7.1
+version: 1.8.0
 date-released: 2026-11-24
 license: MIT
 repository-code: "https://github.com/ayelnashar/NTN-IOT"

@@ -1,10 +1,10 @@
-# ntnsim v1.7.1: Operator 3GPP IoT-NTN vs IoT-only LoRaWAN NTN over LEO
+# ntnsim v1.8.0: Operator 3GPP IoT-NTN vs IoT-only LoRaWAN NTN over LEO
 
 Code and frozen results for the paper
 
 > A. Elnashar, "Operator-Led 3GPP IoT-NTN Versus IoT-Only LoRaWAN Direct-to-Satellite Networks: A Same-Scenario LEO Simulation Study," submitted to *IEEE Open Journal of the Communications Society*, 2026.
 
-Every number, table and figure in the paper comes from `frozen/results.json`, produced by `scripts/run_batch.py` with the code in this repository (release 1.7.1, simulation model 1.7.0). All presets are illustrative system classes, not any operator's deployment, and no measured network data is used.
+Every number, table and figure in the paper comes from `frozen/results.json`, produced by `scripts/run_batch.py` with the code in this repository (version 1.8.0). All presets are illustrative system classes, not any operator's deployment, and no measured network data is used.
 
 ## Repository layout
 
@@ -15,10 +15,10 @@ Every number, table and figure in the paper comes from `frozen/results.json`, pr
 | `frozen/` | `results.json`, CSV tables (link budgets, scenario summary) and all figures (PNG and PDF) used in the paper |
 | `scripts/run_batch.py` | Recomputes every result (about 3.5 h of processor time, about 3 GB RAM, checkpointed) |
 | `scripts/build_notebook.py` | Rebuilds the notebook from the package |
-| `CHANGELOG.md` | Model history and the stated limitations of v1.7.1 |
+| `CHANGELOG.md` | Model history and the stated limitations of v1.8.0 |
 | `PORTING.md` | Notes for porting the model to other bands or regions |
 
-## Headline results (frozen v1.7.1, utility-wells scenario)
+## Headline results (frozen v1.8.0, utility-wells scenario)
 
 | Quantity | Value |
 |---|---|
@@ -64,7 +64,7 @@ A simulator comparing hypothetical architectures that represent two ways of deli
 | Operator via MSS partner | `OP-MSS-NBIOT` | L-band MSS | 5 dBi smallsat, 32 sats, 500 km |
 | IoT-only LoRaWAN | `IO-ISM-LRFHSS`, `IO-ISM-LORA-SF10`, `IO-ISM-LORA-SF12` | ISM 868 MHz (licence-exempt device, non-protected satellite) | 5 dBi smallsat, 16 sats, 550 km |
 | IoT-only LoRaWAN, licensed | `IO-SBAND-LRFHSS` (LR1120, +11.5 dBm), `IO-SBAND-LRFHSS-HP` (+27 dBm module) | S-band MSS | 5 dBi smallsat, 64 sats, 550 km |
-| Control (air interface only) | `CTRL-NBIOT`, `CTRL-LRFHSS`, `CTRL-LORA-SF12` | 847 MHz, same satellite and 22 dBm for all | 223 m² array, 120 sats |
+| Control (air interface only) | `CTRL-NBIOT`, `CTRL-LRFHSS`, `CTRL-LORA-SF12` | 847 MHz, same satellite, 22 dBm and first-visibility transmit policy for all | 223 m² array, 120 sats |
 
 Scenarios (UAE defaults, all values illustrative): remote utility wells, agriculture and water metering, logistics on highways, urban disaster fallback with the terrestrial network down.
 

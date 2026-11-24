@@ -59,7 +59,7 @@ from .antenna import SatAntenna
 from .rng import Rng
 from . import presets as PR
 
-MODEL_VERSION = "1.7.0"
+MODEL_VERSION = "1.8.0"
 _TL_CACHE = {}
 _PROF_CACHE = {}
 
