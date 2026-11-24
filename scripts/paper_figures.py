@@ -149,8 +149,8 @@ save(fig, "p_noise")
 # capacity ----------------------------------------------------------------------------------------------
 fig, ax = plt.subplots(figsize=(W1, 3.3))
 cap = R["capacity"]["utility_wells"]
-for off, key, hatch, lab in ((-0.2, "service", None, "Service capacity (≥ 90 % on time)"),
-                             (0.2, "contention", "/////", "Contention capacity (≤ 10 % collision or blocking)")):
+for off, key, hatch, lab in ((-0.2, "service", None, "Service capacity (≥90% on time)"),
+                             (0.2, "contention", "/////", "Contention capacity (≤10% collision or blocking)")):
     first = True
     for v, s_ in zip(y, STACKS):
         c = cap[s_][key]
@@ -172,7 +172,8 @@ ax.set_xscale("log"); ax.set_xlim(1e-6, 2e3)
 ax.set_yticks(y); ax.set_yticklabels(STACKS, fontsize=5.8); ax.invert_yaxis()
 ax.tick_params(axis="y", which="both", right=False); ax.grid(axis="y", visible=False)
 ax.set_xlabel("Devices per km²")
-legend_above(ax, ncol=1)
+fig.tight_layout()
+legend_under(fig, ax, ncol=2)
 save(fig, "p_cap")
 
 # cell radius ----------------------------------------------------------------------------------------------
