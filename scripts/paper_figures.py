@@ -201,11 +201,12 @@ GP_N = R.get("goodput_n_mc", 1000)
 fig, ax = plt.subplots(figsize=(W1, 2.4))
 def gp_rows(s):
     """Points of one goodput curve up to the last load whose Monte Carlo sample still delivered at least
-    GP_MIN_DELIVERED messages (or, for stacks that never do, at least one)."""
+    GP_MIN_DELIVERED messages: a display cutoff of the sample, not a capacity limit. Points below the cutoff
+    inside the kept range are not drawn."""
     rows = sorted((r for r in R["goodput"][s] if r["devices_per_cell"] > 0), key=lambda r: r["devices_per_cell"])
     cnt = [r["pdr"] * GP_N for r in rows]
-    idx = [i for i, c in enumerate(cnt) if c >= GP_MIN_DELIVERED - 1e-9] or [i for i, c in enumerate(cnt) if c >= 1 - 1e-9]
-    return [r for r in rows[:max(idx) + 1] if r["goodput_bps"] > 0] if idx else []
+    idx = [i for i, c in enumerate(cnt) if c >= GP_MIN_DELIVERED - 1e-9]
+    return [r for r, c in zip(rows[:max(idx) + 1], cnt) if c >= GP_MIN_DELIVERED - 1e-9] if idx else []
 
 
 for s in STACKS:

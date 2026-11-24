@@ -34,10 +34,10 @@ and the final acknowledgement/release are downlink messages with their own
 link budget, repetitions, fading, re-sends and cell downlink load, so they
 gate uplink delivery itself; pdr_confirmed_deadline also requires the final
 acknowledgement. For LoRaWAN stacks the reported uplink delivery is the
-unconfirmed mode; the confirmed mode adds an RX2 acknowledgement served by one
-satellite transmitter without queueing (Erlang loss, duty-cycle budget) and,
-for half-duplex ISM gateways, the loss of uplink packets that overlap the
-gateway's own transmissions. Ground-segment availability is not modelled
+unconfirmed mode; the confirmed mode adds an acknowledgement in RX1 or RX2
+served by one satellite transmitter without queueing (a stationary on-off
+calendar with per-window duty budgets) and, for half-duplex ISM gateways, the
+loss of uplink packets that overlap the gateway's own transmissions. Ground-segment availability is not modelled
 (ground_delay_s can add a store-and-forward wait).
 """
 import hashlib
@@ -59,7 +59,7 @@ from .antenna import SatAntenna
 from .rng import Rng
 from . import presets as PR
 
-MODEL_VERSION = "1.8.0"
+MODEL_VERSION = "1.9.0"
 _TL_CACHE = {}
 _PROF_CACHE = {}
 
@@ -851,7 +851,9 @@ def run_case(stack, scen, stack_over=None, scen_over=None, g_over=None, cache_di
         copies = st.get("copies", 1)
         dcl = st.get("duty_cycle_limit")
         gap = case.gap
-        rxw = 2 * g["rx_window_symbols"] * P.lora_symbol_s(12) if st.get("class_a_rx") else 0.0
+        # Class A (LoRaWAN TS001-1.0.4, 3.3): after every uplink copy the device opens RX1 and, unless a valid
+        # downlink arrived in RX1, RX2; an empty window costs its preamble-detection time at its own rate (v1.9)
+        rxw = sum(g["rx_window_symbols"] * P.lora_symbol_s(w["sf"]) for w in case.ack_win)
         e_cp = [0.0] + [E.lora_msg_energy_j(st["device"], st["ptx_dbm"], case.toa, c_, sc["gnss_per_msg"], rxw)
                         for c_ in range(1, copies + 1)]
         info = []                                   # per-sample record for the confirmed mode (v1.6)
@@ -877,7 +879,11 @@ def run_case(stack, scen, stack_over=None, scen_over=None, g_over=None, cache_di
             else:
                 dop_ok = P.lrfhss_doppler_ok(s["fdr"]) and (g["lrfhss_acq_hz"] is None or offset <= g["lrfhss_acq_hz"])
             if not dop_ok:
-                causes["doppler"] += 1; lat.append(None); info.append(None); continue
+                # the packet was transmitted: it stays in the denominator of the acknowledgement demand (v1.9)
+                causes["doppler"] += 1; lat.append(None)
+                info.append(dict(s=s, ok=False, n_cp=n_cp, lam=lam, flags=None, t0=0.0, t_end=case.toa, dop=True,
+                                 gkey=(int(el // 5) * 5, round(math.log10(max(lam, 1e-9)) * 10))))
+                continue
             ok, cause, k_ok, flags = False, "snr", 0, None
             k = g["fade_k_los_db"] if s["los"] else g["fade_k_nlos_db"]
             for kcp in range(n_cp):

@@ -26,11 +26,11 @@ Load, re-sends and admission (D02)
     expected number of grant and final-message transmissions (re-sends
     included) from a pre-simulation of each device's decoding on the same
     fading process. Final messages are counted only for planned uplink
-    successes. Downlink admission policy: 'uniform' (primary: every downlink
-    message is admitted with the same probability), 'ce_barring' (access of the
+    successes. Downlink admission policy: 'ce_barring' (default: access of the
     deepest initial levels is barred first until the downlink fits;
-    transactions of admitted devices are preserved) or 'rar_priority' (the v1.6
-    stress policy). The downlink wait is M/G/1 over every carried transmission.
+    transactions of admitted devices are preserved), 'uniform' (stress case:
+    responses are dropped and admitted transactions thinned with one factor
+    min(1, 0.9/(rho_R + rho_T))) or 'rar_priority' (the v1.6 stress policy). The downlink wait is M/G/1 over every carried transmission.
 
 Timeline and energy (D04, D08)
     Every device runs one absolute event timeline from the start of access:
@@ -602,7 +602,9 @@ def run_lora_confirmed(case, info, lat, energies, rng_dl, iters=6):
     rx_j = dev_l["v"] * dev_l["rx_ma"] / 1000.0
     th, tf = P.LRFHSS_TH_S, P.LRFHSS_TF_S
     coh = max(g["coh_s"], 1e-3)
-    seeds = [rng_dl.randint(2 ** 31 - 1) if it is not None else None for it in info]
+    seeds = [rng_dl.randint(2 ** 31 - 1) if (it is not None and not it.get("dop")) else None for it in info]
+    # preamble-detection time of each window; the windows of every copy are already in the unconfirmed energy
+    w_det = [g["rx_window_symbols"] * P.lora_symbol_s(w["sf"]) for w in wins]
     grp = {}
     for it in info:
         if it is not None:
@@ -664,12 +666,9 @@ def run_lora_confirmed(case, info, lat, energies, rng_dl, iters=6):
     for it, r, d0, e0 in zip(info, res, lat, energies):
         if it is None:
             lat_conf.append(None); lat_cmode.append(None); e_conf.append(e0); continue
-        n_cp = it["n_cp"]
         if r is None or not r["ok_c"]:
             lat_cmode.append(None); lat_conf.append(None)
-            e_w = (rx_j * g["rx_window_symbols"] * sum(P.lora_symbol_s(w["sf"]) for w in wins if w["used"]) * n_cp
-                   if not st.get("class_a_rx") else 0.0)
-            e_conf.append(e0 + e_w); continue
+            e_conf.append(e0); continue
         lat_cmode.append(d0)
         s = it["s"]
         rr = r["rr"]
@@ -677,11 +676,8 @@ def run_lora_confirmed(case, info, lat, energies, rng_dl, iters=6):
         dl_snrs.append(snr2)
         w = r["w"]
         in_rx1 = w == 0
-        e_w = (rx_j * g["rx_window_symbols"] * ((P.lora_symbol_s(wins[0]["sf"]) if wins[0]["used"] else 0.0)
-                                                + (0.0 if in_rx1 else P.lora_symbol_s(wins[1]["sf"]))) * n_cp
-               if not st.get("class_a_rx") else 0.0)
         if w is None:
-            lat_conf.append(None); e_conf.append(e0 + e_w); continue
+            lat_conf.append(None); e_conf.append(e0); continue
         n_ack += 1; n_rx1 += 1 if in_rx1 else 0
         win = wins[w]
         snr_w = snr2 if w == 1 else case.dl_snr_lt(s, rr.random() * 2 * math.pi, win["eirp"], win["f"])
@@ -691,7 +687,9 @@ def run_lora_confirmed(case, info, lat, energies, rng_dl, iters=6):
         t_ack_end = it["t_end"] + win["delay"] + win["t"]
         got = (snr_w + 10 * math.log10(max(fad, 1e-12)) >= P.LORA_SNR_DB[win["sf"]] and t_ack_end <= s["left"]
                and d0 is not None)
-        e_conf.append(e0 + e_w + rx_j * win["t"])
+        # a received acknowledgement replaces the detection time of its window, and after a valid downlink in
+        # RX1 the device does not open RX2; an undecoded one ends with preamble detection (already in e0)
+        e_conf.append(e0 + (rx_j * (win["t"] - w_det[w] - (w_det[1] if w == 0 else 0.0)) if got else 0.0))
         lat_conf.append((d0 + win["delay"] + win["t"]) if got else None)
     extra = dict(ack_service_min=min((c_["served"] for c_ in cals.values()), default=1.0),
                  dl_tx_occupancy_max=max((c_["occ"] for c_ in cals.values()), default=0.0),

@@ -311,11 +311,15 @@ def sample_calendar(rng, cal, t_lo, t_hi, wins):
     [t_lo, t_hi]: non-overlapping by construction."""
     if cal["rate"] <= 0:
         return []
-    def busy_len():
-        return wins[0]["t"] if rng.random() < cal["share"][0] else wins[1]["t"]
+    def busy_len(first=False):
+        s0 = cal["share"][0]
+        if first:       # the interval covering t_lo is length-biased: type weights share_w * t_w (v1.9)
+            w0, w1 = s0 * wins[0]["t"], cal["share"][1] * wins[1]["t"]
+            s0 = w0 / (w0 + w1) if w0 + w1 > 0 else s0
+        return wins[0]["t"] if rng.random() < s0 else wins[1]["t"]
     iv, t = [], t_lo
     if rng.random() < cal["occ"]:
-        b = busy_len()
+        b = busy_len(first=True)
         e = t + rng.random() * b
         iv.append((t - (b - (e - t)), e)); t = e
     while t < t_hi:

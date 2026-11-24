@@ -97,7 +97,7 @@ def link_budget(stack, scen, el_deg=30.0, los=True, **kw):
         from .antenna import airy_rel_db
         fspl_dl = CH.fspl_db(d, case.f_dl)
         snr = case.dl_snr_median(el_deg, los)
-        ci = (DLm.c_over_i_db(0.0, 0.0, airy_rel_db, case.ant.bw, g["dl_reuse"])
+        ci = (DLm.c_over_i_db(0.0, 0.0, airy_rel_db, case.ant.bw, g["dl_reuse"], case.dl_bw_deg)
               if case.ant.kind == "multibeam" else None)
         if case.tech in DLm.TECH:
             req_dl, req_lbl = case.dl_floor, "assumed acquisition threshold (NPDSCH reference point)"

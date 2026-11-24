@@ -114,8 +114,7 @@
      "other_networks_load": 1.0,
      "copies": 1,
      "duty_cycle_limit": 0.01,
-     "payload": "regenerative",
-     "class_a_rx": true
+     "payload": "regenerative"
     },
     "IO-ISM-LORA-SF10": {
      "model": "iot_only",
@@ -139,8 +138,7 @@
      "other_networks_load": 1.0,
      "copies": 1,
      "duty_cycle_limit": 0.01,
-     "payload": "regenerative",
-     "class_a_rx": true
+     "payload": "regenerative"
     },
     "IO-ISM-LORA-SF12": {
      "model": "iot_only",
@@ -164,8 +162,7 @@
      "other_networks_load": 1.0,
      "copies": 1,
      "duty_cycle_limit": 0.01,
-     "payload": "regenerative",
-     "class_a_rx": true
+     "payload": "regenerative"
     },
     "IO-SBAND-LRFHSS": {
      "model": "iot_only",
@@ -185,8 +182,7 @@
      "other_networks_load": 0.0,
      "copies": 1,
      "duty_cycle_limit": null,
-     "payload": "regenerative",
-     "class_a_rx": false
+     "payload": "regenerative"
     },
     "IO-SBAND-LRFHSS-HP": {
      "model": "iot_only",
@@ -206,8 +202,7 @@
      "other_networks_load": 0.0,
      "copies": 1,
      "duty_cycle_limit": null,
-     "payload": "regenerative",
-     "class_a_rx": false
+     "payload": "regenerative"
     },
     "CTRL-NBIOT": {
      "model": "control",
@@ -272,7 +267,6 @@
      "copies": 1,
      "duty_cycle_limit": null,
      "payload": "transparent",
-     "class_a_rx": true,
      "tx_policy": "first_visible"
     },
     "CTRL-SS-NBIOT": {
@@ -316,7 +310,6 @@
      "other_networks_load": 0.0,
      "copies": 1,
      "duty_cycle_limit": null,
-     "class_a_rx": false,
      "tx_policy": "first_visible"
     },
     "CTRL-SS-LORA-SF12": {
@@ -339,7 +332,6 @@
      "other_networks_load": 0.0,
      "copies": 1,
      "duty_cycle_limit": null,
-     "class_a_rx": true,
      "tx_policy": "first_visible"
     }
    },
@@ -752,7 +744,7 @@
      ],
      [
       "Carrier-to-interference, co-channel beams (beam centre)",
-      10.175843853679696,
+      11.188600156480566,
       "dB"
      ],
      [
@@ -952,7 +944,7 @@
      ],
      [
       "Carrier-to-interference, co-channel beams (beam centre)",
-      10.175843853679696,
+      11.188600156480566,
       "dB"
      ],
      [
@@ -1152,7 +1144,7 @@
      ],
      [
       "Carrier-to-interference, co-channel beams (beam centre)",
-      10.175843853679696,
+      11.188600156480566,
       "dB"
      ],
      [
@@ -1352,7 +1344,7 @@
      ],
      [
       "Carrier-to-interference, co-channel beams (beam centre)",
-      10.175843853679696,
+      11.188600156480566,
       "dB"
      ],
      [
@@ -1554,7 +1546,7 @@
      ],
      [
       "Carrier-to-interference, co-channel beams (beam centre)",
-      10.175843853679696,
+      11.188600156480566,
       "dB"
      ],
      [
@@ -1754,7 +1746,7 @@
      ],
      [
       "Carrier-to-interference, co-channel beams (beam centre)",
-      10.175843853679696,
+      11.188600156480566,
       "dB"
      ],
      [
@@ -1954,7 +1946,7 @@
      ],
      [
       "Carrier-to-interference, co-channel beams (beam centre)",
-      10.175843853679696,
+      11.188600156480566,
       "dB"
      ],
      [
@@ -2154,7 +2146,7 @@
      ],
      [
       "Carrier-to-interference, co-channel beams (beam centre)",
-      10.175843853679696,
+      11.188600156480566,
       "dB"
      ],
      [
@@ -7168,7 +7160,7 @@
      ],
      [
       "Carrier-to-interference, co-channel beams (beam centre)",
-      10.175843853679696,
+      11.188600156480566,
       "dB"
      ],
      [
@@ -7368,7 +7360,7 @@
      ],
      [
       "Carrier-to-interference, co-channel beams (beam centre)",
-      10.175843853679696,
+      11.188600156480566,
       "dB"
      ],
      [
@@ -7568,7 +7560,7 @@
      ],
      [
       "Carrier-to-interference, co-channel beams (beam centre)",
-      10.175843853679696,
+      11.188600156480566,
       "dB"
      ],
      [
@@ -7768,7 +7760,7 @@
      ],
      [
       "Carrier-to-interference, co-channel beams (beam centre)",
-      10.175843853679696,
+      11.188600156480566,
       "dB"
      ],
      [
@@ -7970,7 +7962,7 @@
      ],
      [
       "Carrier-to-interference, co-channel beams (beam centre)",
-      10.175843853679696,
+      11.188600156480566,
       "dB"
      ],
      [
@@ -8170,7 +8162,7 @@
      ],
      [
       "Carrier-to-interference, co-channel beams (beam centre)",
-      10.175843853679696,
+      11.188600156480566,
       "dB"
      ],
      [
@@ -8370,7 +8362,7 @@
      ],
      [
       "Carrier-to-interference, co-channel beams (beam centre)",
-      10.175843853679696,
+      11.188600156480566,
       "dB"
      ],
      [
@@ -8570,7 +8562,7 @@
      ],
      [
       "Carrier-to-interference, co-channel beams (beam centre)",
-      10.175843853679696,
+      11.188600156480566,
       "dB"
      ],
      [
@@ -8772,7 +8764,7 @@
      ],
      [
       "Carrier-to-interference, co-channel beams (beam centre)",
-      10.175843853679696,
+      11.188600156480566,
       "dB"
      ],
      [
@@ -8972,7 +8964,7 @@
      ],
      [
       "Carrier-to-interference, co-channel beams (beam centre)",
-      10.175843853679696,
+      11.188600156480566,
       "dB"
      ],
      [
@@ -9172,7 +9164,7 @@
      ],
      [
       "Carrier-to-interference, co-channel beams (beam centre)",
-      10.175843853679696,
+      11.188600156480566,
       "dB"
      ],
      [
@@ -9372,7 +9364,7 @@
      ],
      [
       "Carrier-to-interference, co-channel beams (beam centre)",
-      10.175843853679696,
+      11.188600156480566,
       "dB"
      ],
      [
@@ -25908,7 +25900,7 @@
     "energy_basis": "generated",
     "n_mc": 3000,
     "seed": 20261122,
-    "model_version": "1.8.0",
+    "model_version": "1.9.0",
     "rho_max": 0.00165081215258639,
     "rho_dl_max": 0.007755134002535019,
     "rho_dl_carried_max": 0.007755134002535019,
@@ -80000,7 +79992,7 @@
     "energy_basis": "generated",
     "n_mc": 3000,
     "seed": 20261122,
-    "model_version": "1.8.0",
+    "model_version": "1.9.0",
     "rho_max": 0.0013558430739273562,
     "rho_dl_max": 0.0034155464511637468,
     "rho_dl_carried_max": 0.0034155464511637468,
@@ -134046,7 +134038,7 @@
     "energy_basis": "generated",
     "n_mc": 3000,
     "seed": 20261122,
-    "model_version": "1.8.0",
+    "model_version": "1.9.0",
     "rho_max": 0.24980359614731037,
     "rho_dl_max": 0.532110646601891,
     "rho_dl_carried_max": 0.532110646601891,
@@ -178717,9 +178709,9 @@
     "latency_mean_s": 661.39810677429,
     "latency_p50_s": 555.031328,
     "latency_p95_s": 2040.031328,
-    "energy_per_msg_j": 0.207816193728,
-    "energy_per_delivered_j": 0.6989333869775785,
-    "energy_per_on_time_j": 0.6989333869775785,
+    "energy_per_msg_j": 0.20606225376,
+    "energy_per_delivered_j": 0.6930344857399103,
+    "energy_per_on_time_j": 0.6930344857399103,
     "battery_years": 15.0,
     "battery_limited_by": "calendar",
     "alloc_hz": 137000.0,
@@ -178729,7 +178721,7 @@
     "energy_basis": "generated",
     "n_mc": 3000,
     "seed": 20261122,
-    "model_version": "1.8.0",
+    "model_version": "1.9.0",
     "toa_s": 2.5313280000000002,
     "device_duty_cycle": 0.0007031466666666667,
     "duty_cycle_compliant": true,
@@ -178757,7 +178749,7 @@
     "rx2_snr_edge_db": -14.359475994917887,
     "rx1_share": 0.0,
     "pdr_deadline_confirmed_mode": 0.26066666666666666,
-    "energy_per_msg_confirmed_j": 0.207901957824,
+    "energy_per_msg_confirmed_j": 0.20613341971200003,
     "pdr_confirmed_deadline": 0.009,
     "pdr_confirmed_deadline_ci95": [
      0.006192711974012497,
@@ -186472,9 +186464,9 @@
     "latency_mean_s": 535.8836424827587,
     "latency_p50_s": 567.952608,
     "latency_p95_s": 1072.952608,
-    "energy_per_msg_j": 0.040993523999999996,
-    "energy_per_delivered_j": 2.120354689655172,
-    "energy_per_on_time_j": 2.120354689655172,
+    "energy_per_msg_j": 0.038797044,
+    "energy_per_delivered_j": 2.006743655172414,
+    "energy_per_on_time_j": 2.006743655172414,
     "battery_years": 15.0,
     "battery_limited_by": "calendar",
     "alloc_hz": 1000000.0,
@@ -186484,7 +186476,7 @@
     "energy_basis": "generated",
     "n_mc": 3000,
     "seed": 20261122,
-    "model_version": "1.8.0",
+    "model_version": "1.9.0",
     "toa_s": 0.45260799999999995,
     "device_duty_cycle": 0.00012572444444444443,
     "duty_cycle_compliant": true,
@@ -186501,7 +186493,7 @@
     "rx2_snr_edge_db": -14.359475994917887,
     "rx1_share": 0.0,
     "pdr_deadline_confirmed_mode": 0.016666666666666666,
-    "energy_per_msg_confirmed_j": 0.041031641375999996,
+    "energy_per_msg_confirmed_j": 0.038828673311999996,
     "pdr_confirmed_deadline": 0.004,
     "pdr_confirmed_deadline_ci95": [
      0.0022896579159291377,
@@ -194219,7 +194211,7 @@
     "latency_mean_s": null,
     "latency_p50_s": null,
     "latency_p95_s": null,
-    "energy_per_msg_j": 0.150213492,
+    "energy_per_msg_j": 0.14933489999999994,
     "energy_per_delivered_j": null,
     "energy_per_on_time_j": null,
     "battery_years": 15.0,
@@ -194231,7 +194223,7 @@
     "energy_basis": "generated",
     "n_mc": 3000,
     "seed": 20261122,
-    "model_version": "1.8.0",
+    "model_version": "1.9.0",
     "toa_s": 1.8104319999999998,
     "device_duty_cycle": 0.0005028977777777777,
     "duty_cycle_compliant": true,
@@ -194248,7 +194240,7 @@
     "rx2_snr_edge_db": -14.359475994917887,
     "rx1_share": null,
     "pdr_deadline_confirmed_mode": 0.0,
-    "energy_per_msg_confirmed_j": 0.150213492,
+    "energy_per_msg_confirmed_j": 0.14933489999999994,
     "pdr_confirmed_deadline": 0.0,
     "pdr_confirmed_deadline_ci95": [
      1.0842021724855044e-19,
@@ -201966,9 +201958,9 @@
     "latency_mean_s": 11.833276051948053,
     "latency_p50_s": 2.5313280000000002,
     "latency_p95_s": 85.031328,
-    "energy_per_msg_j": 0.25842883968,
-    "energy_per_delivered_j": 5.034328045714286,
-    "energy_per_on_time_j": 5.034328045714286,
+    "energy_per_msg_j": 0.2595155904,
+    "energy_per_delivered_j": 5.055498514285714,
+    "energy_per_on_time_j": 5.055498514285714,
     "battery_years": 15.0,
     "battery_limited_by": "calendar",
     "alloc_hz": 137000.0,
@@ -201978,7 +201970,7 @@
     "energy_basis": "generated",
     "n_mc": 3000,
     "seed": 20261122,
-    "model_version": "1.8.0",
+    "model_version": "1.9.0",
     "toa_s": 2.5313280000000002,
     "device_duty_cycle": 0.0007031466666666667,
     "duty_cycle_compliant": null,
@@ -202006,7 +201998,7 @@
     "rx2_snr_edge_db": -9.09376322972426,
     "rx1_share": 0.7867647058823529,
     "pdr_deadline_confirmed_mode": 0.051333333333333335,
-    "energy_per_msg_confirmed_j": 0.25964092898304,
+    "energy_per_msg_confirmed_j": 0.25961629596672,
     "pdr_confirmed_deadline": 0.04533333333333334,
     "pdr_confirmed_deadline_ci95": [
      0.03845246983575107,
@@ -211099,10 +211091,10 @@
     "latency_mean_s": 218.44236662880533,
     "latency_p50_s": 40.031328,
     "latency_p95_s": 1240.031328,
-    "energy_per_msg_j": 4.413420928000001,
-    "energy_per_delivered_j": 5.08068410744436,
-    "energy_per_on_time_j": 5.08068410744436,
-    "battery_years": 1.3556911010365513,
+    "energy_per_msg_j": 4.4146595583999995,
+    "energy_per_delivered_j": 5.082110005832693,
+    "energy_per_on_time_j": 5.082110005832693,
+    "battery_years": 1.3553213149874133,
     "battery_limited_by": "energy",
     "alloc_hz": 137000.0,
     "on_time_msgs_per_s_per_mhz": 17.881823229375197,
@@ -211111,7 +211103,7 @@
     "energy_basis": "generated",
     "n_mc": 3000,
     "seed": 20261122,
-    "model_version": "1.8.0",
+    "model_version": "1.9.0",
     "toa_s": 2.5313280000000002,
     "device_duty_cycle": 0.0007031466666666667,
     "duty_cycle_compliant": null,
@@ -211139,7 +211131,7 @@
     "rx2_snr_edge_db": -9.09376322972426,
     "rx1_share": 0.6942857142857143,
     "pdr_deadline_confirmed_mode": 0.8686666666666667,
-    "energy_per_msg_confirmed_j": 4.4169055049728,
+    "energy_per_msg_confirmed_j": 4.4163892283392,
     "pdr_confirmed_deadline": 0.6676666666666666,
     "pdr_confirmed_deadline_ci95": [
      0.6506053563305317,
@@ -220245,7 +220237,7 @@
     "energy_basis": "generated",
     "n_mc": 3000,
     "seed": 20261122,
-    "model_version": "1.8.0",
+    "model_version": "1.9.0",
     "rho_max": 0.00165081215258639,
     "rho_dl_max": 0.007956555088194497,
     "rho_dl_carried_max": 0.007956555088194497,
@@ -274340,10 +274332,10 @@
     "latency_mean_s": 5.037977297954184,
     "latency_p50_s": 2.5390434213668858,
     "latency_p95_s": 10.04028426779301,
-    "energy_per_msg_j": 0.9876791232000001,
-    "energy_per_delivered_j": 0.9893280032053423,
-    "energy_per_on_time_j": 0.9893280032053423,
-    "battery_years": 5.735890435156423,
+    "energy_per_msg_j": 0.9878818752,
+    "energy_per_delivered_j": 0.9895310936894826,
+    "energy_per_on_time_j": 0.9895310936894826,
+    "battery_years": 5.734806781356966,
     "battery_limited_by": "energy",
     "alloc_hz": 200000.0,
     "on_time_msgs_per_s_per_mhz": 0.03441927147860749,
@@ -274352,7 +274344,7 @@
     "energy_basis": "generated",
     "n_mc": 3000,
     "seed": 20261122,
-    "model_version": "1.8.0",
+    "model_version": "1.9.0",
     "toa_s": 2.5313280000000002,
     "device_duty_cycle": 0.0007031466666666667,
     "duty_cycle_compliant": null,
@@ -274380,7 +274372,7 @@
     "rx2_snr_edge_db": 10.945612216467573,
     "rx1_share": 0.9926544240400668,
     "pdr_deadline_confirmed_mode": 0.9983333333333333,
-    "energy_per_msg_confirmed_j": 0.9884603421440001,
+    "energy_per_msg_confirmed_j": 0.98835181632,
     "pdr_confirmed_deadline": 0.983,
     "pdr_confirmed_deadline_ci95": [
      0.9777182622077074,
@@ -283474,10 +283466,10 @@
     "latency_mean_s": 3.153661686576541,
     "latency_p50_s": 1.817775377362691,
     "latency_p95_s": 1.8192607695993452,
-    "energy_per_msg_j": 0.7134502847999998,
-    "energy_per_delivered_j": 1.0015680179691153,
-    "energy_per_on_time_j": 1.0015680179691153,
-    "battery_years": 7.705137082428055,
+    "energy_per_msg_j": 0.7071649727999999,
+    "energy_per_delivered_j": 0.9927444634534393,
+    "energy_per_on_time_j": 0.9927444634534393,
+    "battery_years": 7.766248770783287,
     "battery_limited_by": "energy",
     "alloc_hz": 200000.0,
     "on_time_msgs_per_s_per_mhz": 0.024558925926472193,
@@ -283486,7 +283478,7 @@
     "energy_basis": "generated",
     "n_mc": 3000,
     "seed": 20261122,
-    "model_version": "1.8.0",
+    "model_version": "1.9.0",
     "toa_s": 1.8104319999999998,
     "device_duty_cycle": 0.0005028977777777777,
     "duty_cycle_compliant": null,
@@ -283503,7 +283495,7 @@
     "rx2_snr_edge_db": 10.945612216467573,
     "rx1_share": 0.99859616284511,
     "pdr_deadline_confirmed_mode": 0.7123333333333334,
-    "energy_per_msg_confirmed_j": 0.7139347170559998,
+    "energy_per_msg_confirmed_j": 0.707498715264,
     "pdr_confirmed_deadline": 0.699,
     "pdr_confirmed_deadline_ci95": [
      0.6823399171960887,
@@ -292608,7 +292600,7 @@
     "energy_basis": "generated",
     "n_mc": 3000,
     "seed": 20261122,
-    "model_version": "1.8.0",
+    "model_version": "1.9.0",
     "rho_max": 0.05148008528686303,
     "rho_dl_max": 0.12218211946297215,
     "rho_dl_carried_max": 0.12218211946297215,
@@ -341087,10 +341079,10 @@
     "latency_mean_s": 160.55485741176471,
     "latency_p50_s": 2.5313280000000002,
     "latency_p95_s": 1130.031328,
-    "energy_per_msg_j": 0.9876791232000001,
-    "energy_per_delivered_j": 1.1619754390588237,
-    "energy_per_on_time_j": 1.1619754390588237,
-    "battery_years": 5.735890435156423,
+    "energy_per_msg_j": 0.9878818752,
+    "energy_per_delivered_j": 1.1622139708235295,
+    "energy_per_on_time_j": 1.1622139708235295,
+    "battery_years": 5.734806781356966,
     "battery_limited_by": "energy",
     "alloc_hz": 200000.0,
     "on_time_msgs_per_s_per_mhz": 11.98583066995822,
@@ -341099,7 +341091,7 @@
     "energy_basis": "generated",
     "n_mc": 3000,
     "seed": 20261122,
-    "model_version": "1.8.0",
+    "model_version": "1.9.0",
     "toa_s": 2.5313280000000002,
     "device_duty_cycle": 0.0007031466666666667,
     "duty_cycle_compliant": null,
@@ -341127,7 +341119,7 @@
     "rx2_snr_edge_db": -2.5814352396972566,
     "rx1_share": 0.8813627254509018,
     "pdr_deadline_confirmed_mode": 0.85,
-    "energy_per_msg_confirmed_j": 0.988373153152,
+    "energy_per_msg_confirmed_j": 0.9882781962240001,
     "pdr_confirmed_deadline": 0.81,
     "pdr_confirmed_deadline_ci95": [
      0.7955686137197061,
@@ -350220,10 +350212,10 @@
     "latency_mean_s": null,
     "latency_p50_s": null,
     "latency_p95_s": null,
-    "energy_per_msg_j": 0.7134502847999998,
+    "energy_per_msg_j": 0.7071649727999999,
     "energy_per_delivered_j": null,
     "energy_per_on_time_j": null,
-    "battery_years": 7.705137082428055,
+    "battery_years": 7.766248770783287,
     "battery_limited_by": "energy",
     "alloc_hz": 200000.0,
     "on_time_msgs_per_s_per_mhz": 0.0,
@@ -350232,7 +350224,7 @@
     "energy_basis": "generated",
     "n_mc": 3000,
     "seed": 20261122,
-    "model_version": "1.8.0",
+    "model_version": "1.9.0",
     "toa_s": 1.8104319999999998,
     "device_duty_cycle": 0.0005028977777777777,
     "duty_cycle_compliant": null,
@@ -350249,7 +350241,7 @@
     "rx2_snr_edge_db": -2.5814352396972566,
     "rx1_share": null,
     "pdr_deadline_confirmed_mode": 0.0,
-    "energy_per_msg_confirmed_j": 0.7134502847999998,
+    "energy_per_msg_confirmed_j": 0.7071649727999999,
     "pdr_confirmed_deadline": 0.0,
     "pdr_confirmed_deadline_ci95": [
      1.0842021724855044e-19,
@@ -359357,7 +359349,7 @@
     "energy_basis": "generated",
     "n_mc": 3000,
     "seed": 20261122,
-    "model_version": "1.8.0",
+    "model_version": "1.9.0",
     "rho_max": 0.008534032971418215,
     "rho_dl_max": 0.055509992033104624,
     "rho_dl_carried_max": 0.055509992033104624,
@@ -413359,7 +413351,7 @@
     "energy_basis": "generated",
     "n_mc": 3000,
     "seed": 20261122,
-    "model_version": "1.8.0",
+    "model_version": "1.9.0",
     "rho_max": 0.00792322361008671,
     "rho_dl_max": 0.02435482095208919,
     "rho_dl_carried_max": 0.02435482095208919,
@@ -467315,7 +467307,7 @@
     "energy_basis": "generated",
     "n_mc": 3000,
     "seed": 20261122,
-    "model_version": "1.8.0",
+    "model_version": "1.9.0",
     "rho_max": 0.18512913231661351,
     "rho_dl_max": 0.8999961968934873,
     "rho_dl_carried_max": 0.8999961968934873,
@@ -490742,10 +490734,10 @@
     "latency_mean_s": 813.2384068785047,
     "latency_p50_s": 844.621728,
     "latency_p95_s": 1609.621728,
-    "energy_per_msg_j": 0.129741413472,
-    "energy_per_delivered_j": 0.7275219447028036,
-    "energy_per_on_time_j": 0.7275219447028036,
-    "battery_years": 10.18503615148301,
+    "energy_per_msg_j": 0.12844055663999998,
+    "energy_per_delivered_j": 0.7202274204112148,
+    "energy_per_on_time_j": 0.7202274204112148,
+    "battery_years": 10.273502144813467,
     "battery_limited_by": "energy",
     "alloc_hz": 137000.0,
     "on_time_msgs_per_s_per_mhz": 15.407397783400624,
@@ -490754,7 +490746,7 @@
     "energy_basis": "generated",
     "n_mc": 3000,
     "seed": 20261122,
-    "model_version": "1.8.0",
+    "model_version": "1.9.0",
     "toa_s": 2.121728,
     "device_duty_cycle": 0.0023574755555555555,
     "duty_cycle_compliant": true,
@@ -490782,7 +490774,7 @@
     "rx2_snr_edge_db": -14.359475994917887,
     "rx1_share": 0.0,
     "pdr_deadline_confirmed_mode": 0.149,
-    "energy_per_msg_confirmed_j": 0.12976047216,
+    "energy_per_msg_confirmed_j": 0.128456371296,
     "pdr_confirmed_deadline": 0.002,
     "pdr_confirmed_deadline_ci95": [
      0.0009169177531076662,
@@ -498078,9 +498070,9 @@
     "latency_mean_s": 167.02151466666578,
     "latency_p50_s": 89.07644799999865,
     "latency_p95_s": 332.911648,
-    "energy_per_msg_j": 0.031179810815999996,
-    "energy_per_delivered_j": 31.179810815999996,
-    "energy_per_on_time_j": 31.179810815999996,
+    "energy_per_msg_j": 0.029363152895999996,
+    "energy_per_delivered_j": 29.363152895999995,
+    "energy_per_on_time_j": 29.363152895999995,
     "battery_years": 15.0,
     "battery_limited_by": "calendar",
     "alloc_hz": 1000000.0,
@@ -498090,7 +498082,7 @@
     "energy_basis": "generated",
     "n_mc": 3000,
     "seed": 20261122,
-    "model_version": "1.8.0",
+    "model_version": "1.9.0",
     "toa_s": 0.41164799999999996,
     "device_duty_cycle": 0.00045738666666666664,
     "duty_cycle_compliant": true,
@@ -498107,7 +498099,7 @@
     "rx2_snr_edge_db": -14.359475994917887,
     "rx1_share": 0.0,
     "pdr_deadline_confirmed_mode": 0.001,
-    "energy_per_msg_confirmed_j": 0.031186163711999997,
+    "energy_per_msg_confirmed_j": 0.029368424448,
     "pdr_confirmed_deadline": 0.0006666666666666666,
     "pdr_confirmed_deadline_ci95": [
      0.0001828392603776389,
@@ -505544,10 +505536,10 @@
     "latency_mean_s": null,
     "latency_p50_s": null,
     "latency_p95_s": null,
-    "energy_per_msg_j": 0.09557851564799999,
+    "energy_per_msg_j": 0.09490051295999997,
     "energy_per_delivered_j": null,
     "energy_per_on_time_j": null,
-    "battery_years": 13.161392115700412,
+    "battery_years": 13.238168368097226,
     "battery_limited_by": "energy",
     "alloc_hz": 1000000.0,
     "on_time_msgs_per_s_per_mhz": 0.0,
@@ -505556,7 +505548,7 @@
     "energy_basis": "generated",
     "n_mc": 3000,
     "seed": 20261122,
-    "model_version": "1.8.0",
+    "model_version": "1.9.0",
     "toa_s": 1.4827519999999998,
     "device_duty_cycle": 0.001647502222222222,
     "duty_cycle_compliant": true,
@@ -505573,7 +505565,7 @@
     "rx2_snr_edge_db": -14.359475994917887,
     "rx1_share": null,
     "pdr_deadline_confirmed_mode": 0.0,
-    "energy_per_msg_confirmed_j": 0.09557851564799999,
+    "energy_per_msg_confirmed_j": 0.09490051295999997,
     "pdr_confirmed_deadline": 0.0,
     "pdr_confirmed_deadline_ci95": [
      1.0842021724855044e-19,
@@ -512920,10 +512912,10 @@
     "latency_mean_s": 15.133091636363636,
     "latency_p50_s": 2.121728,
     "latency_p95_s": 119.621728,
-    "energy_per_msg_j": 0.21671533141631993,
-    "energy_per_delivered_j": 4.925348441279999,
-    "energy_per_on_time_j": 4.925348441279999,
-    "battery_years": 6.463701828025819,
+    "energy_per_msg_j": 0.2178009953856,
+    "energy_per_delivered_j": 4.950022622400001,
+    "energy_per_on_time_j": 4.950022622400001,
+    "battery_years": 6.434355917801135,
     "battery_limited_by": "energy",
     "alloc_hz": 137000.0,
     "on_time_msgs_per_s_per_mhz": 3.8014514157175365,
@@ -512932,7 +512924,7 @@
     "energy_basis": "generated",
     "n_mc": 3000,
     "seed": 20261122,
-    "model_version": "1.8.0",
+    "model_version": "1.9.0",
     "toa_s": 2.121728,
     "device_duty_cycle": 0.0023574755555555555,
     "duty_cycle_compliant": null,
@@ -512960,7 +512952,7 @@
     "rx2_snr_edge_db": -9.09376322972426,
     "rx1_share": 0.6521739130434783,
     "pdr_deadline_confirmed_mode": 0.044,
-    "energy_per_msg_confirmed_j": 0.21788802600575996,
+    "energy_per_msg_confirmed_j": 0.21787066063487998,
     "pdr_confirmed_deadline": 0.030333333333333334,
     "pdr_confirmed_deadline_ci95": [
      0.02477142129064382,
@@ -522050,10 +522042,10 @@
     "latency_mean_s": 220.17430059504545,
     "latency_p50_s": 44.621728,
     "latency_p95_s": 1184.621728,
-    "energy_per_msg_j": 3.6959250366719996,
-    "energy_per_delivered_j": 4.26945518290951,
-    "energy_per_on_time_j": 4.26945518290951,
-    "battery_years": 0.4127767825367837,
+    "energy_per_msg_j": 3.697162428441599,
+    "energy_per_delivered_j": 4.270884591961801,
+    "energy_per_on_time_j": 4.270884591961801,
+    "battery_years": 0.4126398018415416,
     "battery_limited_by": "energy",
     "alloc_hz": 137000.0,
     "on_time_msgs_per_s_per_mhz": 74.79067671680639,
@@ -522062,7 +522054,7 @@
     "energy_basis": "generated",
     "n_mc": 3000,
     "seed": 20261122,
-    "model_version": "1.8.0",
+    "model_version": "1.9.0",
     "toa_s": 2.121728,
     "device_duty_cycle": 0.0023574755555555555,
     "duty_cycle_compliant": null,
@@ -522090,7 +522082,7 @@
     "rx2_snr_edge_db": -9.09376322972426,
     "rx1_share": 0.5691318327974276,
     "pdr_deadline_confirmed_mode": 0.8656666666666667,
-    "energy_per_msg_confirmed_j": 3.698184375936,
+    "energy_per_msg_confirmed_j": 3.6979504554239995,
     "pdr_confirmed_deadline": 0.29533333333333334,
     "pdr_confirmed_deadline_ci95": [
      0.2792787857893417,
@@ -531193,7 +531185,7 @@
     "energy_basis": "generated",
     "n_mc": 3000,
     "seed": 20261122,
-    "model_version": "1.8.0",
+    "model_version": "1.9.0",
     "rho_max": 0.008534032971418215,
     "rho_dl_max": 0.04888716593641105,
     "rho_dl_carried_max": 0.04888716593641105,
@@ -585153,10 +585145,10 @@
     "latency_mean_s": 4.434561217751469,
     "latency_p50_s": 2.1294496951496806,
     "latency_p95_s": 2.1306869418541448,
-    "energy_per_msg_j": 0.8281808832,
-    "energy_per_delivered_j": 0.8303952705882354,
-    "energy_per_on_time_j": 0.8303952705882354,
-    "battery_years": 1.8112032069103299,
+    "energy_per_msg_j": 0.8283836352,
+    "energy_per_delivered_j": 0.8305985647058824,
+    "energy_per_on_time_j": 0.8305985647058824,
+    "battery_years": 1.8107710299322781,
     "battery_limited_by": "energy",
     "alloc_hz": 200000.0,
     "on_time_msgs_per_s_per_mhz": 2.6995434933845974,
@@ -585165,7 +585157,7 @@
     "energy_basis": "generated",
     "n_mc": 3000,
     "seed": 20261122,
-    "model_version": "1.8.0",
+    "model_version": "1.9.0",
     "toa_s": 2.121728,
     "device_duty_cycle": 0.0023574755555555555,
     "duty_cycle_compliant": null,
@@ -585193,7 +585185,7 @@
     "rx2_snr_edge_db": 10.945612216467573,
     "rx1_share": 0.918937100571813,
     "pdr_deadline_confirmed_mode": 0.9973333333333333,
-    "energy_per_msg_confirmed_j": 0.8289652588800002,
+    "energy_per_msg_confirmed_j": 0.82884838784,
     "pdr_confirmed_deadline": 0.9573333333333334,
     "pdr_confirmed_deadline_ci95": [
      0.9494972350573607,
@@ -594287,10 +594279,10 @@
     "latency_mean_s": 1.9571420162583006,
     "latency_p50_s": 1.4880587640567935,
     "latency_p95_s": 1.4910842410202259,
-    "energy_per_msg_j": 0.5858516927999999,
-    "energy_per_delivered_j": 15.692456057142854,
-    "energy_per_on_time_j": 15.692456057142854,
-    "battery_years": 2.534067689804742,
+    "energy_per_msg_j": 0.5795663807999999,
+    "energy_per_delivered_j": 15.524099485714281,
+    "energy_per_on_time_j": 15.524099485714281,
+    "battery_years": 2.5605739304898956,
     "battery_limited_by": "energy",
     "alloc_hz": 200000.0,
     "on_time_msgs_per_s_per_mhz": 0.10105243023364804,
@@ -594299,7 +594291,7 @@
     "energy_basis": "generated",
     "n_mc": 3000,
     "seed": 20261122,
-    "model_version": "1.8.0",
+    "model_version": "1.9.0",
     "toa_s": 1.4827519999999998,
     "device_duty_cycle": 0.001647502222222222,
     "duty_cycle_compliant": null,
@@ -594316,7 +594308,7 @@
     "rx2_snr_edge_db": 10.945612216467573,
     "rx1_share": 1.0,
     "pdr_deadline_confirmed_mode": 0.037333333333333336,
-    "energy_per_msg_confirmed_j": 0.585877081856,
+    "energy_per_msg_confirmed_j": 0.5795840413439999,
     "pdr_confirmed_deadline": 0.037,
     "pdr_confirmed_deadline_ci95": [
      0.030815776589976786,
@@ -603421,7 +603413,7 @@
     "energy_basis": "generated",
     "n_mc": 3000,
     "seed": 20261122,
-    "model_version": "1.8.0",
+    "model_version": "1.9.0",
     "rho_max": 0.14349707157500727,
     "rho_dl_max": 0.5392827437526759,
     "rho_dl_carried_max": 0.5392827437526759,
@@ -649485,10 +649477,10 @@
     "latency_mean_s": 163.79144340781963,
     "latency_p50_s": 2.121728,
     "latency_p95_s": 1099.621728,
-    "energy_per_msg_j": 0.8281808832,
-    "energy_per_delivered_j": 0.9878897215109345,
-    "energy_per_on_time_j": 0.9878897215109345,
-    "battery_years": 1.8112032069103299,
+    "energy_per_msg_j": 0.8283836352,
+    "energy_per_delivered_j": 0.9881315728031809,
+    "energy_per_on_time_j": 0.9881315728031809,
+    "battery_years": 1.8107710299322781,
     "battery_limited_by": "energy",
     "alloc_hz": 200000.0,
     "on_time_msgs_per_s_per_mhz": 49.613980778127114,
@@ -649497,7 +649489,7 @@
     "energy_basis": "generated",
     "n_mc": 3000,
     "seed": 20261122,
-    "model_version": "1.8.0",
+    "model_version": "1.9.0",
     "toa_s": 2.121728,
     "device_duty_cycle": 0.0023574755555555555,
     "duty_cycle_compliant": null,
@@ -649525,7 +649517,7 @@
     "rx2_snr_edge_db": -2.5814352396972566,
     "rx1_share": 0.6834719334719335,
     "pdr_deadline_confirmed_mode": 0.8383333333333334,
-    "energy_per_msg_confirmed_j": 0.828775346432,
+    "energy_per_msg_confirmed_j": 0.82869721088,
     "pdr_confirmed_deadline": 0.6153333333333333,
     "pdr_confirmed_deadline_ci95": [
      0.5977865786955109,
@@ -658618,10 +658610,10 @@
     "latency_mean_s": null,
     "latency_p50_s": null,
     "latency_p95_s": null,
-    "energy_per_msg_j": 0.5858516927999999,
+    "energy_per_msg_j": 0.5795663807999999,
     "energy_per_delivered_j": null,
     "energy_per_on_time_j": null,
-    "battery_years": 2.534067689804742,
+    "battery_years": 2.5605739304898956,
     "battery_limited_by": "energy",
     "alloc_hz": 200000.0,
     "on_time_msgs_per_s_per_mhz": 0.0,
@@ -658630,7 +658622,7 @@
     "energy_basis": "generated",
     "n_mc": 3000,
     "seed": 20261122,
-    "model_version": "1.8.0",
+    "model_version": "1.9.0",
     "toa_s": 1.4827519999999998,
     "device_duty_cycle": 0.001647502222222222,
     "duty_cycle_compliant": null,
@@ -658647,7 +658639,7 @@
     "rx2_snr_edge_db": -2.5814352396972566,
     "rx1_share": null,
     "pdr_deadline_confirmed_mode": 0.0,
-    "energy_per_msg_confirmed_j": 0.5858516927999999,
+    "energy_per_msg_confirmed_j": 0.5795663807999999,
     "pdr_confirmed_deadline": 0.0,
     "pdr_confirmed_deadline_ci95": [
      1.0842021724855044e-19,
@@ -667755,7 +667747,7 @@
     "energy_basis": "generated",
     "n_mc": 3000,
     "seed": 20261122,
-    "model_version": "1.8.0",
+    "model_version": "1.9.0",
     "rho_max": 0.002970516456593369,
     "rho_dl_max": 0.058174129031512534,
     "rho_dl_carried_max": 0.058174129031512534,
@@ -721697,7 +721689,7 @@
     "energy_basis": "generated",
     "n_mc": 3000,
     "seed": 20261122,
-    "model_version": "1.8.0",
+    "model_version": "1.9.0",
     "rho_max": 0.01693723029334514,
     "rho_dl_max": 0.017949268402510085,
     "rho_dl_carried_max": 0.017949268402510085,
@@ -775533,7 +775525,7 @@
     "energy_basis": "generated",
     "n_mc": 3000,
     "seed": 20261122,
-    "model_version": "1.8.0",
+    "model_version": "1.9.0",
     "rho_max": 0.46253971162697183,
     "rho_dl_max": 0.8999723409738036,
     "rho_dl_carried_max": 0.8999723409738036,
@@ -795990,10 +795982,10 @@
     "latency_mean_s": 456.11483733333336,
     "latency_p50_s": 430.236128,
     "latency_p95_s": 865.236128,
-    "energy_per_msg_j": 0.15385058304,
-    "energy_per_delivered_j": 1.5385058303999999,
-    "energy_per_on_time_j": 1.5385058303999999,
-    "battery_years": 8.783294338003833,
+    "energy_per_msg_j": 0.15333153791999998,
+    "energy_per_delivered_j": 1.5333153791999998,
+    "energy_per_on_time_j": 1.5333153791999998,
+    "battery_years": 8.809396378898192,
     "battery_limited_by": "energy",
     "alloc_hz": 137000.0,
     "on_time_msgs_per_s_per_mhz": 7.828632300338648,
@@ -796002,7 +795994,7 @@
     "energy_basis": "generated",
     "n_mc": 3000,
     "seed": 20261122,
-    "model_version": "1.8.0",
+    "model_version": "1.9.0",
     "toa_s": 2.736128,
     "device_duty_cycle": 0.003040142222222222,
     "duty_cycle_compliant": true,
@@ -796030,7 +796022,7 @@
     "rx2_snr_edge_db": -17.359475994917887,
     "rx1_share": null,
     "pdr_deadline_confirmed_mode": 0.084,
-    "energy_per_msg_confirmed_j": 0.15385058304,
+    "energy_per_msg_confirmed_j": 0.15333153791999998,
     "pdr_confirmed_deadline": 0.0,
     "pdr_confirmed_deadline_ci95": [
      1.0842021724855044e-19,
@@ -803083,9 +803075,9 @@
     "latency_mean_s": 502.993568,
     "latency_p50_s": 892.993568,
     "latency_p95_s": 892.993568,
-    "energy_per_msg_j": 0.051766273503999996,
-    "energy_per_delivered_j": 77.649410256,
-    "energy_per_on_time_j": 77.649410256,
+    "energy_per_msg_j": 0.05091390409600001,
+    "energy_per_delivered_j": 76.37085614400002,
+    "energy_per_on_time_j": 76.37085614400002,
     "battery_years": 15.0,
     "battery_limited_by": "calendar",
     "alloc_hz": 1000000.0,
@@ -803095,7 +803087,7 @@
     "energy_basis": "generated",
     "n_mc": 3000,
     "seed": 20261122,
-    "model_version": "1.8.0",
+    "model_version": "1.9.0",
     "toa_s": 0.493568,
     "device_duty_cycle": 0.0005484088888888889,
     "duty_cycle_compliant": true,
@@ -803112,7 +803104,7 @@
     "rx2_snr_edge_db": -17.359475994917887,
     "rx1_share": null,
     "pdr_deadline_confirmed_mode": 0.0006666666666666666,
-    "energy_per_msg_confirmed_j": 0.051766273503999996,
+    "energy_per_msg_confirmed_j": 0.05091390409600001,
     "pdr_confirmed_deadline": 0.0,
     "pdr_confirmed_deadline_ci95": [
      1.0842021724855044e-19,
@@ -810268,7 +810260,7 @@
     "energy_basis": "generated",
     "n_mc": 3000,
     "seed": 20261122,
-    "model_version": "1.8.0",
+    "model_version": "1.9.0",
     "toa_s": 1.974272,
     "device_duty_cycle": 0.0021936355555555558,
     "duty_cycle_compliant": true,
@@ -817377,10 +817369,10 @@
     "latency_mean_s": 2.736128,
     "latency_p50_s": 2.736128,
     "latency_p95_s": 2.736128,
-    "energy_per_msg_j": 0.3145714223590399,
-    "energy_per_delivered_j": 94.37142670771196,
-    "energy_per_on_time_j": 94.37142670771196,
-    "battery_years": 4.580650681122515,
+    "energy_per_msg_j": 0.31853299098367993,
+    "energy_per_delivered_j": 95.55989729510398,
+    "energy_per_on_time_j": 95.55989729510398,
+    "battery_years": 4.527256342856507,
     "battery_limited_by": "energy",
     "alloc_hz": 137000.0,
     "on_time_msgs_per_s_per_mhz": 0.2609544100112883,
@@ -817389,7 +817381,7 @@
     "energy_basis": "generated",
     "n_mc": 3000,
     "seed": 20261122,
-    "model_version": "1.8.0",
+    "model_version": "1.9.0",
     "toa_s": 2.736128,
     "device_duty_cycle": 0.003040142222222222,
     "duty_cycle_compliant": null,
@@ -817417,7 +817409,7 @@
     "rx2_snr_edge_db": -12.09376322972426,
     "rx1_share": 0.6,
     "pdr_deadline_confirmed_mode": 0.0033333333333333335,
-    "energy_per_msg_confirmed_j": 0.3185520996838399,
+    "energy_per_msg_confirmed_j": 0.3185484771814399,
     "pdr_confirmed_deadline": 0.0016666666666666668,
     "pdr_confirmed_deadline_ci95": [
      0.0007120934361692268,
@@ -826244,10 +826236,10 @@
     "latency_mean_s": 128.26272706960034,
     "latency_p50_s": 2.736128,
     "latency_p95_s": 540.236128,
-    "energy_per_msg_j": 4.412966771228443,
-    "energy_per_delivered_j": 5.944723984591526,
-    "energy_per_on_time_j": 5.944723984591526,
-    "battery_years": 0.3461833196395631,
+    "energy_per_msg_j": 4.4174819919132435,
+    "energy_per_delivered_j": 5.95080645520419,
+    "energy_per_on_time_j": 5.95080645520419,
+    "battery_years": 0.34583198898277606,
     "battery_limited_by": "energy",
     "alloc_hz": 137000.0,
     "on_time_msgs_per_s_per_mhz": 58.11454710951389,
@@ -826256,7 +826248,7 @@
     "energy_basis": "generated",
     "n_mc": 3000,
     "seed": 20261122,
-    "model_version": "1.8.0",
+    "model_version": "1.9.0",
     "toa_s": 2.736128,
     "device_duty_cycle": 0.003040142222222222,
     "duty_cycle_compliant": null,
@@ -826284,7 +826276,7 @@
     "rx2_snr_edge_db": -12.09376322972426,
     "rx1_share": 0.5177514792899408,
     "pdr_deadline_confirmed_mode": 0.7423333333333333,
-    "energy_per_msg_confirmed_j": 4.4189772252444435,
+    "energy_per_msg_confirmed_j": 4.418684495593244,
     "pdr_confirmed_deadline": 0.11133333333333334,
     "pdr_confirmed_deadline_ci95": [
      0.10057079105127223,
@@ -835124,7 +835116,7 @@
     "energy_basis": "generated",
     "n_mc": 3000,
     "seed": 20261122,
-    "model_version": "1.8.0",
+    "model_version": "1.9.0",
     "rho_max": 0.0040099162152256946,
     "rho_dl_max": 0.06708326981978961,
     "rho_dl_carried_max": 0.06708326981978961,
@@ -889054,10 +889046,10 @@
     "latency_mean_s": 5.669913852268146,
     "latency_p50_s": 2.7438468838662144,
     "latency_p95_s": 30.24447806851057,
-    "energy_per_msg_j": 1.1334282432,
-    "energy_per_delivered_j": 1.1391238625125628,
-    "energy_per_on_time_j": 1.1391238625125628,
-    "battery_years": 1.3324304669088176,
+    "energy_per_msg_j": 1.1336309951999999,
+    "energy_per_delivered_j": 1.139327633366834,
+    "energy_per_on_time_j": 1.139327633366834,
+    "battery_years": 1.3321965596095358,
     "battery_limited_by": "energy",
     "alloc_hz": 200000.0,
     "on_time_msgs_per_s_per_mhz": 0.05650128076562925,
@@ -889066,7 +889058,7 @@
     "energy_basis": "generated",
     "n_mc": 3000,
     "seed": 20261122,
-    "model_version": "1.8.0",
+    "model_version": "1.9.0",
     "toa_s": 2.736128,
     "device_duty_cycle": 0.003040142222222222,
     "duty_cycle_compliant": null,
@@ -889094,7 +889086,7 @@
     "rx2_snr_edge_db": 10.716564066928642,
     "rx1_share": 0.9912897822445561,
     "pdr_deadline_confirmed_mode": 0.995,
-    "energy_per_msg_confirmed_j": 1.134207668352,
+    "energy_per_msg_confirmed_j": 1.1340964574719998,
     "pdr_confirmed_deadline": 0.9733333333333334,
     "pdr_confirmed_deadline_ci95": [
      0.966934813333022,
@@ -898188,10 +898180,10 @@
     "latency_mean_s": 2.960632810851539,
     "latency_p50_s": 1.9814259317091014,
     "latency_p95_s": 1.983001401133338,
-    "energy_per_msg_j": 0.8432495808,
-    "energy_per_delivered_j": 1.4767943621716288,
-    "energy_per_on_time_j": 1.4767943621716288,
-    "battery_years": 1.7796357366859876,
+    "energy_per_msg_j": 0.8369642687999999,
+    "energy_per_delivered_j": 1.4657868105078808,
+    "energy_per_on_time_j": 1.4657868105078808,
+    "battery_years": 1.792668113179659,
     "battery_limited_by": "energy",
     "alloc_hz": 200000.0,
     "on_time_msgs_per_s_per_mhz": 0.03242435308258724,
@@ -898200,7 +898192,7 @@
     "energy_basis": "generated",
     "n_mc": 3000,
     "seed": 20261122,
-    "model_version": "1.8.0",
+    "model_version": "1.9.0",
     "toa_s": 1.974272,
     "device_duty_cycle": 0.0021936355555555558,
     "duty_cycle_compliant": null,
@@ -898217,7 +898209,7 @@
     "rx2_snr_edge_db": 10.716564066928642,
     "rx1_share": 0.9964973730297724,
     "pdr_deadline_confirmed_mode": 0.571,
-    "energy_per_msg_confirmed_j": 0.8436378973440001,
+    "energy_per_msg_confirmed_j": 0.8372308116480001,
     "pdr_confirmed_deadline": 0.558,
     "pdr_confirmed_deadline_ci95": [
      0.5401655534100318,
@@ -907322,7 +907314,7 @@
     "energy_basis": "generated",
     "n_mc": 3000,
     "seed": 20261122,
-    "model_version": "1.8.0",
+    "model_version": "1.9.0",
     "rho_max": 0.4704119130036422,
     "rho_dl_max": 0.8391828815049934,
     "rho_dl_carried_max": 0.8391828815049934,
@@ -949555,10 +949547,10 @@
     "latency_mean_s": 70.08784752264918,
     "latency_p50_s": 2.736128,
     "latency_p95_s": 430.236128,
-    "energy_per_msg_j": 1.0487989343744,
-    "energy_per_delivered_j": 1.4744127474804123,
-    "energy_per_on_time_j": 1.4744127474804123,
-    "battery_years": 1.4378038061276046,
+    "energy_per_msg_j": 1.0491741607423999,
+    "energy_per_delivered_j": 1.4749402447175255,
+    "energy_per_on_time_j": 1.4749402447175255,
+    "battery_years": 1.4372998344627954,
     "battery_limited_by": "energy",
     "alloc_hz": 200000.0,
     "on_time_msgs_per_s_per_mhz": 38.14605470104011,
@@ -949567,7 +949559,7 @@
     "energy_basis": "generated",
     "n_mc": 3000,
     "seed": 20261122,
-    "model_version": "1.8.0",
+    "model_version": "1.9.0",
     "toa_s": 2.736128,
     "device_duty_cycle": 0.003040142222222222,
     "duty_cycle_compliant": null,
@@ -949595,7 +949587,7 @@
     "rx2_snr_edge_db": -5.581435239697257,
     "rx1_share": 0.6572802197802198,
     "pdr_deadline_confirmed_mode": 0.7113333333333334,
-    "energy_per_msg_confirmed_j": 1.0496875963904,
+    "energy_per_msg_confirmed_j": 1.0495806109183996,
     "pdr_confirmed_deadline": 0.4746666666666667,
     "pdr_confirmed_deadline_ci95": [
      0.45684117637021937,
@@ -958464,10 +958456,10 @@
     "latency_mean_s": null,
     "latency_p50_s": null,
     "latency_p95_s": null,
-    "energy_per_msg_j": 0.7802869454336001,
+    "energy_per_msg_j": 0.7746585499136001,
     "energy_per_delivered_j": null,
     "energy_per_on_time_j": null,
-    "battery_years": 1.919417054448375,
+    "battery_years": 1.9329892202161654,
     "battery_limited_by": "energy",
     "alloc_hz": 200000.0,
     "on_time_msgs_per_s_per_mhz": 0.0,
@@ -958476,7 +958468,7 @@
     "energy_basis": "generated",
     "n_mc": 3000,
     "seed": 20261122,
-    "model_version": "1.8.0",
+    "model_version": "1.9.0",
     "toa_s": 1.974272,
     "device_duty_cycle": 0.0021936355555555558,
     "duty_cycle_compliant": null,
@@ -958493,7 +958485,7 @@
     "rx2_snr_edge_db": -5.581435239697257,
     "rx1_share": null,
     "pdr_deadline_confirmed_mode": 0.0,
-    "energy_per_msg_confirmed_j": 0.7802869454336001,
+    "energy_per_msg_confirmed_j": 0.7746585499136001,
     "pdr_confirmed_deadline": 0.0,
     "pdr_confirmed_deadline_ci95": [
      1.0842021724855044e-19,
@@ -967377,7 +967369,7 @@
     "energy_basis": "generated",
     "n_mc": 3000,
     "seed": 20261122,
-    "model_version": "1.8.0",
+    "model_version": "1.9.0",
     "rho_max": 0.16475140122750362,
     "rho_dl_max": 0.8999876172707845,
     "rho_dl_carried_max": 0.8999876172707845,
@@ -999299,7 +999291,7 @@
     "energy_basis": "generated",
     "n_mc": 3000,
     "seed": 20261122,
-    "model_version": "1.8.0",
+    "model_version": "1.9.0",
     "rho_max": 2.406094139766173,
     "rho_dl_max": 0.899996985706876,
     "rho_dl_carried_max": 0.899996985706876,
@@ -1034310,7 +1034302,7 @@
     "energy_basis": "generated",
     "n_mc": 3000,
     "seed": 20261122,
-    "model_version": "1.8.0",
+    "model_version": "1.9.0",
     "rho_max": 1.4424315762249584,
     "rho_dl_max": 0.8999869184366291,
     "rho_dl_carried_max": 0.8999869184366291,
@@ -1042931,10 +1042923,10 @@
     "latency_mean_s": 332.8831174736842,
     "latency_p50_s": 301.567328,
     "latency_p95_s": 591.567328,
-    "energy_per_msg_j": 0.12330987609600003,
-    "energy_per_delivered_j": 19.46998043621053,
-    "energy_per_on_time_j": 19.46998043621053,
-    "battery_years": 7.458538062357335,
+    "energy_per_msg_j": 0.12298331020800003,
+    "energy_per_delivered_j": 19.418417401263163,
+    "energy_per_on_time_j": 19.418417401263163,
+    "battery_years": 7.476290898465585,
     "battery_limited_by": "energy",
     "alloc_hz": 137000.0,
     "on_time_msgs_per_s_per_mhz": 2.9781077408760486,
@@ -1042943,7 +1042935,7 @@
     "energy_basis": "generated",
     "n_mc": 3000,
     "seed": 20261122,
-    "model_version": "1.8.0",
+    "model_version": "1.9.0",
     "toa_s": 4.067328000000001,
     "device_duty_cycle": 0.006778880000000001,
     "duty_cycle_compliant": true,
@@ -1042971,7 +1042963,7 @@
     "rx2_snr_edge_db": -24.359475994917887,
     "rx1_share": null,
     "pdr_deadline_confirmed_mode": 0.006333333333333333,
-    "energy_per_msg_confirmed_j": 0.12330987609600003,
+    "energy_per_msg_confirmed_j": 0.12298331020800003,
     "pdr_confirmed_deadline": 0.0,
     "pdr_confirmed_deadline_ci95": [
      1.0842021724855044e-19,
@@ -1049668,7 +1049660,7 @@
     "latency_mean_s": null,
     "latency_p50_s": null,
     "latency_p95_s": null,
-    "energy_per_msg_j": 0.029464820352000005,
+    "energy_per_msg_j": 0.028825746048,
     "energy_per_delivered_j": null,
     "energy_per_on_time_j": null,
     "battery_years": 15.0,
@@ -1049680,7 +1049672,7 @@
     "energy_basis": "generated",
     "n_mc": 3000,
     "seed": 20261122,
-    "model_version": "1.8.0",
+    "model_version": "1.9.0",
     "toa_s": 0.698368,
     "device_duty_cycle": 0.0011639466666666667,
     "duty_cycle_compliant": true,
@@ -1049697,7 +1049689,7 @@
     "rx2_snr_edge_db": -24.359475994917887,
     "rx1_share": null,
     "pdr_deadline_confirmed_mode": 0.0,
-    "energy_per_msg_confirmed_j": 0.029464820352000005,
+    "energy_per_msg_confirmed_j": 0.028825746048,
     "pdr_confirmed_deadline": 0.0,
     "pdr_confirmed_deadline_ci95": [
      1.0842021724855044e-19,
@@ -1056590,7 +1056582,7 @@
     "energy_basis": "generated",
     "n_mc": 3000,
     "seed": 20261122,
-    "model_version": "1.8.0",
+    "model_version": "1.9.0",
     "toa_s": 2.793472,
     "device_duty_cycle": 0.004655786666666667,
     "duty_cycle_compliant": true,
@@ -1063397,10 +1063389,10 @@
     "latency_mean_s": 4.067328000000001,
     "latency_p50_s": 4.067328000000001,
     "latency_p95_s": 4.067328000000001,
-    "energy_per_msg_j": 0.36628827105024,
-    "energy_per_delivered_j": 1098.86481315072,
-    "energy_per_on_time_j": 1098.86481315072,
-    "battery_years": 2.695762877671185,
+    "energy_per_msg_j": 0.37397956814592004,
+    "energy_per_delivered_j": 1121.9387044377602,
+    "energy_per_on_time_j": 1121.9387044377602,
+    "battery_years": 2.6423520895331762,
     "battery_limited_by": "energy",
     "alloc_hz": 137000.0,
     "on_time_msgs_per_s_per_mhz": 0.15674251267768674,
@@ -1063409,7 +1063401,7 @@
     "energy_basis": "generated",
     "n_mc": 3000,
     "seed": 20261122,
-    "model_version": "1.8.0",
+    "model_version": "1.9.0",
     "toa_s": 4.067328000000001,
     "device_duty_cycle": 0.006778880000000001,
     "duty_cycle_compliant": null,
@@ -1063437,7 +1063429,7 @@
     "rx2_snr_edge_db": -19.09376322972426,
     "rx1_share": 0.0,
     "pdr_deadline_confirmed_mode": 0.0003333333333333333,
-    "energy_per_msg_confirmed_j": 0.37014122497792007,
+    "energy_per_msg_confirmed_j": 0.3739854245248,
     "pdr_confirmed_deadline": 0.0003333333333333333,
     "pdr_confirmed_deadline_ci95": [
      5.884242821930163e-05,
@@ -1072184,10 +1072176,10 @@
     "latency_mean_s": 52.51975599045347,
     "latency_p50_s": 4.067328000000001,
     "latency_p95_s": 311.567328,
-    "energy_per_msg_j": 6.272425495637335,
-    "energy_per_delivered_j": 44.90996774919333,
-    "energy_per_on_time_j": 44.90996774919333,
-    "battery_years": 0.16298660372751578,
+    "energy_per_msg_j": 6.281191695854933,
+    "energy_per_delivered_j": 44.97273290588258,
+    "energy_per_on_time_j": 44.97273290588258,
+    "battery_years": 0.1627598952701229,
     "battery_limited_by": "energy",
     "alloc_hz": 137000.0,
     "on_time_msgs_per_s_per_mhz": 65.67511281195075,
@@ -1072196,7 +1072188,7 @@
     "energy_basis": "generated",
     "n_mc": 3000,
     "seed": 20261122,
-    "model_version": "1.8.0",
+    "model_version": "1.9.0",
     "toa_s": 4.067328000000001,
     "device_duty_cycle": 0.006778880000000001,
     "duty_cycle_compliant": null,
@@ -1072224,7 +1072216,7 @@
     "rx2_snr_edge_db": -19.09376322972426,
     "rx1_share": 0.0,
     "pdr_deadline_confirmed_mode": 0.13966666666666666,
-    "energy_per_msg_confirmed_j": 6.276975122722134,
+    "energy_per_msg_confirmed_j": 6.281325192686933,
     "pdr_confirmed_deadline": 0.006666666666666667,
     "pdr_confirmed_deadline_ci95": [
      0.004319805176810569,
@@ -1080984,7 +1080976,7 @@
     "energy_basis": "generated",
     "n_mc": 3000,
     "seed": 20261122,
-    "model_version": "1.8.0",
+    "model_version": "1.9.0",
     "rho_max": 0.16191263171588302,
     "rho_dl_max": 0.8999949646483486,
     "rho_dl_carried_max": 0.8999949646483486,
@@ -1112834,10 +1112826,10 @@
     "latency_mean_s": 5.5397090004771234,
     "latency_p50_s": 4.07454754936508,
     "latency_p95_s": 4.0762389921536135,
-    "energy_per_msg_j": 1.5857975232000001,
-    "energy_per_delivered_j": 3.2385245538461542,
-    "energy_per_on_time_j": 3.2385245538461542,
-    "battery_years": 0.6410898571757874,
+    "energy_per_msg_j": 1.5860002752000004,
+    "energy_per_delivered_j": 3.2389386151123225,
+    "energy_per_on_time_j": 3.2389386151123225,
+    "battery_years": 0.6410086293267065,
     "battery_limited_by": "energy",
     "alloc_hz": 200000.0,
     "on_time_msgs_per_s_per_mhz": 39.724590315281944,
@@ -1112846,7 +1112838,7 @@
     "energy_basis": "generated",
     "n_mc": 3000,
     "seed": 20261122,
-    "model_version": "1.8.0",
+    "model_version": "1.9.0",
     "toa_s": 4.067328000000001,
     "device_duty_cycle": 0.006778880000000001,
     "duty_cycle_compliant": null,
@@ -1112874,7 +1112866,7 @@
     "rx2_snr_edge_db": 9.214558090969886,
     "rx1_share": 0.6737064413938754,
     "pdr_deadline_confirmed_mode": 0.48966666666666664,
-    "energy_per_msg_confirmed_j": 1.5861933894400002,
+    "energy_per_msg_confirmed_j": 1.5861363006720004,
     "pdr_confirmed_deadline": 0.267,
     "pdr_confirmed_deadline_ci95": [
      0.25147449561725743,
@@ -1121968,10 +1121960,10 @@
     "latency_mean_s": null,
     "latency_p50_s": null,
     "latency_p95_s": null,
-    "energy_per_msg_j": 1.0962460608,
+    "energy_per_msg_j": 1.0899607487999998,
     "energy_per_delivered_j": null,
     "energy_per_on_time_j": null,
-    "battery_years": 0.9237163912739633,
+    "battery_years": 0.9289744603809303,
     "battery_limited_by": "energy",
     "alloc_hz": 200000.0,
     "on_time_msgs_per_s_per_mhz": 0.0,
@@ -1121980,7 +1121972,7 @@
     "energy_basis": "generated",
     "n_mc": 3000,
     "seed": 20261122,
-    "model_version": "1.8.0",
+    "model_version": "1.9.0",
     "toa_s": 2.793472,
     "device_duty_cycle": 0.004655786666666667,
     "duty_cycle_compliant": null,
@@ -1121997,7 +1121989,7 @@
     "rx2_snr_edge_db": 9.214558090969886,
     "rx1_share": null,
     "pdr_deadline_confirmed_mode": 0.0,
-    "energy_per_msg_confirmed_j": 1.0962460608,
+    "energy_per_msg_confirmed_j": 1.0899607487999998,
     "pdr_confirmed_deadline": 0.0,
     "pdr_confirmed_deadline_ci95": [
      1.0842021724855044e-19,
@@ -1131102,7 +1131094,7 @@
     "energy_basis": "generated",
     "n_mc": 3000,
     "seed": 20261122,
-    "model_version": "1.8.0",
+    "model_version": "1.9.0",
     "rho_max": 0.9670827892852348,
     "rho_dl_max": 0.8999920513156292,
     "rho_dl_carried_max": 0.8999920513156292,
@@ -1143980,10 +1143972,10 @@
     "latency_mean_s": 13.478685340720222,
     "latency_p50_s": 4.067328000000001,
     "latency_p95_s": 4.067328000000001,
-    "energy_per_msg_j": 1.4240461758336003,
-    "energy_per_delivered_j": 11.834178746539614,
-    "energy_per_on_time_j": 11.834178746539614,
-    "battery_years": 0.713188699310472,
+    "energy_per_msg_j": 1.4269593165696002,
+    "energy_per_delivered_j": 11.858387672323547,
+    "energy_per_on_time_j": 11.858387672323547,
+    "battery_years": 0.7117470864707712,
     "battery_limited_by": "energy",
     "alloc_hz": 200000.0,
     "on_time_msgs_per_s_per_mhz": 38.76007224750177,
@@ -1143992,7 +1143984,7 @@
     "energy_basis": "generated",
     "n_mc": 3000,
     "seed": 20261122,
-    "model_version": "1.8.0",
+    "model_version": "1.9.0",
     "toa_s": 4.067328000000001,
     "device_duty_cycle": 0.006778880000000001,
     "duty_cycle_compliant": null,
@@ -1144020,7 +1144012,7 @@
     "rx2_snr_edge_db": -12.58143523969727,
     "rx1_share": 0.4444444444444444,
     "pdr_deadline_confirmed_mode": 0.12033333333333333,
-    "energy_per_msg_confirmed_j": 1.4270914432896,
+    "energy_per_msg_confirmed_j": 1.4270671130496,
     "pdr_confirmed_deadline": 0.015,
     "pdr_confirmed_deadline_ci95": [
      0.011229317874161187,
@@ -1152807,10 +1152799,10 @@
     "latency_mean_s": null,
     "latency_p50_s": null,
     "latency_p95_s": null,
-    "energy_per_msg_j": 0.9844289625984001,
+    "energy_per_msg_j": 0.9815158218623999,
     "energy_per_delivered_j": null,
     "energy_per_on_time_j": null,
-    "battery_years": 1.027143666851281,
+    "battery_years": 1.0301487023251572,
     "battery_limited_by": "energy",
     "alloc_hz": 200000.0,
     "on_time_msgs_per_s_per_mhz": 0.0,
@@ -1152819,7 +1152811,7 @@
     "energy_basis": "generated",
     "n_mc": 3000,
     "seed": 20261122,
-    "model_version": "1.8.0",
+    "model_version": "1.9.0",
     "toa_s": 2.793472,
     "device_duty_cycle": 0.004655786666666667,
     "duty_cycle_compliant": null,
@@ -1152836,7 +1152828,7 @@
     "rx2_snr_edge_db": -12.58143523969727,
     "rx1_share": null,
     "pdr_deadline_confirmed_mode": 0.0,
-    "energy_per_msg_confirmed_j": 0.9844289625984001,
+    "energy_per_msg_confirmed_j": 0.9815158218623999,
     "pdr_confirmed_deadline": 0.0,
     "pdr_confirmed_deadline_ci95": [
      1.0842021724855044e-19,
@@ -1161709,7 +1161701,7 @@
      0.3139406731804442
     ],
     "latency_p95_s": 2040.031328,
-    "energy_per_msg_j": 0.207816193728,
+    "energy_per_msg_j": 0.20606225376,
     "noise_rise_db": 2.0921395455864165
    },
    {
@@ -1161721,7 +1161713,7 @@
      0.3968406485871244
     ],
     "latency_p95_s": 2725.031328,
-    "energy_per_msg_j": 0.207816193728,
+    "energy_per_msg_j": 0.20606225376,
     "noise_rise_db": 0.0
    },
    {
@@ -1161733,7 +1161725,7 @@
      0.041467670787811994
     ],
     "latency_p95_s": 1075.031328,
-    "energy_per_msg_j": 0.207816193728,
+    "energy_per_msg_j": 0.20606225376,
     "noise_rise_db": 8.566548177458094
    },
    {
@@ -1161745,7 +1161737,7 @@
      0.4985588625582544
     ],
     "latency_p95_s": 525.031328,
-    "energy_per_msg_j": 0.384370272,
+    "energy_per_msg_j": 0.38112623999999995,
     "noise_rise_db": 2.0921395455864165
    },
    {
@@ -1161757,7 +1161749,7 @@
      0.3817177454952602
     ],
     "latency_p95_s": 2620.031328,
-    "energy_per_msg_j": 0.207816193728,
+    "energy_per_msg_j": 0.20562376876799998,
     "noise_rise_db": 3.4924307627490685
    },
    {
@@ -1161769,7 +1161761,7 @@
      0.2081958211964135
     ],
     "latency_p95_s": 1155.031328,
-    "energy_per_msg_j": 0.207816193728,
+    "energy_per_msg_j": 0.20693922374399998,
     "noise_rise_db": 2.0921395455864165
    },
    {
@@ -1161781,7 +1161773,7 @@
      0.3173220062337052
     ],
     "latency_p95_s": 2035.031328,
-    "energy_per_msg_j": 0.207816193728,
+    "energy_per_msg_j": 0.20606225376,
     "noise_rise_db": 2.0921395455864165
    },
    {
@@ -1161793,7 +1161785,7 @@
      0.24812285026390984
     ],
     "latency_p95_s": 1335.031328,
-    "energy_per_msg_j": 0.253703026368,
+    "energy_per_msg_j": 0.25155980256000005,
     "noise_rise_db": 2.0921395455864165
    },
    {
@@ -1161805,7 +1161797,7 @@
      0.32340582003339285
     ],
     "latency_p95_s": 2215.031328,
-    "energy_per_msg_j": 0.207816193728,
+    "energy_per_msg_j": 0.20606225376,
     "noise_rise_db": 2.0921395455864165
    },
    {
@@ -1161817,7 +1161809,7 @@
      0.31901228641839297
     ],
     "latency_p95_s": 2135.031328,
-    "energy_per_msg_j": 0.207816193728,
+    "energy_per_msg_j": 0.20606225376,
     "noise_rise_db": 2.0921395455864165
    }
   ],
@@ -1162137,7 +1162129,7 @@
      0.9992879065638308
     ],
     "latency_p95_s": 10.04028426779301,
-    "energy_per_msg_j": 0.9876791232000001,
+    "energy_per_msg_j": 0.9878818752,
     "noise_rise_db": 0.0
    },
    {
@@ -1162149,7 +1162141,7 @@
      0.9998171607396225
     ],
     "latency_p95_s": 10.04028426779301,
-    "energy_per_msg_j": 0.9876791232000001,
+    "energy_per_msg_j": 0.9878818752,
     "noise_rise_db": 0.0
    },
    {
@@ -1162161,7 +1162153,7 @@
      0.9992879065638308
     ],
     "latency_p95_s": 10.04028426779301,
-    "energy_per_msg_j": 0.9876791232000001,
+    "energy_per_msg_j": 0.9878818752,
     "noise_rise_db": 0.0
    },
    {
@@ -1162173,7 +1162165,7 @@
      0.9992879065638308
     ],
     "latency_p95_s": 10.04028426779301,
-    "energy_per_msg_j": 0.9876791232000001,
+    "energy_per_msg_j": 0.9878818752,
     "noise_rise_db": 0.0
    }
   ],
@@ -1164468,7 +1164460,7 @@
      "snr_median_30deg_los_db": -8.215478397158776
     },
     "on_time_by_ce": null,
-    "energy_per_msg_j": 0.207816193728,
+    "energy_per_msg_j": 0.20606225376,
     "battery_years": 15.0,
     "causes": {
      "ok": 0.29733333333333334,
@@ -1164504,7 +1164496,7 @@
      "snr_median_30deg_los_db": -8.215478397158776
     },
     "on_time_by_ce": null,
-    "energy_per_msg_j": 0.207816193728,
+    "energy_per_msg_j": 0.20693922374399998,
     "battery_years": 15.0,
     "causes": {
      "ok": 0.29733333333333334,
@@ -1164540,7 +1164532,7 @@
      "snr_median_30deg_los_db": -8.215478397158776
     },
     "on_time_by_ce": null,
-    "energy_per_msg_j": 0.207816193728,
+    "energy_per_msg_j": 0.20540452627199995,
     "battery_years": 15.0,
     "causes": {
      "ok": 0.29733333333333334,
@@ -1164576,7 +1164568,7 @@
      "snr_median_30deg_los_db": -8.215478397158776
     },
     "on_time_by_ce": null,
-    "energy_per_msg_j": 0.207816193728,
+    "energy_per_msg_j": 0.20606225376,
     "battery_years": 15.0,
     "causes": {
      "ok": 0.29733333333333334,
@@ -1164612,8 +1164604,8 @@
      "snr_median_30deg_los_db": -8.215478397158776
     },
     "on_time_by_ce": null,
-    "energy_per_msg_j": 0.384370272,
-    "battery_years": 13.103772376990793,
+    "energy_per_msg_j": 0.38112623999999995,
+    "battery_years": 13.194909150301564,
     "causes": {
      "ok": 0.4806666666666667,
      "snr": 0.518,
@@ -1164648,7 +1164640,7 @@
      "snr_median_30deg_los_db": -8.215478397158776
     },
     "on_time_by_ce": null,
-    "energy_per_msg_j": 0.207816193728,
+    "energy_per_msg_j": 0.20606225376,
     "battery_years": 15.0,
     "causes": {
      "ok": 0.37933333333333336,
@@ -1164686,8 +1164678,8 @@
      "snr_median_30deg_los_db": -2.9497656319651355
     },
     "on_time_by_ce": null,
-    "energy_per_msg_j": 4.413420928000001,
-    "battery_years": 1.3556911010365513,
+    "energy_per_msg_j": 4.4146595583999995,
+    "battery_years": 1.3553213149874133,
     "causes": {
      "ok": 0.8686666666666667,
      "snr": 0.13033333333333333,
@@ -1164722,8 +1164714,8 @@
      "snr_median_30deg_los_db": -2.9497656319651355
     },
     "on_time_by_ce": null,
-    "energy_per_msg_j": 4.413420928000001,
-    "battery_years": 1.3556911010365513,
+    "energy_per_msg_j": 4.4146595583999995,
+    "battery_years": 1.3553213149874133,
     "causes": {
      "ok": 0.8686666666666667,
      "snr": 0.13033333333333333,
@@ -1164738,7 +1164730,7 @@
    {
     "case": "EU868 RX1 mapping (SF11), RX1 first",
     "pdr_deadline": 0.8686666666666667,
-    "pdr_confirmed_deadline": 0.40166666666666667,
+    "pdr_confirmed_deadline": 0.39766666666666667,
     "pdr_deadline_confirmed_mode": 0.8686666666666667,
     "dl_failures": 0.0,
     "rho_dl_max": null,
@@ -1164758,8 +1164750,8 @@
      "snr_median_30deg_los_db": -2.9497656319651355
     },
     "on_time_by_ce": null,
-    "energy_per_msg_j": 4.413420928000001,
-    "battery_years": 1.3556911010365513,
+    "energy_per_msg_j": 4.416517504000001,
+    "battery_years": 1.354767014002593,
     "causes": {
      "ok": 0.8686666666666667,
      "snr": 0.13033333333333333,
@@ -1164794,8 +1164786,8 @@
      "snr_median_30deg_los_db": -2.9497656319651355
     },
     "on_time_by_ce": null,
-    "energy_per_msg_j": 4.413420928000001,
-    "battery_years": 1.3556911010365513,
+    "energy_per_msg_j": 4.423329971199999,
+    "battery_years": 1.3527384503165871,
     "causes": {
      "ok": 0.8686666666666667,
      "snr": 0.13033333333333333,
@@ -1164830,8 +1164822,8 @@
      "snr_median_30deg_los_db": 3.0502343680348645
     },
     "on_time_by_ce": null,
-    "energy_per_msg_j": 4.413420928000001,
-    "battery_years": 1.3556911010365513,
+    "energy_per_msg_j": 4.413730585600001,
+    "battery_years": 1.3555986356082177,
     "causes": {
      "ok": 0.8686666666666667,
      "snr": 0.13033333333333333,

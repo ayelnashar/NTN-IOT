@@ -20,7 +20,7 @@ def code(s, hidden=False):
 
 
 cells = [md("""
-# Operator 3GPP IoT-NTN vs IoT-only LoRaWAN NTN: LEO simulator (v1.8.0, frozen version used in the paper)
+# Operator 3GPP IoT-NTN vs IoT-only LoRaWAN NTN: LEO simulator (v1.9.0, frozen version used in the paper)
 
 **What it compares.** The same IoT scenarios served by hypothetical architectures representing two business models (infrastructure scale, spectrum and technology are confounded in the main stacks; the control stacks and sensitivity analysis separate them):
 

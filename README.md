@@ -1,10 +1,10 @@
-# ntnsim v1.8.0: Operator 3GPP IoT-NTN vs IoT-only LoRaWAN NTN over LEO
+# ntnsim v1.9.0: Operator 3GPP IoT-NTN vs IoT-only LoRaWAN NTN over LEO
 
 Code and frozen results for the paper
 
 > A. Elnashar, "Operator-Led 3GPP IoT-NTN Versus IoT-Only LoRaWAN Direct-to-Satellite Networks: A Same-Scenario LEO Simulation Study," submitted to *IEEE Open Journal of the Communications Society*, 2026.
 
-Every number, table and figure in the paper comes from `frozen/results.json`, produced by `scripts/run_batch.py` with the code in this repository (version 1.8.0). All presets are illustrative system classes, not any operator's deployment, and no measured network data is used.
+Every number, table and figure in the paper comes from `frozen/results.json`, produced by `scripts/run_batch.py` with the code in this repository (version 1.9.0). All presets are illustrative system classes, not any operator's deployment, and no measured network data is used.
 
 ## Repository layout
 
@@ -15,10 +15,10 @@ Every number, table and figure in the paper comes from `frozen/results.json`, pr
 | `frozen/` | `results.json`, CSV tables (link budgets, scenario summary) and all figures (PNG and PDF) used in the paper |
 | `scripts/run_batch.py` | Recomputes every result (about 3.5 h of processor time, about 3 GB RAM, checkpointed) |
 | `scripts/build_notebook.py` | Rebuilds the notebook from the package |
-| `CHANGELOG.md` | Model history and the stated limitations of v1.8.0 |
+| `CHANGELOG.md` | Model history and the stated limitations of v1.9.0 |
 | `PORTING.md` | Notes for porting the model to other bands or regions |
 
-## Headline results (frozen v1.8.0, utility-wells scenario)
+## Headline results (frozen v1.9.0, utility-wells scenario)
 
 | Quantity | Value |
 |---|---|
@@ -41,6 +41,7 @@ The downlink is modelled for every stack (`ntnsim/downlink.py`, `ntnsim/txn.py`)
 
 - Link budget: satellite EIRP density from 3GPP TR 36.763 Set 4 (small satellites, fixed EIRP) or the array aperture gain at the downlink frequency plus an assumed 8.5 dBW/MHz RF density (arrays); each device's uplink realisation re-evaluated at the downlink frequency in the same physical direction with the downlink beamwidth; co-channel beams at reuse 3. The model reports the RF power needed to light every beam of the footprint (about 21 kW for NB-IoT, 126 kW for LTE-M at the assumed density).
 - 3GPP: declared NB-IoT and LTE-M configurations; control and shared channels with a gap anchored at the NPDSCH reference point (TBS 680, 8 subframes, 128 repetitions, -14.7 dB) for the active beta; assumed acquisition limit -14.7 dB (non-acquired devices send no preamble); initial coverage level from the downlink measurement, three attempts per level, five in total, NPRACH and RAR moving together; one RAR MAC PDU per non-empty occasion and level with one RAR per distinct detected preamble (binomial occupancy), split at the maximum TBS; the RAR carries the first grant; grants for later attempts and a final message, re-sent up to 4 times with repetitions doubled up to R_max; downlink load with every re-send; one fixed point for access, uplink admission and downlink load; downlink admission by access barring per coverage level (default), uniform or RAR-priority (stress); one absolute event timeline per device for uplink fading, downlink decoding and the energy ledger.
+- LoRaWAN devices are Class A: after every uplink copy they open RX1 and, without a valid downlink in RX1, RX2, each empty window costing its preamble-detection time at its own rate (v1.9)
 - LoRaWAN confirmed mode: one acknowledgement transmitter per cell as a stationary on-off calendar (loss system, window-specific duty budgets); RX1 with the EU868 mapping on the uplink channel at 25 mW and 1 % in the ISM band (it does not close), RX2 at the configured rate; RX1 at the configured rate in licensed bands; joint LR-FHSS decode-and-blanking mask on the same calendar for half-duplex ISM gateways; acknowledgement demand from the uplinks that survive; acknowledgement must end inside the contact.
 
 `g_over=dict(downlink=False)` reproduces v1.5.1 exactly.
@@ -90,13 +91,13 @@ LoRa time on air matches the TTN airtime calculator to within 0.05 ms for SF7 to
 
 ## What is assumed, and what is not modelled
 
-Assumed (exposed as parameters): satellite and constellation presets; ISM transmitter activity seen from orbit (low 1e-4, medium 1e-3, high 1e-2 per km²); LR-FHSS SNR thresholds (4 / 7 dB); LoRa and LR-FHSS Doppler tolerances; NPRACH repetition mapping; NB-IoT repetition efficiency beta 0.5 (hardware-inspired sensitivity; beta 1 reproduces the link-level anchor); LTE-M continuous Eb/N0 model with a 300 kbit/s cap (legacy model; no cap applies to the NB-IoT table model); protocol overhead; device current profiles; polarisation loss 3 dB; scintillation allowance 1 dB; transmit policy (wait for 30° elevation). TR 38.811 clutter tables are S-band values used at sub-GHz.
+Assumed (exposed as parameters): satellite and constellation presets; ISM transmitter activity seen from orbit (low 1e-4, medium 1e-3, high 1e-2 per km²); LR-FHSS SNR thresholds (4 / 7 dB); LoRa and LR-FHSS Doppler tolerances; NPRACH repetition mapping; NB-IoT repetition efficiency beta 0.5 (hardware-inspired sensitivity; beta 1 reproduces the link-level anchor); LTE-M continuous Eb/N0 model with a 300 kbit/s cap (legacy model; no cap applies to the NB-IoT table model); protocol overhead; device current profiles; polarisation loss 3 dB; scintillation allowance 1 dB; transmit policy (first visibility for operator and control stacks; wait for 30° elevation for IoT-only stacks; both evaluated for every control). TR 38.811 clutter tables are S-band values used at sub-GHz.
 
 Phase 2 (v1.2) added event-driven traffic, NB-IoT TBS/RU/repetition tables with two documented calibrations, packet-level LR-FHSS hopping grids, scan broadening and optional finite beams, equal-infrastructure smallsat controls and spectral efficiency, symmetric frequency-offset limits and a TR 38.811 nearest-angle mode. Phase 3 items are listed in CHANGELOG.
 
 Not modelled: symbol-level cell acquisition and control decoding; acknowledgement-triggered retransmissions; feeder links and gateway availability; satellite downlink interference into terrestrial users; J2 and drag; inter-satellite handover within a message; NB-IoT HARQ at physical-layer detail; LR-FHSS onboard demodulator limits (an optional cap can be added); economics are a template with no prices (fill in quotes).
 
-The operator low-band stacks assume large direct-to-device arrays and a 120-satellite constellation, while the IoT-only stacks assume 16 to 64 small satellites. Results therefore compare **hypothetical architectures**, in which infrastructure scale, spectrum and technology are confounded. The control stacks isolate the air interface at one configured operating point (spectrum slices still differ: 180, 137 and 125 kHz); the sensitivity analysis shows how far each assumption moves the result. Equal-spectrum and equal-infrastructure controls are Phase 2. B20 reuse from space is a hypothetical configuration: B20 is not an NTN band in TS 36.102.
+The operator low-band stacks assume large direct-to-device arrays and a 120-satellite constellation, while the IoT-only stacks assume 16 to 64 small satellites. Results therefore compare **hypothetical architectures**, in which infrastructure scale, spectrum and technology are confounded. The control stacks compare the configured protocol stacks on matched infrastructure: device profiles, noise figures, retry budgets, admission control and usable spectrum slices (180, 137 and 125 kHz) still differ; the sensitivity analysis shows how far each assumption moves the result. Equal-spectrum and equal-infrastructure controls are Phase 2. B20 reuse from space is a hypothetical configuration: B20 is not an NTN band in TS 36.102.
 
 ## Citation
 

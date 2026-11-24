@@ -1,5 +1,17 @@
 # Changelog
 
+## v1.9.0 (paper version): fixes from the final external review
+
+Delivery, capacity and every ratio are unchanged (checked field by field against v1.8.0); 65/65 validation checks pass.
+
+| Item | Change | Effect on frozen results |
+|---|---|---|
+| Class A receive windows | Every LoRaWAN device opens RX1 and, without a valid downlink in RX1, RX2 after each uplink copy, at each window's configured rate (LoRaWAN TS001-1.0.4, 3.3). v1.8 charged two SF12 windows only for stacks flagged `class_a_rx`, none for the others, and in confirmed mode skipped RX2 after any RX1 transmission and counted the acknowledgement on top of its window. The `class_a_rx` flag is removed. | Energy per message and battery life of the LoRa-family stacks change by less than 1 % (largest: CTRL-LORA-SF12 0.7135 to 0.7072 J, 7.71 to 7.77 years) |
+| Link-budget C/I | The reported co-channel C/I uses the downlink beamwidth, as the engine already did. | `link_budget[*][*].dl_rows` C/I 10.18 to 11.19 dB; SINR unchanged |
+| Acknowledgement calendar | The busy interval that covers the start of the sampled window is chosen with length-biased weights (share x airtime). | Only the licensed EU868-RX1 sensitivity changes (confirmed 0.402 to 0.398); equal-duration and single-window cases are identical |
+| Doppler-rejected packets | They stay in the denominator of the acknowledgement demand (no extra random draws). | None (no baseline Doppler losses) |
+| Documentation | Downlink admission docstring (default `ce_barring`), confirmed-mode description, README assumptions, goodput figure without the one-success fallback. | None |
+
 ## v1.8.0 (paper version): one transmit policy for all control stacks
 
 All six control stacks (CTRL-*, CTRL-SS-*) now transmit at first visibility, so within each control group only the air interface differs. In v1.7 the LR-FHSS and LoRa controls kept the IoT-only default (wait for 30 deg elevation) while the NB-IoT controls transmitted at first visibility; equal-policy results existed only in the transmit-policy matrix. The 30 deg policy is still evaluated for every control in that matrix. Engine code unchanged; all non-control results are identical to v1.7.1 (checked field by field); 65/65 validation checks pass.

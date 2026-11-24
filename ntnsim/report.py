@@ -92,7 +92,7 @@ def run_all(out_dir="out", cache_dir="out/cache", n_mc=3000, quick=False, log=pr
     scales = [10 ** (x / 2) for x in range(-6, 9)] if not quick else [0.01, 1, 100]
     # beam-cell stacks hold about 10^4 times fewer devices per cell than a small-satellite footprint at the same
     # load, so their sweep continues past 10^4 times the scenario load, point by point, while the previous point
-    # still delivered at least 10 messages of the Monte Carlo sample (the resolution limit used in the figure)
+    # still delivered at least 10 messages of the Monte Carlo sample (the display cutoff of the figure, not a capacity limit)
     gp_n = max(600, n_mc // 3)
     R["goodput"] = {}
     for s in ALL:

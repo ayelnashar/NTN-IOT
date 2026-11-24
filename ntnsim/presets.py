@@ -90,27 +90,27 @@ STACKS = {
                           tech="LRFHSS", dr="DR8", f_hz=868.1e6, f_dl_hz=869.525e6, dl_eirp_cap_dbm=29.15, dl_duty=0.10, gw_half_duplex=True, sat="smallsat_patch", alloc_hz=137e3,
                           const="iot_sparse", ptx_dbm=14.0, g_dev_dbi=2.15, device="lora_lr11xx",
                           spectrum="ism", ism="low", other_networks_load=1.0, copies=1,
-                          duty_cycle_limit=0.01, payload="regenerative", class_a_rx=True),
+                          duty_cycle_limit=0.01, payload="regenerative"),
     "IO-ISM-LORA-SF10": dict(model="iot_only", label="IoT-only LoRa SF10, ISM 868 MHz",
                              tech="LORA", sf=10, channels=8, f_hz=868.1e6, f_dl_hz=869.525e6, dl_eirp_cap_dbm=29.15, dl_duty=0.10, gw_half_duplex=True, sat="smallsat_patch", alloc_hz=1e6,
                              const="iot_sparse", ptx_dbm=14.0, g_dev_dbi=2.15, device="lora_lr11xx",
                              spectrum="ism", ism="low", other_networks_load=1.0, copies=1,
-                             duty_cycle_limit=0.01, payload="regenerative", class_a_rx=True),
+                             duty_cycle_limit=0.01, payload="regenerative"),
     "IO-ISM-LORA-SF12": dict(model="iot_only", label="IoT-only LoRa SF12, ISM 868 MHz",
                              tech="LORA", sf=12, channels=8, f_hz=868.1e6, f_dl_hz=869.525e6, dl_eirp_cap_dbm=29.15, dl_duty=0.10, gw_half_duplex=True, sat="smallsat_patch", alloc_hz=1e6,
                              const="iot_sparse", ptx_dbm=14.0, g_dev_dbi=2.15, device="lora_lr11xx",
                              spectrum="ism", ism="low", other_networks_load=1.0, copies=1,
-                             duty_cycle_limit=0.01, payload="regenerative", class_a_rx=True),
+                             duty_cycle_limit=0.01, payload="regenerative"),
     "IO-SBAND-LRFHSS": dict(model="iot_only", label="IoT-only LR-FHSS, licensed S-band, LR1120 (+11.5 dBm)",
                             tech="LRFHSS", dr="DR8", f_hz=1995e6, f_dl_hz=2185e6, sat="smallsat_patch", alloc_hz=137e3,
                             const="iot_dense", ptx_dbm=11.5, g_dev_dbi=2.15, device="lora_lr1120_sband",
                             spectrum="licensed_mss", ism="off", other_networks_load=0.0, copies=1,
-                            duty_cycle_limit=None, payload="regenerative", class_a_rx=False),
+                            duty_cycle_limit=None, payload="regenerative"),
     "IO-SBAND-LRFHSS-HP": dict(model="iot_only", label="IoT-only LR-FHSS, licensed S-band, high-power module (+27 dBm)",
                                tech="LRFHSS", dr="DR8", f_hz=1995e6, f_dl_hz=2185e6, sat="smallsat_patch", alloc_hz=137e3,
                                const="iot_dense", ptx_dbm=27.0, g_dev_dbi=2.15, device="sband_hp_module",
                                spectrum="licensed_mss", ism="off", other_networks_load=0.0, copies=1,
-                               duty_cycle_limit=None, payload="regenerative", class_a_rx=False),
+                               duty_cycle_limit=None, payload="regenerative"),
     # ---- same-band control (air interface only) -----------------------------
     "CTRL-NBIOT": dict(model="control", label="Control: NB-IoT NTN, 847 MHz, equal satellite and power",
                        tech="NBIOT", f_hz=847e6, f_dl_hz=806e6, sat="d2d_array_223m2", const="d2d_120", alloc_hz=200e3,
@@ -126,7 +126,7 @@ STACKS = {
                            tech="LORA", sf=12, channels=1, f_hz=847e6, f_dl_hz=806e6, sat="d2d_array_223m2", alloc_hz=200e3,
                            const="d2d_120", ptx_dbm=22.0, g_dev_dbi=0.0, device="lora_lr11xx",
                            spectrum="licensed_terrestrial", ism="off", other_networks_load=0.0,
-                           copies=1, duty_cycle_limit=None, payload="transparent", class_a_rx=True,
+                           copies=1, duty_cycle_limit=None, payload="transparent",
                            tx_policy="first_visible"),
 }
 # control stacks share one transmit policy (first visibility) so that they differ only in the air interface;
@@ -134,9 +134,9 @@ STACKS = {
 for _t, _extra in (("NBIOT", dict(device="nbiot_ntn", coexistence="dedicated", carriers_per_beam=1, rach_max=5,
                                    edt=True, rai=True, ctrl_overhead=0.3, tx_policy="first_visible")),
                    ("LRFHSS", dict(dr="DR8", device="lora_lr11xx", ism="off", other_networks_load=0.0, copies=1,
-                                   duty_cycle_limit=None, class_a_rx=False, tx_policy="first_visible")),
+                                   duty_cycle_limit=None, tx_policy="first_visible")),
                    ("LORA", dict(sf=12, channels=1, device="lora_lr11xx", ism="off", other_networks_load=0.0,
-                                 copies=1, duty_cycle_limit=None, class_a_rx=True, tx_policy="first_visible"))):
+                                 copies=1, duty_cycle_limit=None, tx_policy="first_visible"))):
     _name = {"NBIOT": "NB-IoT", "LRFHSS": "LR-FHSS DR8", "LORA": "LoRa SF12"}[_t]
     STACKS["CTRL-SS-" + {"NBIOT": "NBIOT", "LRFHSS": "LRFHSS", "LORA": "LORA-SF12"}[_t]] = dict(
         model="control_smallsat", label=f"Control (smallsat): {_name}, 847 MHz, 5 dBi, 64 sats, 22 dBm",
